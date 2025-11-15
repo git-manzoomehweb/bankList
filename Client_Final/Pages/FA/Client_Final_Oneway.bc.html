@@ -1,0 +1,398 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<style type="text/css">
+    .cms-data-member {
+        display: none
+    }
+
+    <basis core="call" lid="1" file="Client_Final_Css.inc" />
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.basiscore.net/basisfly.com/css/reservation_ConfirmStyle.css" />
+<script type="text/javascript">
+    <basis core="call" lid="1" file="Client_Reservation_js.inc" />
+</script>
+<script src="https://cdn.basiscore.net/basisfly.com/js/reservation_ConfirmJs.js" type="text/javascript"></script>
+<basis core="call" lid="1" file="Client_BasisCore_Script.inc"></basis>
+<basis core="dbsource" source="basiscore" name="about" mid="5" lid="1" usedforid="[##cms.cms.ownerid##]">
+    <member core="view" name="txt" type="view" postsql="select Answer from [about.txt] where prpID = '8000'" />
+</basis>
+<basis core="group" name="FirstDelay">
+    <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+        <member name="factor" method="flight" query='{
+            "name": "db",
+            "mid": "20",
+            "member": [
+                {
+                    "type": "scalar",
+                    "name": "q",
+                    "request": "factorpreformNew",
+                    "agencycounter": "[##cms.form.agencycounter##]",
+                    "agencycountername": "[##cms.form.agencycountername##]",
+                    "code":"[##cms.form.c_code##]",
+                    "club_discount":"[##cms.form.club_discount##]",
+                    "invoicedesc":"[##cms.form.invoicedesc##]",
+                    "currency_request":"[##cms.form.currency_request##]",
+                    "userid": "[##cms.form.userid##]",
+                    "accounttype": "[##cms.form.accounttype##]",
+                    "mid": "[##cms.form.mid##]",
+                    "supplier": "[##cms.form.supplier##]",
+                    "share": "[##cms.form.share##]",
+                    "provider": [##cms.form.mainprovider|("0")##],
+                    "clear":"[##cms.form.clear##]",
+                    "trackingNo": "[##cms.cookie.trackingid##]",
+                    "ownerid": "[##cms.cms.ownerid##]",
+                    "factorid": "0",
+                    "targetunit": "10",
+                    "factortype": "1",
+                    "passengerinfo": [##cms.json.header##],
+                    "products": [
+                        {
+                            "type": "1",
+                            "productid": "[##cms.form.productid##]",
+                            "adults": "[##cms.form.adultcount##]",
+                            "childs": "[##cms.form.childcount##]",
+                            "infants": "[##cms.form.infantcount##]",
+                            "classname": "[##cms.form.classname##]",
+                            "dateinfo": {
+                                "begindate": "[##cms.form.arrivalTime##]"
+                            },
+                            "unit": "10"
+                        }
+                    ]
+                }
+            ]
+        }' preview="" />
+    </basis>
+    <basis core="group" name="SecondDelay">
+        <basis core="inlinesource" name="db">
+            <member name="TypeFactorpreform" format="json" preview=""
+                postsql="select value from [db.TypeFactorpreform] where field = 'type'">
+                {"root":[##db.factor.result##]}</member>
+            <member name="CodeFactorpreform" format="json" preview=""
+                postsql="select value from [db.CodeFactorpreform] where field = 'code'">
+                {"root":[##db.factor.result##]}</member>
+            <member name="DescriptionFactorpreform" format="json" preview=""
+                postsql="select value from [db.DescriptionFactorpreform] where field = 'description'">
+                {"root":[##db.factor.result##]}</member>
+            <member name="Factorid" format="json" preview=""
+                postsql="select value from [db.Factorid] where field = 'factorid'">{"root":[##db.factor.result##]}
+            </member>
+            <member name="NewpriceFactorpreform" format="json" preview=""
+                postsql="select value from [db.NewpriceFactorpreform] where field = 'new_price'">
+                {"root":[##db.factor.result##]}</member>
+            <member name="NewtimeFactorpreform" format="json" preview=""
+                postsql="select value from [db.NewtimeFactorpreform] where field = 'newtime'">
+                {"root":[##db.factor.result##]}</member>
+
+        </basis>
+        <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
+            <member method="cms" name="webservice_detail" query='{
+                "name": "db",
+                "mid": "20",
+                "member": [
+                    {
+                        "name": "q",
+                        "type": "list",
+                        "request": "webservice_Detail",
+                        "id": [##cms.form.bank_id|("")##],
+                        "dmnid": [##cms.cms.domainid##],
+                        "lid":"1"
+                    }
+                ]
+            }' />
+        </basis>
+        <basis core="group" name="DetailDelay">
+            <basis core="inlinesource" name="db">
+                <member name="bankid" format="json" postsql="select value from [db.bankid] where field = 'bankid'">
+                    {"root":[##db.webservice_detail.result##]} </member>
+                <member name="unit" format="json" postsql="select value from [db.unit] where field = 'unit'">
+                    {"root":[##db.webservice_detail.result##]} </member>
+            </basis>
+            <basis core="group" name="PriceDelay1">
+                <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
+                    <member name="FinalPrice" method="invoice" query='{
+                   "name": "db",
+                   "mid": "20",
+                   "member": [
+                      {
+                         "type": "list",
+                         "name": "q",
+                         "request": "finalprice",
+                         "trackingNo": "[##db.Factorid.Value|(0)##]",
+                         "unit": "[##db.unit.Value##]"
+                      }
+                   ]
+                }
+                ' />
+                </basis>
+                <basis core="group" name="PriceDelay2">
+                    <basis core="inlinesource" name="db">
+                        <member name="firstpay" format="json" preview=""
+                            postsql="select value from [db.firstpay] where field = 'firstprice'">
+                            {"root":[##db.FinalPrice.result##]}
+                        </member>
+                        <member name="total" format="json" preview=""
+                            postsql="select value from [db.total] where field = 'totalprice'">
+                            {"root":[##db.FinalPrice.result##]}
+                        </member>
+                        <member name="totalwithcommision" format="json" preview=""
+                            postsql="select value from [db.totalwithcommision] where field = 'totalwithcommision'">
+                            {"root":[##db.FinalPrice.result##]}
+                        </member>
+                        <member name="coupon" format="json" preview=""
+                            postsql="select value from [db.coupon] where field = 'coupon'">
+                            {"root":[##db.FinalPrice.result##]}
+                        </member>
+                    </basis>
+                    <basis core="dbsource" source="hosting" name="site">
+                        <member name="address" type="list" request="siteaddress" />
+                    </basis>
+                    <basis core="group" name="DelayFactorpreformS" if="'[##db.TypeFactorpreform.Value##]'='0'">
+
+                        <basis core="group" name="type" if="[##cms.form.accounttype##] = 1">
+                            <div id="bgLoadding-box"></div>
+                            <basis core="dbsource" source="trust_login" name="db" usedforid="602">
+                                <member name="Form" request="jsonform" type="scalar" />
+                            </basis>
+                            <basis core="group" name="InnerDelay">
+                                <basis core="inlinesource" name="db">
+                                    <member name="jsonform" format="json" preview=""
+                                        postsql="select  Id , ParentId , case when trim(Field) is null  then  (select field from [db.jsonform] where id = a.parentid ) else field end as field, value , type , path  from [db.jsonform] as a">
+                                        {"root":[##db.Form.json##]}</member>
+                                </basis>
+                                <form action="" method="post" class="Confirm">
+                                    <div class="title-success"><span> پیش قرارداد شما با موفقیت ثبت گردید </span>
+                                    </div>
+                                    <input type="hidden" name="userid" value="[##cms.form.userid##]" />
+                                    <input type="hidden" value="[##db.Factorid.Value|(0)##]" name="factorid" />
+                                    <div>
+                                        <basis core="tree" datamembername="db.jsonform" idcol="id"
+                                            parentidcol="parentid" nullvalue="null">
+                                            <face filter="Field in ('schemaID')">
+                                                <input type="hidden" value="@value" name="_root.schemaID" readonly />
+                                            </face>
+                                            <face filter="Field in ('schemaName')">
+                                                <input type="hidden" value="@value" name="_root.schemaName" readonly />
+                                            </face>
+                                            <face filter="type in ('object','array')">@Child</face>
+                                        </basis>
+                                    </div>
+                                    <div class="Section_box">
+                                        <basis core="tree" datamembername="db.jsonform" idcol="id"
+                                            parentidcol="parentid" nullvalue="null">
+                                            <face filter="Field in ('obj') and type in ('object')">
+                                                <div class="Section">@Child
+                                                    <div class="clr"></div>
+                                                </div>
+                                            </face>
+                                            <face filter="Field in ('question') and value <> 'توضیحات'">
+                                                <div class="QuestionForm">@value</div>
+                                            </face>
+                                            <face filter="Field in ('answer')">
+                                                <div class="AnswerForm">@value<span class="mtype"></span></div>
+                                            </face>
+                                            <face filter="Field in ('prpid','typeid','value')">@value</face>
+                                            <face filter="type in ('object','array')">@Child</face>
+                                        </basis>
+                                    </div>
+                                    <div class="Section">
+                                        <div class="redirecPanel">برای مشاهده پیش قرارداد در پنل کاربری خود <a
+                                                href="[##site.address.domain##]/Panel-InvoiceView.bc?lid=1&id=[##db.Factorid.Value|(0)##]"
+                                                target="_blank"> کلیک </a>کنید</div>
+                                        <div class="link_homepage"><a href="[##cms.Host.FA_redirect|(/)##]">بازگشت به
+                                                صفحه اصلی سایت</a></div>
+                                        <div class="clr"></div>
+                                    </div>
+                                </form>
+                                <div class="Hide_Box" style="display:none">
+                                    <input type="hidden" value="[##db.total.Value##]" class="total">
+                                    <input type="hidden" value="[##db.firstpay.Value##]" class="totalcom">
+                                    <input type="hidden"
+                                        value="/reservation/invoice/view.bc?cat=202&id=[##db.Factorid.Value|(0)##]&open=1"
+                                        class="link">
+                                    <input type="hidden" value="[##db.Factorid.Value|(0)##]" class="invoiceid">
+                                    <input type="hidden" value="[##cms.form.moneytype##]" class="moneytype">
+                                </div>
+                                <script type="text/javascript">
+                                    $(".Section_box").find(".Section").each(function (i) {
+                                        if (i == 0) {
+                                            $(this).find(".AnswerForm").find("input[type=text]").val($(
+                                                ".invoiceid").val())
+                                            $(this).find(".AnswerForm").find("input[type=text]").prop(
+                                                'readonly', true);
+                                        }
+
+                                        if (i == 1) {
+                                            $(this).find(".AnswerForm").find(".part").each(function (
+                                                j) {
+                                                if (j == 0) {
+                                                    $(this).find("input[type=text]").val(
+                                                        parseInt($(
+                                                            ".total").val())
+                                                            .toLocaleString())
+                                                    $(this).find("input[type=text]").addClass(
+                                                        "Seprator")
+                                                    $(this).find("input[type=text]").prop(
+                                                        'readonly',
+                                                        true);
+                                                }
+
+                                                if (j == 1) {
+                                                    $(this).find("input[type=text]").val($(
+                                                        ".moneytype")
+                                                        .val())
+                                                    $(this).closest(".AnswerForm").find(
+                                                        ".mtype")
+                                                        .text(
+                                                            $(".moneytype").val())
+                                                    $(this).hide()
+                                                }
+                                            })
+                                        }
+
+                                        if (i == 2) {
+                                            $(this).find(".AnswerForm").find(".part").each(function (
+                                                j) {
+                                                if (j == 0) {
+                                                    $(this).find("input[type=text]").val(
+                                                        parseInt($(
+                                                            ".totalcom").val())
+                                                            .toLocaleString())
+                                                    $(this).find("input[type=text]").addClass(
+                                                        "Seprator")
+                                                    $(this).find("input[type=text]").prop(
+                                                        'readonly', true);
+
+                                                }
+
+                                                if (j == 1) {
+                                                    $(this).find("input[type=text]").val($(
+                                                        ".moneytype")
+                                                        .val())
+                                                    $(this).closest(".AnswerForm").find(
+                                                        ".mtype")
+                                                        .text(
+                                                            $(".moneytype").val())
+                                                    $(this).hide()
+                                                }
+                                            })
+                                        }
+
+                                        if (i == 3) {
+                                            $(this).find(".AnswerForm").find("input[type=text]").val($(
+                                                ".link")
+                                                .val())
+                                            $(this).hide()
+                                            $(this).css("margin", "0")
+                                        }
+                                    })
+
+                                    $(".Confirm").submit(function (e) {
+                                        $(".Seprator").each(function () {
+                                            var x = $(this).val();
+                                            var y = x.split(",");
+                                            var z = "";
+
+                                            for (var i = 0; i < y.length; i++) {
+                                                z += y[i]
+                                            };
+
+                                            $(this).val(z)
+                                        })
+
+                                    });
+                                </script>
+                            </basis>
+
+                        </basis>
+                        <basis core="group" name="type" if="[##cms.form.accounttype##] in (3,2)">
+
+                            <basis core="group" name="pay_type" if="'[##cms.form.paytype##]' <> 'credit'">
+                                <div id="bgLoadding-box"></div>
+                                <div id="payment-Loadding">
+                                    <div class="loader2"></div>
+                                    <div id="text-loading">در حال اتصال به درگاه پرداخت الکترونیک , لطفا چند
+                                        لحظه صبر کنید
+                                        ...</div>
+                                </div>
+                                <basis core="dbsource" source="accounting" name="db" bankid="[##db.bankid.Value##]"
+                                    unit="[##db.unit.Value##]" factorid="[##db.Factorid.Value|(0)##]"
+                                    price="[##db.firstpay.Value##]" eid="1">
+                                    <member name="paymentid" type="scalar" request="paymentid" preview="" />
+                                </basis>
+
+                                <basis core="group" if="'[##db.paymentid.Column1##]' <> 'not ok'">
+                                    <basis core="group" name="Delay_save_inputs"
+                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,203,204)">
+                                        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource"
+                                            name="db">
+                                            <member name="save_inputs" method="cms" query='{
+                                            "name": "db",
+                                            "mid": "20",
+                                            "member": [
+                                                {
+                                                    "request": "save_inputs",
+                                                    "id": "[##db.paymentid.Column1##]",
+                                                    "trackingid": "[##cms.cookie.trackingid##]",
+                                                    "rkey": "[##cms.cookie.rkey##]",
+                                                    "factorid": "[##db.Factorid.Value|(0)##]",
+                                                    "agencyid": "[##cms.form.agencyid|(0)##]",
+                                                    "paytype": "[##cms.form.paytype##]",
+                                                    "totalfinal": "[##db.firstpay.Value##]",
+                                                    "supplier": "[##cms.form.supplier##]",
+                                                    "bank_id": "[##cms.form.bank_id##]",
+                                                    "bankid": "[##db.bankid.Value##]",
+                                                    "paymentid": "[##db.paymentid.Column1##]",
+                                                    "factortype": "1"
+                                                }
+                                            ]
+                                        }' preview="" />
+                                        </basis>
+                                        <basis core="group" name="Saman" if="[##cms.form.bank_id##] = 31">
+                                            <basis core="inlinesource" name="db">
+                                                <member name="merchantID" format="json"
+                                                    postsql="select value from [db.merchantID] where field = 'merchantid'">
+                                                    {"root":[##db.webservice_detail.result##]} </member>
+                                                <member name="callback" format="json"
+                                                    postsql="select value from [db.callback] where field = 'callback'">
+                                                    {"root":[##db.webservice_detail.result##]} </member>
+                                            </basis>
+                                            <basis core="group" name="bankgroup">
+                                                <basis core="external.ws.ws" service="saman" name="saman"
+                                                    source="cmsDbService" procedurename="sbserviceprocedure1"
+                                                    preview="">
+                                                    <member name="m1" method="RequestToken" sort="random">
+                                                        <params>
+                                                            <param name="MID" value="[##db.merchantID.Value##]" />
+                                                            <param name="ResNum" value="[##db.paymentid.Column1##]" />
+                                                            <param name="Amount" value="[##db.firstpay.Value##]" />
+                                                            <param name="SegAmount1" value="0" />
+                                                            <param name="SegAmount2" value="0" />
+                                                            <param name="SegAmount3" value="0" />
+                                                            <param name="SegAmount4" value="0" />
+                                                            <param name="SegAmount5" value="0" />
+                                                            <param name="SegAmount6" value="0" />
+                                                            <param name="AdditionalData1" value="" />
+                                                            <param name="AdditionalData2" value="" />
+                                                            <param name="Wage" value="0" />
+                                                            <param name="RedirectUrl" value="" />
+                                                        </params>
+                                                    </member>
+                                                </basis>
+
+                                            </basis>
+                                        </basis>
+
+                                    </basis>
+
+                                </basis>
+                            </basis>
+                        </basis>
+                    </basis>
+
+
+                </basis>
+            </basis>
+        </basis>
+    </basis>
+</basis>

@@ -1,0 +1,3206 @@
+<basis core="dbsource" source="basiscore" name="about" mid="5" lid="2" usedforid="[##cms.cms.ownerid##]">
+    <member core="view" name="txt" type="view" postsql="select Answer from [about.txt] where prpID = '8000'" />
+</basis>
+<basis core="dbsource" source="hosting" name="site">
+    <member name="address" type="list" request="siteaddress" />
+</basis>
+<basis core="group" name="Saman" if="[##cms.form.bank_id##] = 31">
+    <basis core="group" if="[##cms.form.token##]>0">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                     "retry": "[##cms.form.retry|()##]",
+                     "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+        </basis>
+    </basis>
+
+</basis>
+<basis core="group" name="Mellat" if="[##cms.form.bank_id##] = 32">
+    <basis core="group" if="'[##cms.form.token##]' in ('0','43')">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                            " name": "db",
+                            "member": [
+                                {
+                                    "type": "list",
+                                    "name": "add_factor_point",
+                                    "request": "addFactorPoint ",
+                                    "dmnid": "[##cms.cms.domainid##]",
+                                    "ownerid": "[##cms.cms.ownerid##]",
+                                    "factorid": "[##cms.form.factorid##]"
+                                }
+                            ]
+                        }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+
+        </basis>
+    </basis>
+
+</basis>
+<basis core="group" name="Pasargad" if="[##cms.form.bank_id##] = 33">
+    <basis core="group" if="'[##cms.form.verifypay##]' = 'True'">
+
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                         "name":"db",
+                         "mid":"20",
+                         "member":[{
+                         "type":"scalar",
+                         "name":"q",
+                         "request":"factoradd",
+                         "trackingNo":"[##cms.form.trackingid##]",
+                         "factorid":"[##cms.form.factorid##]", 
+                         "userid":"[##cms.form.userid##]",
+                         "clear":"1", 
+                         "bankinfo":"",
+                         "description":"",
+                         "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                         }]
+                         
+                         }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                                " name": "db",
+                                "member": [
+                                    {
+                                        "type": "list",
+                                        "name": "add_factor_point",
+                                        "request": "addFactorPoint ",
+                                        "dmnid": "[##cms.cms.domainid##]",
+                                        "ownerid": "[##cms.cms.ownerid##]",
+                                        "factorid": "[##cms.form.factorid##]"
+                                    }
+                                ]
+                            }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="Pay" if="[##cms.form.bank_id##] = 34">
+    <basis core="group" if="'[##cms.form.status##]' = 'true' ">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                    " name": "db",
+                    "member": [
+                        {
+                            "type": "list",
+                            "name": "add_factor_point",
+                            "request": "addFactorPoint ",
+                            "dmnid": "[##cms.cms.domainid##]",
+                            "ownerid": "[##cms.cms.ownerid##]",
+                            "factorid": "[##cms.form.factorid##]"
+                        }
+                    ]
+                }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+
+</basis>
+<basis core="group" name="zarrinpal" if="[##cms.form.bank_id##] = 35">
+    <basis core="group" if="'[##cms.form.token##]' = '100'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="Asanpardakht" if="[##cms.form.bank_id##] = 38">
+    <basis core="group" if="'[##cms.form.token##]' = '600'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+
+</basis>
+<basis core="group" name="Sekhavat" if="[##cms.form.bank_id##] = 39">
+    <basis core="group" if="'[##cms.form.token##]' = 'ok'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                         "name":"db",
+                         "mid":"20",
+                         "member":[{
+                         "type":"scalar",
+                         "name":"q",
+                         "request":"factoradd",
+                         "trackingNo":"[##cms.form.trackingid##]",
+                         "factorid":"[##cms.form.factorid##]", 
+                         "userid":"[##cms.form.userid##]",
+                         "clear":"1", 
+                         "bankinfo":"",
+                         "description":"",
+                         "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                         }]
+                         
+                         }' preview="" />
+        </basis>
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                            " name": "db",
+                            "member": [
+                                {
+                                    "type": "list",
+                                    "name": "add_factor_point",
+                                    "request": "addFactorPoint ",
+                                    "dmnid": "[##cms.cms.domainid##]",
+                                    "ownerid": "[##cms.cms.ownerid##]",
+                                    "factorid": "[##cms.form.factorid##]"
+                                }
+                            ]
+                        }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+
+    </basis>
+
+</basis>
+<basis core="group" name="Gardeshgari" if="[##cms.form.bank_id##] = 50">
+    <basis core="group" if="'[##cms.form.token##]' = 'true'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="kipaa" if="[##cms.form.bank_id##] = 51">
+    <basis core="group" if="'[##cms.form.token##]' = 'true'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="Sepah" if="[##cms.form.bank_id##] = 54">
+    <basis core="group" if="'[##cms.form.token##]' = 'false'">
+        <basis core="group" if="'[##cms.form.RRN##]' <> 'false' ">
+            <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+            </basis>
+
+            <basis core="group" name="es">
+                <basis core="inlinesource" name="db">
+                    <member name="factoradd" format="json" preview=""
+                        postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                        {"root":[##db.finalfactor.result##]}</member>
+                    <member name="code" format="json" preview=""
+                        postsql="select value from [db.code] where field = 'code'">
+                        {"root":[##db.finalfactor.result##]} </member>
+                    <member name="status" format="json" preview=""
+                        postsql="select value from [db.status] where field = 'status'">
+                        {"root":[##db.finalfactor.result##]} </member>
+                </basis>
+                <script type="text/javascript">
+                    $.ajax({
+                        url: "/Client_Invoice_Report_en.bc",
+                        type: "post",
+                        data: {
+                            factorid: "[##cms.form.factorid##]",
+                            code: "[##db.code.Value##]",
+                            userid: "[##cms.form.userid##]",
+                        },
+                        success: function (result) { }
+                    });
+                </script>
+                <basis core="group" if="[##db.code.Value##] <> 0 ">
+                    <basis core="group" if="[##db.code.Value##] = 2 ">
+                        <basis core="group" if="[##db.status.Value##] = 2 ">
+                            <div class="factorerror">
+                                <div>Your reservation has been registered and is being issued, please follow the status
+                                    of the reservation from the support</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+                        </basis>
+                        <basis core="group" if="[##db.status.Value##] <> 2 ">
+                            <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                                nullvalue="null">
+                                <face filter="field='error'  and type='Scalar.String'">
+                                    <div class="factorerror">
+                                        <div>@value</div>
+                                        <div>Booking encountered an error, please contact the agency</div>
+                                        <div>Phone number : [##about.txt.Answer##]</div>
+                                    </div>
+                                </face>
+                                <face filter="type in ('object','array')">@child</face>
+                            </basis>
+                        </basis>
+                    </basis>
+                    <basis core="group" if="[##db.code.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+
+                </basis>
+                <basis core="group" if="[##db.code.Value##] = 0 ">
+                    <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                        <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                    </basis>
+                    <div class="redirecPanel">to view the contract in your user panel <a
+                            href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                            target="_blank">
+                            Click </a></div>
+                    <div class="redirecPanel_doc"><a
+                            href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                            target="_blank">
+                            Click
+                            <basis core="group" name="check-type-invoice"
+                                if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                            <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">
+                                Hotel
+                            </basis>
+                            <basis core="group" name="check-type-invoice"
+                                if="'[##cms.form.factortype##]' in ('4','10')">Tour
+                            </basis>
+                            <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                                Insurance
+                            </basis>
+                            <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">
+                                Lounge
+                            </basis>
+                            <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">
+                                Service
+                            </basis>
+                            <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">
+                                Visa
+                            </basis>
+                            to view the documents
+                        </a>
+                    </div>
+                    <script type="text/javascript">
+                        $(".btn_document").css("display", "inline-block")
+                    </script>
+                </basis>
+
+
+            </basis>
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="aghayePardakht" if="[##cms.form.bank_id##] = 55">
+    <basis core="group" if="'[##cms.form.token##]' = '1'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+
+    </basis>
+</basis>
+<basis core="group" name="ayandeh" if="[##cms.form.bank_id##] = 57">
+    <basis core="group" if="'[##cms.form.token##]' = '0'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+
+    </basis>
+</basis>
+<basis core="group" name="refah" if="[##cms.form.bank_id##] = 65">
+    <basis core="group" if="'[##cms.form.token##]' = 'true'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+
+    </basis>
+</basis>
+<basis core="group" name="ArcaPayment" if="[##cms.form.bank_id##] = 59">
+    <basis core="group" if="'[##cms.form.errorCode##]' = '0'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+
+    </basis>
+</basis>
+<basis core="group" name="shahr" if="[##cms.form.bank_id##] = 66">
+    <basis core="group" if="'[##cms.form.token##]' = '200'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+
+    </basis>
+</basis>
+<basis core="group" name="clover" if="[##cms.form.bank_id##] = 71">
+    <basis core="group" if="'[##cms.form.token##]' = 'succeeded'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+
+    </basis>
+</basis>
+<basis core="group" name="IranKish" if="[##cms.form.bank_id##] = 77">
+    <basis core="group" if="'[##cms.form.token##]' = 'true'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('8','9')">
+                            Train
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="IranKish" if="[##cms.form.bank_id##] = 96">
+    <basis core="group" if="'[##cms.form.token##]' = 'true'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('8','9')">
+                            Train
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="PaypalPayment" if="[##cms.form.bank_id##] = 198">
+    <basis core="group" if="'[##cms.form.token##]' = 'COMPLETED'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('8','9')">
+                            Train
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="pod" if="[##cms.form.bank_id##] = 201">
+    <basis core="group" if="'[##cms.form.token##]' = '1'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('8','9')">
+                            Train
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="sadad" if="[##cms.form.bank_id##] = 200">
+    <basis core="group" if="'[##cms.form.token##]' = '0'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('8','9')">
+                            Train
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+</basis>
+<basis core="group" name="credit_payment" if="[##cms.form.Credit_payment##] = 1">
+    <!-- payment by credit -->
+    <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+        <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+    </basis>
+
+    <basis core="group" name="es">
+        <basis core="inlinesource" name="db">
+            <member name="factoradd" format="json" preview=""
+                postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                {"root":[##db.finalfactor.result##]}</member>
+            <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                {"root":[##db.finalfactor.result##]} </member>
+            <member name="status" format="json" preview=""
+                postsql="select value from [db.status] where field = 'status'">
+                {"root":[##db.finalfactor.result##]} </member>
+        </basis>
+        <script type="text/javascript">
+            $.ajax({
+                url: "/Client_Invoice_Report_en.bc",
+                type: "post",
+                data: {
+                    factorid: "[##cms.form.factorid##]",
+                    code: "[##db.code.Value##]",
+                    userid: "[##cms.form.userid##]",
+                },
+                success: function (result) { }
+            });
+        </script>
+        <basis core="group" if="[##db.code.Value##] <> 0 ">
+            <basis core="group" if="[##db.code.Value##] = 2 ">
+                <basis core="group" if="[##db.status.Value##] = 2 ">
+                    <div class="factorerror">
+                        <div>Your reservation has been registered and is being issued, please follow the status of the
+                            reservation from the support</div>
+                        <div>Phone number : [##about.txt.Answer##]</div>
+                    </div>
+                </basis>
+                <basis core="group" if="[##db.status.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+            </basis>
+            <basis core="group" if="[##db.code.Value##] <> 2 ">
+                <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                    <face filter="field='error'  and type='Scalar.String'">
+                        <div class="factorerror">
+                            <div>@value</div>
+                            <div>Booking encountered an error, please contact the agency</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+
+                    </face>
+                    <face filter="type in ('object','array')">@child</face>
+                </basis>
+            </basis>
+
+        </basis>
+        <basis core="group" if="[##db.code.Value##] = 0 ">
+            <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+            </basis>
+            <div class="redirecPanel">to view the contract in your user panel <a
+                    href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]" target="_blank">
+                    Click </a></div>
+            <div class="redirecPanel_doc"><a
+                    href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                    target="_blank">
+                    Click
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('1','2','7','6')">
+                        Flight</basis>
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                    </basis>
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">Tour
+                    </basis>
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">Insurance
+                    </basis>
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                    </basis>
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                    </basis>
+                    <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                    </basis>
+                    to view the documents
+                </a>
+            </div>
+            <script type="text/javascript">
+                $(".btn_document").css("display", "inline-block")
+            </script>
+        </basis>
+
+
+    </basis>
+</basis>
+<basis core="group" name="api" if="[##cms.form.bank_id##] in (202,203,204,205,207,208,209)">
+    <basis core="group" if="'[##cms.form.token##]' = '1'">
+        <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+            <member name="finalfactor" method="invoice" query='{
+                     "name":"db",
+                     "mid":"20",
+                     "member":[{
+                     "type":"scalar",
+                     "name":"q",
+                     "request":"factoradd",
+                     "trackingNo":"[##cms.form.trackingid##]",
+                     "factorid":"[##cms.form.factorid##]", 
+                     "userid":"[##cms.form.userid##]",
+                     "clear":"1", 
+                     "bankinfo":"",
+                     "description":"",
+                     "paymentid":"[##cms.form.paymentid##]",
+                    "retry": "[##cms.form.retry|()##]",
+                    "rkey": "[##cms.form.rkey##]"
+                     }]
+                     
+                     }' preview="" />
+        </basis>
+        <basis core="group" name="es">
+            <basis core="inlinesource" name="db">
+                <member name="factoradd" format="json" preview=""
+                    postsql="select Id,ParentId,case when trim(Field) is null then (select Field from [db.factoradd] where id=a.parentid) else Field end as Field,Value,Type,Path from [db.factoradd] as a">
+                    {"root":[##db.finalfactor.result##]}</member>
+                <member name="code" format="json" preview="" postsql="select value from [db.code] where field = 'code'">
+                    {"root":[##db.finalfactor.result##]} </member>
+                <member name="status" format="json" preview=""
+                    postsql="select value from [db.status] where field = 'status'">
+                    {"root":[##db.finalfactor.result##]} </member>
+            </basis>
+            <script type="text/javascript">
+
+                $.ajax({
+                    url: "/Client_Invoice_Report_en.bc",
+                    type: "post",
+                    data: {
+                        factorid: "[##cms.form.factorid##]",
+                        code: "[##db.code.Value##]",
+                        userid: "[##cms.form.userid##]",
+
+                    },
+                    success: function (result) { }
+                });
+            </script>
+            <basis core="group" if="[##db.code.Value##] <> 0 ">
+                <basis core="group" if="[##db.code.Value##] = 2 ">
+                    <basis core="group" if="[##db.status.Value##] = 2 ">
+                        <div class="factorerror">
+                            <div>Your reservation has been registered and is being issued, please follow the status of
+                                the reservation from the support</div>
+                            <div>Phone number : [##about.txt.Answer##]</div>
+                        </div>
+                    </basis>
+                    <basis core="group" if="[##db.status.Value##] <> 2 ">
+                        <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid"
+                            nullvalue="null">
+                            <face filter="field='error'  and type='Scalar.String'">
+                                <div class="factorerror">
+                                    <div>@value</div>
+                                    <div>Booking encountered an error, please contact the agency</div>
+                                    <div>Phone number : [##about.txt.Answer##]</div>
+                                </div>
+                            </face>
+                            <face filter="type in ('object','array')">@child</face>
+                        </basis>
+                    </basis>
+                </basis>
+                <basis core="group" if="[##db.code.Value##] <> 2 ">
+                    <basis core="tree" datamembername="db.factoradd" idcol="id" parentidcol="parentid" nullvalue="null">
+                        <face filter="field='error'  and type='Scalar.String'">
+                            <div class="factorerror">
+                                <div>@value</div>
+                                <div>Booking encountered an error, please contact the agency</div>
+                                <div>Phone number : [##about.txt.Answer##]</div>
+                            </div>
+
+                        </face>
+                        <face filter="type in ('object','array')">@child</face>
+                    </basis>
+                </basis>
+
+            </basis>
+            <basis core="group" if="[##db.code.Value##] = 0 ">
+                <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
+                    <member name="add_factor_point" method="cms" query='{
+                        " name": "db",
+                        "member": [
+                            {
+                                "type": "list",
+                                "name": "add_factor_point",
+                                "request": "addFactorPoint ",
+                                "dmnid": "[##cms.cms.domainid##]",
+                                "ownerid": "[##cms.cms.ownerid##]",
+                                "factorid": "[##cms.form.factorid##]"
+                            }
+                        ]
+                    }' />
+                </basis>
+                <div class="redirecPanel">to view the contract in your user panel <a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]"
+                        target="_blank">
+                        Click </a></div>
+                <div class="redirecPanel_doc"><a
+                        href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##cms.form.factorid##]&doc=1"
+                        target="_blank">
+                        Click
+                        <basis core="group" name="check-type-invoice"
+                            if="'[##cms.form.factortype##]' in ('1','2','7','6')">Flight</basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('3')">Hotel
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('4','10')">
+                            Tour
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('5')">
+                            Insurance
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('11')">Lounge
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('8','9')">
+                            Train
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('12')">Service
+                        </basis>
+                        <basis core="group" name="check-type-invoice" if="'[##cms.form.factortype##]' in ('13')">Visa
+                        </basis>
+                        to view the documents
+                    </a>
+                </div>
+                <script type="text/javascript">
+                    $(".btn_document").css("display", "inline-block")
+                </script>
+            </basis>
+
+
+        </basis>
+    </basis>
+</basis>
