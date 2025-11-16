@@ -1,0 +1,128 @@
+<basis core="group">
+    <basis core="call" file="Client_BasisCore_Script.inc"></basis>
+    
+    <!-- API Call -->
+    <basis core="api" name="api.Webservice" source="basisfly"
+        url="https://www.basisfly.com/panel/main/view/[##cms.cookie.rkey##]" method="post" 
+        body='{
+            "name": "db", 
+            "mid": "20", 
+            "member": [
+                {
+                    "name": "q",
+                    "type": "view",
+                    "id": "[##cms.query.id##]",
+                    "rkey": "[##cms.cookie.rkey##]",
+                    "request": "invoice_document",
+                    "lid": "[##cms.query.languageid##]",
+                    "link": "[##cms.request.host##]"
+                }
+            ] 
+        }' 
+        content-type="application/json" run="atclient">
+    </basis>
+
+    <!-- Print Result -->
+    <basis core="print" datamembername="db.invoice_document" run="atclient">
+
+        <face>
+            <script type="text/template">
+                {{ 
+                    // --- تمام منطق داخل همین return ---
+                    const docs = Array.isArray($data) ? $data : [$data];
+                    let titleHtml = '';
+                    let linksHtml = '';
+
+                    docs.forEach(jsondata => {
+                        const doc = jsondata?.doucument;
+                        if (!doc || !Array.isArray(doc.links)) return;
+
+                        // عنوان
+                        const titleContent = getDocumentTitleContent(doc.title);
+                        if (titleContent) {
+                            titleHtml += `<div class="invoice_Documnet_title">${titleContent}</div>`;
+                        }
+
+                        // لینک‌ها
+                        doc.links.forEach(item => {
+                            const l = item.link;
+
+                            if (l.whead?.new_link) {
+                                linksHtml += createLink(l.whead, 'با سربرگ', 'whead', true);
+                            }
+                            if (l.wohead?.new_link) {
+                                linksHtml += createLink(l.wohead, 'بدون سربرگ', 'wohead', false);
+                            }
+                        });
+                    });
+
+                    if (!linksHtml) {
+                        linksHtml = '<p style="text-align:center; color:#999; padding:20px; font-family:Tahoma;">هیچ سندی برای نمایش وجود ندارد.</p>';
+                    }
+
+                    return `
+                        <div class="invoice_Documnet">
+                            ${titleHtml}
+                            <div class="invoice_Documnet_Flex">
+                                ${linksHtml}
+                                <!-- <div class="toggle-wohead">
+                                    <label>
+                                        <input type="checkbox" id="toggleWohead" onchange="toggleWoheadLinks(this)" />
+                                        نمایش نسخه بدون سربرگ
+                                    </label>
+                                </div> -->
+                            </div>
+                        </div>`;
+                }}
+            </script>
+        </face>
+    </basis>
+
+    <!-- توابع کمکی (خارج از basis) -->
+    <script>
+        // جلوگیری از XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // عنوان بر اساس نوع سند
+        function getDocumentTitleContent(title) {
+            const titles = {
+                'invoice': 'دانلود قرارداد',
+                'ticket': 'دانلود بلیط',
+                'voucher': 'دانلود واچر',
+                'insurance': 'دانلود بیمه',
+                'visa': 'دانلود مدارک اپلود شده',
+                'uploadvisa': 'دانلود ویزا'
+            };
+            return titles[title] ? `${titles[title]}<span class="lang-invoice">(Fa)</span>` : '';
+        }
+
+        // ساخت لینک
+        function createLink(linkData, label, type, visible) {
+            const display = visible ? '' : 'display:none;';
+            return `
+                <a href="${linkData.new_link}"
+                   class="Invoice-Doucument flex-pdf-icon ${type}"
+                   target="_blank"
+                   data-href="${linkData.new_link}"
+                   style="${display}">
+                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                    <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png" width="50" height="50" alt="PDF" />
+                    <span>${escapeHtml(linkData.name)} (${label})</span>
+                </a>`;
+        }
+
+        // سوئیچ نمایش/مخفی کردن بدون سربرگ
+        function toggleWoheadLinks(checkbox) {
+            document.querySelectorAll('.wohead').forEach(link => {
+                link.style.display = checkbox.checked ? 'inline-flex' : 'none';
+            });
+        }
+    </script>
+
+
+
+</basis>

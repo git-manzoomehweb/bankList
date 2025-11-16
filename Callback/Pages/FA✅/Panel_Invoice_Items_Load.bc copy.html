@@ -1,0 +1,130 @@
+<basis core="group">
+    <basis core="call" file="Client_BasisCore_Script.inc"></basis>
+    <basis core="api" name="api.Webservice" source="basisfly"
+        url="https://www.basisfly.com/panel/main/view/[##cms.cookie.rkey##]" method="post" body='{
+                "name": "db", 
+                "mid": "20", 
+                "member":
+                [
+                            {
+                               "name": "q",
+                               "type": "view",
+                               "id": "[##cms.query.id##]",
+                               "rkey": "[##cms.cookie.rkey##]",
+                               "request": "invoice_document",
+                               "lid":"[##cms.query.languageid##]",
+                               "link":"[##cms.request.host##]"
+                         }
+                ] 
+            }' content-type="application/json" run="atclient">
+    </basis>
+    
+    <basis core="print" datamembername="db.invoice_document" run="atclient">
+        <layout>
+                @child
+        </layout>
+    
+        <face>
+            <script type="text/template">
+    
+                                    {{ 
+                                       
+                                          
+                                               
+                                        return renderPDFLinks($data); 
+                                    
+                                    }}
+            </script>
+        </face>
+    </basis>
+    
+    
+    <script>
+        // تابع کمکی برای جلوگیری از XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    
+    
+        function getDocumentTitleContent(title) {
+            switch (title) {
+                case 'invoice':
+                    return 'دانلود قرارداد<span class="lang-invoice">(Fa)</span>';
+                case 'ticket':
+                    return 'دانلود بلیط<span class="lang-invoice">(Fa)</span>';
+                case 'voucher':
+                    return 'دانلود واچر<span class="lang-invoice">(Fa)</span>';
+                case 'insurance':
+                    return 'دانلود بیمه<span class="lang-invoice">(Fa)</span>';
+                case 'visa':
+                    return 'دانلود مدارک اپلود شده<span class="lang-invoice">(Fa)</span>';
+                case 'uploadvisa':
+                    return 'دانلود ویزا<span class="lang-invoice">(Fa)</span>';
+                default:
+                    // اگر خواستی چیزی نیاد، می‌تونی رشته خالی برگردونی
+                    return '';
+            }
+        }
+    
+    
+        function renderPDFLinks(data) {
+            const docs = Array.isArray(data) ? data : [data];
+            let html1 = '';
+            let html2 = '';
+    
+            docs.forEach(jsondata => {
+                if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
+                    return;
+                }
+    
+                const title = jsondata.doucument.title;
+                const titleHtml = getDocumentTitleContent(title);
+    
+                if (titleHtml) {
+                    html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                }
+    
+                jsondata.doucument.links.forEach(item => {
+                    const links = item.link; 
+    
+                    // با سربرگ
+                    if (links.whead && links.whead.new_link) {
+                        html2 += `
+                        <a href="${links.whead.new_link}"
+                           class="Invoice-Doucument flex-pdf-icon whead"
+                           target="_blank"
+                           data-href="${links.whead.new_link}">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                            <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                                 width="50" height="50" alt="Pdf Icon" />
+                            <span>${escapeHtml(links.whead.name)} (با سربرگ)</span>
+                        </a>`;
+                    }
+    
+    
+    
+                    // بدون سربرگ
+                    if (links.wohead && links.wohead.new_link) {
+                        html2 += `
+                        <a href="${links.wohead.new_link}"
+                           class="Invoice-Doucument flex-pdf-icon wohead" style="display: none;"
+                           target="_blank"
+                           data-href="${links.wohead.new_link}">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                            <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                                 width="50" height="50" alt="Pdf Icon" />
+                            <span>${escapeHtml(links.wohead.name)} (بدون سربرگ)</span>
+                        </a>`;
+                    }
+                });
+            });
+    
+            return `<div class="invoice_Documnet">
+            ${html1}
+            <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
+            </div>`;
+        }
+    </script>
+</basis>

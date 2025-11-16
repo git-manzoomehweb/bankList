@@ -26,7 +26,7 @@
         <basis core="inlinesource" name="db">
             <member name="token" format="json" preview="">{"root":[##cms.form.token##]}</member>
         </basis>
-        <form method="post" name="PostToken" action="https://bpm.shaparak.ir/pgwchannel/startpay.mellat"
+        <form method="post" id="PostToken" name="PostToken" action="https://bpm.shaparak.ir/pgwchannel/startpay.mellat"
             class="PostToken">
             <basis core="print" datamembername="db.token">
                 <face filter="field='answer'">
@@ -35,14 +35,75 @@
             </basis>
             <!-- <input type="submit" value="submit"/>-->
         </form>
+
         <script type="text/javascript">
+        (function () {
+            var form = document.querySelector("form.PostToken");
+            if (!form) return;
+
+            var refInput = document.getElementById("RefId");
+
+            function fixRefId() {
+                if (!refInput || !refInput.value) return;
+
+                var parts = refInput.value.split(",");
+                console.log("RefId parts:", parts);
+
+                if (parts.length > 1) {
+                    refInput.value = parts[1].trim();
+                    console.log("Final RefId:", refInput.value);
+                }
+            }
+
+            // ۱) همین الان، قبل از هر submit، مقدار رو اصلاح کن
+            fixRefId();
+
+            // ۲) اگر جاهای دیگه با form.submit() این فرم رو می‌فرستن، قبلش مقدار رو اصلاح کن
+            var originalSubmit = form.submit;
+            form.submit = function () {
+                fixRefId();
+                return originalSubmit.call(this);
+            };
+
+            // ۳) اگر خودت می‌خوای همینجا اتوماتیک بفرستی سمت بانک، این خط رو باز کن:
+            form.submit();
+        })();
+        </script>
+
+
+
+
+<!-- <script type="text/javascript">
+    $(document).ready(function () {
+        var refInput = document.getElementById('RefId');
+        if (refInput && refInput.value) {
+            var sp = refInput.value.split(',');
+            console.log("reffffffffffffid:", sp);
+
+            if (sp.length > 1) {
+                var m = sp[1].trim(); // اگر خواستی فاصله‌ها هم حذف بشه
+                refInput.value = m;
+            }
+        }
+
+        // بعد از اصلاح مقدار، فرم رو سابمیت کن
+        // $(".PostToken").submit();
+    });
+</script> -->
+
+
+
+        <!-- <script type="text/javascript">
+
             var sp = (document.getElementById('RefId').value).split(',');
+            console.log("reffffffffffffid:" , sp)
             var m = sp[1];
             document.getElementById('RefId').value = m;
             $(document).ready(function () {
                 $(".PostToken").submit();
             }); 
-        </script>
+        </script> -->
+
     </basis>
     <basis core="group" name="Psargad" if="[##cms.form.bank_id##] = 33">
         <!-- pasargad -->

@@ -1,5 +1,4 @@
     <basis core="call" file="Client_BasisCore_Script.inc"></basis>
-
 <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
     <member name="get_inputs" method="cms" query='{
         "name": "db",
@@ -51,9 +50,20 @@
         <member name="get_inputs_reciverownerid" format="json"
             postsql="select  value  from [db.get_inputs_reciverownerid] as a where Field = 'reciverownerid'" preview="">
             {"root":[##db.get_inputs.result##]}</member>
+
+
         <member name="get_inputs_supplierownerid" format="json"
             postsql="select  value  from [db.get_inputs_supplierownerid] as a where Field = 'supplierownerid'"
             preview="">{"root":[##db.get_inputs.result##]}</member>
+
+
+
+        <member name="get_inputs_currency" format="json"
+            postsql="select  value  from [db.get_inputs_currency] as a where Field = 'currency'"
+            preview="">{"root":[##db.get_inputs.result##]}</member>
+
+
+
     </basis>
 
     <basis core="dbsource" source="hosting" name="site">
@@ -272,6 +282,8 @@
                                 <input type="hidden" value="" id="action" name="action" />
                                 <input type="hidden" value="[##db.checkrkey.userid|(0)##]" name="userid" />
                                 <input type="hidden" value="[##db.get_inputs_factorid.Value##]" name="factorid" />
+
+
                                 <input type="hidden" value="[##db.get_inputs_agencyid.value##]" name="agencyid" />
                                 <input type="hidden" value="[##db.get_inputs_supplier.value##]" name="supplier" />
                                 <input type="hidden" value="[##db.get_inputs_paytype.value##]" name="paytype" />
@@ -2108,6 +2120,8 @@
                     url='https://basisfly.com/pay/Verify/[##db.get_inputs_rkey.Value##]' method="post" body='{
                                 "bankid": [##db.get_inputs_bankid.Value##],
                                 "factorid": [##db.get_inputs_factorid.Value##],
+                                "amount": [##db.get_inputs_totalfinal.Value##],
+                                "currency": [##db.get_inputs_currency.Value##],
                                 "orderid": [##db.get_inputs_paymentid.Value##],
                                 "params": {##cms.params.params##},
                                 "cardno": "[##cms.form.CardMaskPan##]",
@@ -2225,7 +2239,12 @@
                                           <div class="alert-Txt">...در حال بارگیری اطلاعات لطفا صبر کنید</div>`;
                                 document.querySelector(".sectionInfo").innerHTML = "";
                             }
-                            window.location.href = "[##site.address.domain##]/Panel-wallet.bc?rK=[##db.get_inputs_rkey.Value##]";
+
+
+                                                    window.location.href = "[##site.address.domain##]/Panel-wallet.bc?rK=[##db.get_inputs_rkey.Value##]";
+                    
+
+
 
                         } catch (err) {
                             console.error('manipulation=' + err.lineNumber + ',' + err.message);

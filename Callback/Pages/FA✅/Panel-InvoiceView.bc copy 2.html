@@ -10,7 +10,24 @@
 
     <basis core="call" file="Client_BasisCore_Script.inc"></basis>
 
-
+<basis core="api" name="api.Webservice" source="basisfly"  url="https://www.basisfly.com/panel/main/view/[##cms.cookie.rkey##]"
+    method="post" body='{
+            "name": "db", 
+            "mid": "20", 
+            "member":
+            [
+                        {
+                           "name": "q",
+                           "type": "view",
+                           "id": "[##cms.query.id##]",
+                           "rkey": "[##cms.cookie.rkey##]",
+                           "request": "invoice_document",
+                           "lid":"1",
+                           "link":"[##cms.request.host##]"
+                     }
+            ] 
+        }' content-type="application/json" run="atclient">
+</basis>
 
     <basis core="external.fly.ws" procedurename="dbsource" source="cmsDbService2" name="db">
         <member name="get_unit_currency" method="cms" query='{
@@ -3357,8 +3374,27 @@
 
 
 
-                        <div class="invoice_Documnet_Content" id="invoice_Documnet_Content">
+                        <div class="invoice_Documnet_Content">
+                        <basis core="print" datamembername="db.invoice_document" run="atclient">
+                            <layout>
+                                    @child
+                            </layout>
+        
+                            <face>
+                                <script type="text/template">
 
+                                {{ 
+                                   
+                                      
+                                           
+                                    return renderPDFLinks($data); 
+                                
+                                }}
+
+
+                                </script>
+                            </face>
+                        </basis>
                                 </div>
 
 
@@ -4009,8 +4045,197 @@
             <div class="clr"></div>
             </div>
 
+            <!-- <script>
+                           
+
+                function renderPDFLinks(jsondata) {
+const doc = jsondata.doucument;
+const links = doc.links[0].link; // فقط یک لینک داریم
+let html = '';
+
+// لینک با سربرگ
+if (links.whead && links.whead.new_link) {
+html += `<a href="${links.whead.new_link}" 
+       class="Invoice-Doucument flex-pdf-icon" 
+       target="_blank" 
+       data-href="${links.whead.new_link}">
+<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+<img src="[##cms.cms.cdn##]/_images/Panel-PDF.png" width="128" height="128" alt="Pdf Icon"></img>
+<span>${escapeHtml(links.whead.name)} (با سربرگ)</span>
+</a>`;
+}
+
+// لینک بدون سربرگ
+if (links.wohead && links.wohead.new_link) {
+html += `<a href="${links.wohead.new_link}" 
+       class="Invoice-Doucument flex-pdf-icon" 
+       target="_blank" 
+       data-href="${links.wohead.new_link}">
+<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+<img src="[##cms.cms.cdn##]/_images/Panel-PDF.png" width="128" height="128" alt="Pdf Icon" ></img>
+<span>${escapeHtml(links.wohead.name)} (بدون سربرگ)</span>
+</a>`;
+}
+
+return html;
+}
+
+// تابع کمکی برای جلوگیری از XSS
+function escapeHtml(text) {
+const div = document.createElement('div');
+div.textContent = text;
+return div.innerHTML;
+}
+
+              </script> -->
+
+<!-- <script>
+
+    // تابع کمکی برای جلوگیری از XSS
+function escapeHtml(text) {
+const div = document.createElement('div');
+div.textContent = text;
+return div.innerHTML;
+}
+
+    function renderPDFLinks(jsondata) {
+        console.log(jsondata);
+        let html = '';
+    
+        if (jsondata.doucument.title) {
+            html += `<h4>${jsondata.doucument.title === 'invoice' ? 'فاکتور' : 'بلیط'}</h4>`;
+        }
+        jsondata.doucument.links.forEach(item => {
+            // const doc = item.doucument;
+            const doc = item;
+            
+            // عنوان بخش (اختیاری)
+    
+            doc.link.forEach(linkObj => {
+                const links = linkObj;
+                // const links = linkObj.link;
+    
+                // با سربرگ
+                if (links.whead && links.whead.new_link) {
+                    html += `<a href="${links.whead.new_link}" 
+                               class="Invoice-Doucument flex-pdf-icon" 
+                               target="_blank" 
+                               data-href="${links.whead.new_link}">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png" width="128" height="128" alt="Pdf Icon">
+                        <span>${escapeHtml(links.whead.name)} (با سربرگ)</span>
+                    </a>`;
+                }
+    
+                // بدون سربرگ
+                if (links.wohead && links.wohead.new_link) {
+                    html += `<a href="${links.wohead.new_link}" 
+                               class="Invoice-Doucument flex-pdf-icon" 
+                               target="_blank" 
+                               data-href="${links.wohead.new_link}">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png" width="128" height="128" alt="Pdf Icon">
+                        <span>${escapeHtml(links.wohead.name)} (بدون سربرگ)</span>
+                    </a>`;
+                }
+            });
+        });
+    
+        return html;
+    }
+
+</script> -->
 
 
+<script>
+// تابع کمکی برای جلوگیری از XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+
+function getDocumentTitleContent(title) {
+    switch (title) {
+        case 'invoice':
+            return 'دانلود قرارداد<span class="lang-invoice">(Fa)</span>';
+        case 'ticket':
+            return 'دانلود بلیط<span class="lang-invoice">(Fa)</span>';
+        case 'voucher':
+            return 'دانلود واچر<span class="lang-invoice">(Fa)</span>';
+        case 'insurance':
+            return 'دانلود بیمه<span class="lang-invoice">(Fa)</span>';
+        case 'visa':
+            return 'دانلود مدارک اپلود شده<span class="lang-invoice">(Fa)</span>';
+        case 'uploadvisa':
+            return 'دانلود ویزا<span class="lang-invoice">(Fa)</span>';
+        default:
+            // اگر خواستی چیزی نیاد، می‌تونی رشته خالی برگردونی
+            return '';
+    }
+}
+
+
+// data می‌تونه یک آبجکت باشه یا آرایه‌ای از آبجکت‌ها مثل مثالی که فرستادی
+function renderPDFLinks(data) {
+    const docs = Array.isArray(data) ? data : [data];
+    let html1 = '';
+    let html2 = '';
+
+    docs.forEach(jsondata => {
+        if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
+            return;
+        }
+
+        const title = jsondata.doucument.title;
+        const titleHtml = getDocumentTitleContent(title);
+
+if (titleHtml) {
+    html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+}
+
+        jsondata.doucument.links.forEach(item => {
+            const links = item.link; // همین آبجکت { whead: {...}, wohead: {...} }
+
+            // با سربرگ
+            if (links.whead && links.whead.new_link) {
+                html2 += `
+                    <a href="${links.whead.new_link}"
+                       class="Invoice-Doucument flex-pdf-icon whead"
+                       target="_blank"
+                       data-href="${links.whead.new_link}">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                             width="50" height="50" alt="Pdf Icon" />
+                        <span>${escapeHtml(links.whead.name)} (با سربرگ)</span>
+                    </a>`;
+            }
+
+
+
+            // بدون سربرگ
+            if (links.wohead && links.wohead.new_link) {
+                html2 += `
+                    <a href="${links.wohead.new_link}"
+                       class="Invoice-Doucument flex-pdf-icon wohead" style="display: none;"
+                       target="_blank"
+                       data-href="${links.wohead.new_link}">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                             width="50" height="50" alt="Pdf Icon" />
+                        <span>${escapeHtml(links.wohead.name)} (بدون سربرگ)</span>
+                    </a>`;
+            }
+        });
+    });
+
+    return `<div class="invoice_Documnet">
+        ${html1}
+        <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
+        </div>`;
+}
+</script>
 
 
             <script src="[##cms.cms.cdn##]/_js/User_Panel.js"></script>
@@ -4130,214 +4355,72 @@
                 // }
 
 
-//                 function Document_lang(x , id) {
-//     // گرفتن lid از input
-//     const lid = x && x.value ? x.value : "";
-
-//     if (!lid) {
-//         console.error("lid خالی است");
-//         return;
-//     }
-
-//                     const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
-
-//     fetch(url, {
-//         method: "GET",
-//         credentials: "same-origin"
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error("خطا در دریافت داده از Panel_Invoice_Items_Load.bc");
-//             }
-//             return response.text();
-//         })
-//         .then(html => {
-//             const parser = new DOMParser();
-//             // const doc = parser.parseFromString(html, "text/html");
-
-//             const container = document.querySelector(".invoice_Documnet_Content");
-//             if (!container) {
-//                 console.error("المنت با کلاس .invoice_Documnet_Content پیدا نشد");
-//                 return;
-//             }
-
-//                         container.innerHTML = html;
-
-
-//             // همه‌ی اسکریپت‌ها
-//             // const allScripts = Array.from(doc.querySelectorAll("script"));
-
-//             // فقط اسکریپت‌هایی که واقعاً JS هستند (برای اجرا)
-//             // const jsScripts = allScripts.filter(s => {
-//             //     const t = (s.getAttribute("type") || "").toLowerCase();
-//             //     // type خالی یا text/javascript یا application/javascript → اجرا بشن
-//             //     if (!t || t === "text/javascript" || t === "application/javascript") {
-//             //         return true;
-//             //     }
-//             //     // تمپلیت‌ها و json و ... رو نگه می‌داریم سرجاشون
-//             //     return false;
-//             // });
-
-//             // فقط JSهای اجرایی رو از DOM جدا می‌کنیم
-//             // jsScripts.forEach(s => s.parentNode && s.parentNode.removeChild(s));
-
-//             // حالا کل body (که هنوز script type="text/template" داخل face رو داره) می‌ره داخل کانتینر
-//             // container.innerHTML = doc.body ? doc.body.innerHTML : html;
-
-//             // اجرای اسکریپت‌های JS
-//             // jsScripts.forEach(oldScript => {
-//             //     const newScript = document.createElement("script");
-
-//             //     // جلوگیری از دو بار لود شدن basiscore اگر از قبل روی صفحه هست
-//             //     const isBasiscore = oldScript.dataset && oldScript.dataset.script === "basiscore";
-//             //     const src = oldScript.getAttribute("src");
-
-//             //     if (isBasiscore && document.querySelector('script[data-script="basiscore"]')) {
-//             //         // basiscore قبلاً لود شده
-//             //         return;
-//             //     }
-
-//             //     if (src && document.querySelector(`script[src="${src}"]`)) {
-//             //         // همین src قبلاً روی صفحه بوده، معمولاً نیاز نیست دوباره لود بشه
-//             //         return;
-//             //     }
-
-//             //     // کپی کردن attributeها
-//             //     Array.from(oldScript.attributes).forEach(attr => {
-//             //         newScript.setAttribute(attr.name, attr.value);
-//             //     });
-
-//             //     // inline script
-//             //     if (oldScript.textContent) {
-//             //         newScript.text = oldScript.textContent;
-//             //     }
-
-//             //     document.body.appendChild(newScript);
-//             // });
-
-//             // اگر نسخه‌ی BasisCore شما متدی برای rerun روی DOM جدید دارد،
-//             // اینجا می‌تونی صداش بزنی. این تکه رو safe نگه می‌دارم:
-//             // try {
-//             //     if (window.$bc && typeof $bc.run === "function") {
-//             //         // اگر چنین متدی دارید
-//             //         $bc.run(container);
-//             //     }
-//             // } catch (e) {
-//             //     console.warn("خطا در اجرای مجدد BasisCore روی محتوای جدید:", e);
-//             // }
-//         })
-//         .catch(err => {
-//             console.error("خطا در Document_lang:", err);
-//         });
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-async function Document_lang(x, id, targetSelector = '#invoice_Documnet_Content') {
-    // 1. دریافت languageid
-    const lid = (typeof x === 'object' && x?.value !== undefined) 
-        ? x.value.trim() 
-        : String(x).trim();
-
-    if (!lid || !/^\d+$/.test(lid)) {
-        return showError(targetSelector, 'زبان نامعتبر است (باید عدد باشد)');
-    }
-
-    if (!id) {
-        return showError(targetSelector, 'شناسه فاکتور (id) الزامی است');
-    }
-
-    // 2. ساخت URL
-    const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
-
-    const container = document.querySelector(targetSelector);
-    if (!container) {
-        return console.error(`عنصر ${targetSelector} پیدا نشد`);
-    }
-
-    // 3. نمایش لودینگ
-    container.innerHTML = `
-        <div style="text-align:center; padding:20px; color:#666;">
-            <i class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
-            <p style="margin-top:10px;">در حال بارگذاری سند...</p>
-        </div>`;
-
-    try {
-        // 4. فچ HTML خام
-        const response = await fetch(url, {
-            method: 'GET',
-            credentials: 'include', // برای کوکی و سشن
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'text/html'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`خطا ${response.status}: ${response.statusText}`);
-        }
-
-        // 5. دریافت HTML به صورت متن
-        const htmlText = await response.text();
-
-        // 6. تزریق مستقیم HTML
-        container.innerHTML = htmlText;
-
-    } catch (error) {
-        console.error('خطا در Document_lang:', error);
-        showError(targetSelector, `خطا در بارگذاری: ${error.message}`);
-    }
-}
-
-// ——————————————————————
-// تابع کمکی نمایش خطا
-function showError(selector, message) {
-    const el = document.querySelector(selector);
-    if (el) {
-        el.innerHTML = `
-            <div style="text-align:center; padding:20px; background:#ffe6e6; color:#c00; border-radius:8px; margin:10px 0; border:1px solid #fcc;">
-                <strong>خطا:</strong> ${escapeHtml(message)}
-            </div>`;
-    }
-}
-
-// تابع کمکی XSS
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                // x همون input هست که value ش میشه lid
+                function Document_lang(x , id) {
+                    // مقدار lid رو از input بگیر
+                    const lid = x && x.value ? x.value : "1";
+
+                    // if (!lid) {
+                    //     console.error("lid خالی است");
+                    //     return;
+                    // }
+
+                    // آدرس سرویس به همراه query string
+                    const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
+
+                    fetch(url, {
+                        method: "GET",
+                        credentials: "same-origin"
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("خطا در دریافت داده از Panel_Invoice_Items_Load.bc");
+                            }
+                            return response.text();
+                        })
+                        .then(html => {
+                            // پارس کردن HTML برگشتی
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, "text/html");
+
+                            // گرفتن همه script ها
+                            const scriptTags = doc.querySelectorAll("script");
+
+                            // حذف script ها از محتوا، که فقط HTML تمیز بریزیم داخل کانتینر
+                            scriptTags.forEach(s => s.parentNode && s.parentNode.removeChild(s));
+
+                            // کانتینری که باید محتوا داخلش ریخته شود
+                            const container = document.querySelector(".invoice_Documnet_Content");
+                            if (!container) {
+                                console.error("المنت با کلاس .invoice_Documnet_Content پیدا نشد");
+                                return;
+                            }
+
+                            // ریختن محتوای صفحه (بدون اسکریپت‌ها) داخل invoice_Documnet_Content
+                            container.innerHTML = doc.body ? doc.body.innerHTML : html;
+
+                            // حالا اجرای اسکریپت‌ها: برای هر script یک script جدید در صفحه فعلی بساز
+                            scriptTags.forEach(oldScript => {
+                                const newScript = document.createElement("script");
+
+                                // کپی کردن تمام اتریبوت‌ها (مثل src، type و ...)
+                                Array.from(oldScript.attributes).forEach(attr => {
+                                    newScript.setAttribute(attr.name, attr.value);
+                                });
+
+                                // اگر inline script بود، متنش رو هم کپی کن
+                                if (oldScript.textContent) {
+                                    newScript.text = oldScript.textContent;
+                                }
+
+                                // اضافه کردن به body تا اجرا شود
+                                document.body.appendChild(newScript);
+                            });
+                        })
+                        .catch(err => {
+                            console.error("خطا در Document_lang:", err);
+                        });
+                }
 
 
 
