@@ -3269,33 +3269,33 @@
                         </ul> -->
 
                         <ul class="invoice_Documents_state">
-    <li>
-        <label class="Panel_radio_Box">
-            <input type="radio" name="Document_lang" value="1"
-                   onclick="Document_lang(this, [##cms.query.id##])" checked>
-            <span class="Panel_check_mark"></span>
-            فارسی
-        </label>
-    </li>
+                            <li>
+                                <label class="Panel_radio_Box">
+                                    <input type="radio" name="Document_lang" value="1"
+                                        onclick="Document_lang(this, [##cms.query.id##])" checked>
+                                    <span class="Panel_check_mark"></span>
+                                    فارسی
+                                </label>
+                            </li>
 
-    <li>
-        <label class="Panel_radio_Box">
-            <input type="radio" name="Document_lang" value="2"
-                   onclick="Document_lang(this, [##cms.query.id##])">
-            <span class="Panel_check_mark"></span>
-            English
-        </label>
-    </li>
+                            <li>
+                                <label class="Panel_radio_Box">
+                                    <input type="radio" name="Document_lang" value="2"
+                                        onclick="Document_lang(this, [##cms.query.id##])">
+                                    <span class="Panel_check_mark"></span>
+                                    English
+                                </label>
+                            </li>
 
-    <li>
-        <label class="Panel_radio_Box">
-            <input type="radio" name="Document_lang" value="3"
-                   onclick="Document_lang(this, [##cms.query.id##])">
-            <span class="Panel_check_mark"></span>
-            العربية
-        </label>
-    </li>
-</ul>
+                            <li>
+                                <label class="Panel_radio_Box">
+                                    <input type="radio" name="Document_lang" value="3"
+                                        onclick="Document_lang(this, [##cms.query.id##])">
+                                    <span class="Panel_check_mark"></span>
+                                    العربية
+                                </label>
+                            </li>
+                        </ul>
 
 
                         <ul class="invoice_Documents_state">
@@ -3391,11 +3391,10 @@
 
 
 
-                                    <!-- API Call -->
-    <basis core="api" name="api.Webservice" source="basisfly"
-        url="https://www.basisfly.com/panel/main/view/[##cms.cookie.rkey##]" method="post" 
-         triggers="db.invoiceDocumentLang" 
-        body='{
+                        <!-- API Call -->
+                        <basis core="api" name="api.Webservice" source="basisfly"
+                            url="https://www.basisfly.com/panel/main/view/[##cms.cookie.rkey##]" method="post"
+                            triggers="db.invoiceDocumentLang" body='{
             "name": "db", 
             "mid": "20", 
             "member": [
@@ -3409,32 +3408,32 @@
                     "link": "[##cms.request.host##]"
                 }
             ] 
-        }' 
-        content-type="application/json" run="atclient" >
-    </basis>
+        }' content-type="application/json" run="atclient">
+                        </basis>
 
 
-    <!-- Print Result -->
-    <basis core="print" datamembername="db.invoice_document" run="atclient"   >
+                        <!-- Print Result -->
+                        <basis core="print" datamembername="db.invoice_document"
+                            if="{##db.invoiceDocumentLang.run|(false)##}" run="atclient">
 
 
-        <layout>
-                        <script type="text/template">
+                            <layout>
+                                <script type="text/template">
 
                                     <div class="invoice_Documnet_Content" id="invoice_Documnet_Content">
                                         @child
                                 </div>
                             </script>
-        </layout>
-        <face>
-            <script type="text/template">
-    
+                            </layout>
+                            <face>
+                                <script type="text/template">
+
                                     {{  
                                         return renderPDFLinks($data); 
                                     }}
             </script>
-        </face>
-    </basis>
+                            </face>
+                        </basis>
 
 
                     </div>
@@ -4205,166 +4204,166 @@
                 // }
 
 
-//                 function Document_lang(x , id) {
-//     // گرفتن lid از input
-//     const lid = x && x.value ? x.value : "";
+                //                 function Document_lang(x , id) {
+                //     // گرفتن lid از input
+                //     const lid = x && x.value ? x.value : "";
 
-//     if (!lid) {
-//         console.error("lid خالی است");
-//         return;
-//     }
+                //     if (!lid) {
+                //         console.error("lid خالی است");
+                //         return;
+                //     }
 
-//                     const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
+                //                     const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
 
-//     fetch(url, {
-//         method: "GET",
-//         credentials: "same-origin"
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error("خطا در دریافت داده از Panel_Invoice_Items_Load.bc");
-//             }
-//             return response.text();
-//         })
-//         .then(html => {
-//             const parser = new DOMParser();
-//             // const doc = parser.parseFromString(html, "text/html");
+                //     fetch(url, {
+                //         method: "GET",
+                //         credentials: "same-origin"
+                //     })
+                //         .then(response => {
+                //             if (!response.ok) {
+                //                 throw new Error("خطا در دریافت داده از Panel_Invoice_Items_Load.bc");
+                //             }
+                //             return response.text();
+                //         })
+                //         .then(html => {
+                //             const parser = new DOMParser();
+                //             // const doc = parser.parseFromString(html, "text/html");
 
-//             const container = document.querySelector(".invoice_Documnet_Content");
-//             if (!container) {
-//                 console.error("المنت با کلاس .invoice_Documnet_Content پیدا نشد");
-//                 return;
-//             }
+                //             const container = document.querySelector(".invoice_Documnet_Content");
+                //             if (!container) {
+                //                 console.error("المنت با کلاس .invoice_Documnet_Content پیدا نشد");
+                //                 return;
+                //             }
 
-//                         container.innerHTML = html;
-
-
-//             // همه‌ی اسکریپت‌ها
-//             // const allScripts = Array.from(doc.querySelectorAll("script"));
-
-//             // فقط اسکریپت‌هایی که واقعاً JS هستند (برای اجرا)
-//             // const jsScripts = allScripts.filter(s => {
-//             //     const t = (s.getAttribute("type") || "").toLowerCase();
-//             //     // type خالی یا text/javascript یا application/javascript → اجرا بشن
-//             //     if (!t || t === "text/javascript" || t === "application/javascript") {
-//             //         return true;
-//             //     }
-//             //     // تمپلیت‌ها و json و ... رو نگه می‌داریم سرجاشون
-//             //     return false;
-//             // });
-
-//             // فقط JSهای اجرایی رو از DOM جدا می‌کنیم
-//             // jsScripts.forEach(s => s.parentNode && s.parentNode.removeChild(s));
-
-//             // حالا کل body (که هنوز script type="text/template" داخل face رو داره) می‌ره داخل کانتینر
-//             // container.innerHTML = doc.body ? doc.body.innerHTML : html;
-
-//             // اجرای اسکریپت‌های JS
-//             // jsScripts.forEach(oldScript => {
-//             //     const newScript = document.createElement("script");
-
-//             //     // جلوگیری از دو بار لود شدن basiscore اگر از قبل روی صفحه هست
-//             //     const isBasiscore = oldScript.dataset && oldScript.dataset.script === "basiscore";
-//             //     const src = oldScript.getAttribute("src");
-
-//             //     if (isBasiscore && document.querySelector('script[data-script="basiscore"]')) {
-//             //         // basiscore قبلاً لود شده
-//             //         return;
-//             //     }
-
-//             //     if (src && document.querySelector(`script[src="${src}"]`)) {
-//             //         // همین src قبلاً روی صفحه بوده، معمولاً نیاز نیست دوباره لود بشه
-//             //         return;
-//             //     }
-
-//             //     // کپی کردن attributeها
-//             //     Array.from(oldScript.attributes).forEach(attr => {
-//             //         newScript.setAttribute(attr.name, attr.value);
-//             //     });
-
-//             //     // inline script
-//             //     if (oldScript.textContent) {
-//             //         newScript.text = oldScript.textContent;
-//             //     }
-
-//             //     document.body.appendChild(newScript);
-//             // });
-
-//             // اگر نسخه‌ی BasisCore شما متدی برای rerun روی DOM جدید دارد،
-//             // اینجا می‌تونی صداش بزنی. این تکه رو safe نگه می‌دارم:
-//             // try {
-//             //     if (window.$bc && typeof $bc.run === "function") {
-//             //         // اگر چنین متدی دارید
-//             //         $bc.run(container);
-//             //     }
-//             // } catch (e) {
-//             //     console.warn("خطا در اجرای مجدد BasisCore روی محتوای جدید:", e);
-//             // }
-//         })
-//         .catch(err => {
-//             console.error("خطا در Document_lang:", err);
-//         });
-// }
+                //                         container.innerHTML = html;
 
 
+                //             // همه‌ی اسکریپت‌ها
+                //             // const allScripts = Array.from(doc.querySelectorAll("script"));
+
+                //             // فقط اسکریپت‌هایی که واقعاً JS هستند (برای اجرا)
+                //             // const jsScripts = allScripts.filter(s => {
+                //             //     const t = (s.getAttribute("type") || "").toLowerCase();
+                //             //     // type خالی یا text/javascript یا application/javascript → اجرا بشن
+                //             //     if (!t || t === "text/javascript" || t === "application/javascript") {
+                //             //         return true;
+                //             //     }
+                //             //     // تمپلیت‌ها و json و ... رو نگه می‌داریم سرجاشون
+                //             //     return false;
+                //             // });
+
+                //             // فقط JSهای اجرایی رو از DOM جدا می‌کنیم
+                //             // jsScripts.forEach(s => s.parentNode && s.parentNode.removeChild(s));
+
+                //             // حالا کل body (که هنوز script type="text/template" داخل face رو داره) می‌ره داخل کانتینر
+                //             // container.innerHTML = doc.body ? doc.body.innerHTML : html;
+
+                //             // اجرای اسکریپت‌های JS
+                //             // jsScripts.forEach(oldScript => {
+                //             //     const newScript = document.createElement("script");
+
+                //             //     // جلوگیری از دو بار لود شدن basiscore اگر از قبل روی صفحه هست
+                //             //     const isBasiscore = oldScript.dataset && oldScript.dataset.script === "basiscore";
+                //             //     const src = oldScript.getAttribute("src");
+
+                //             //     if (isBasiscore && document.querySelector('script[data-script="basiscore"]')) {
+                //             //         // basiscore قبلاً لود شده
+                //             //         return;
+                //             //     }
+
+                //             //     if (src && document.querySelector(`script[src="${src}"]`)) {
+                //             //         // همین src قبلاً روی صفحه بوده، معمولاً نیاز نیست دوباره لود بشه
+                //             //         return;
+                //             //     }
+
+                //             //     // کپی کردن attributeها
+                //             //     Array.from(oldScript.attributes).forEach(attr => {
+                //             //         newScript.setAttribute(attr.name, attr.value);
+                //             //     });
+
+                //             //     // inline script
+                //             //     if (oldScript.textContent) {
+                //             //         newScript.text = oldScript.textContent;
+                //             //     }
+
+                //             //     document.body.appendChild(newScript);
+                //             // });
+
+                //             // اگر نسخه‌ی BasisCore شما متدی برای rerun روی DOM جدید دارد،
+                //             // اینجا می‌تونی صداش بزنی. این تکه رو safe نگه می‌دارم:
+                //             // try {
+                //             //     if (window.$bc && typeof $bc.run === "function") {
+                //             //         // اگر چنین متدی دارید
+                //             //         $bc.run(container);
+                //             //     }
+                //             // } catch (e) {
+                //             //     console.warn("خطا در اجرای مجدد BasisCore روی محتوای جدید:", e);
+                //             // }
+                //         })
+                //         .catch(err => {
+                //             console.error("خطا در Document_lang:", err);
+                //         });
+                // }
 
 
 
 
 
 
- // تابع کمکی برای جلوگیری از XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    
-    
-        function getDocumentTitleContent(title) {
-            switch (title) {
-                case 'invoice':
-                    return 'دانلود قرارداد<span class="lang-invoice">(Fa)</span>';
-                case 'ticket':
-                    return 'دانلود بلیط<span class="lang-invoice">(Fa)</span>';
-                case 'voucher':
-                    return 'دانلود واچر<span class="lang-invoice">(Fa)</span>';
-                case 'insurance':
-                    return 'دانلود بیمه<span class="lang-invoice">(Fa)</span>';
-                case 'visa':
-                    return 'دانلود مدارک اپلود شده<span class="lang-invoice">(Fa)</span>';
-                case 'uploadvisa':
-                    return 'دانلود ویزا<span class="lang-invoice">(Fa)</span>';
-                default:
-                    // اگر خواستی چیزی نیاد، می‌تونی رشته خالی برگردونی
-                    return '';
-            }
-        }
-    
-    
-        function renderPDFLinks(data) {
-            const docs = Array.isArray(data) ? data : [data];
-            let html1 = '';
-            let html2 = '';
-    
-            docs.forEach(jsondata => {
-                if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
-                    return;
+
+
+                // تابع کمکی برای جلوگیری از XSS
+                function escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
                 }
-    
-                const title = jsondata.doucument.title;
-                const titleHtml = getDocumentTitleContent(title);
-    
-                if (titleHtml) {
-                    html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+
+
+                function getDocumentTitleContent(title) {
+                    switch (title) {
+                        case 'invoice':
+                            return 'دانلود قرارداد<span class="lang-invoice">(Fa)</span>';
+                        case 'ticket':
+                            return 'دانلود بلیط<span class="lang-invoice">(Fa)</span>';
+                        case 'voucher':
+                            return 'دانلود واچر<span class="lang-invoice">(Fa)</span>';
+                        case 'insurance':
+                            return 'دانلود بیمه<span class="lang-invoice">(Fa)</span>';
+                        case 'visa':
+                            return 'دانلود مدارک اپلود شده<span class="lang-invoice">(Fa)</span>';
+                        case 'uploadvisa':
+                            return 'دانلود ویزا<span class="lang-invoice">(Fa)</span>';
+                        default:
+                            // اگر خواستی چیزی نیاد، می‌تونی رشته خالی برگردونی
+                            return '';
+                    }
                 }
-    
-                jsondata.doucument.links.forEach(item => {
-                    const links = item.link; 
-    
-                    // با سربرگ
-                    if (links.whead && links.whead.new_link) {
-                        html2 += `
+
+
+                function renderPDFLinks(data) {
+                    const docs = Array.isArray(data) ? data : [data];
+                    let html1 = '';
+                    let html2 = '';
+
+                    docs.forEach(jsondata => {
+                        if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
+                            return;
+                        }
+
+                        const title = jsondata.doucument.title;
+                        const titleHtml = getDocumentTitleContent(title);
+
+                        if (titleHtml) {
+                            html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                        }
+
+                        jsondata.doucument.links.forEach(item => {
+                            const links = item.link;
+
+                            // با سربرگ
+                            if (links.whead && links.whead.new_link) {
+                                html2 += `
                         <a href="${links.whead.new_link}"
                            class="Invoice-Doucument flex-pdf-icon whead"
                            target="_blank"
@@ -4374,13 +4373,13 @@
                                  width="50" height="50" alt="Pdf Icon" />
                             <span>${escapeHtml(links.whead.name)} (با سربرگ)</span>
                         </a>`;
-                    }
-    
-    
-    
-                    // بدون سربرگ
-                    if (links.wohead && links.wohead.new_link) {
-                        html2 += `
+                            }
+
+
+
+                            // بدون سربرگ
+                            if (links.wohead && links.wohead.new_link) {
+                                html2 += `
                         <a href="${links.wohead.new_link}"
                            class="Invoice-Doucument flex-pdf-icon wohead" style="display: none;"
                            target="_blank"
@@ -4390,127 +4389,127 @@
                                  width="50" height="50" alt="Pdf Icon" />
                             <span>${escapeHtml(links.wohead.name)} (بدون سربرگ)</span>
                         </a>`;
-                    }
-                });
-            });
-    
-            return `<div class="invoice_Documnet">
+                            }
+                        });
+                    });
+
+                    return `<div class="invoice_Documnet">
             ${html1}
             <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
             </div>`;
-        }
+                }
 
 
 
 
 
 
-// function Document_lang(x , id){
+                // function Document_lang(x , id){
 
-//             const langid = x && x.value ? x.value : "";
-//     console.log(langid)
-//             $bc.setSource("db.invoiceDocumentLang", {
-//             lid: langid,
-//             run: true
-//         });
-//             $bc.setSource("db.invoice_document", {
-//             run: true
-//         });
+                //             const langid = x && x.value ? x.value : "";
+                //     console.log(langid)
+                //             $bc.setSource("db.invoiceDocumentLang", {
+                //             lid: langid,
+                //             run: true
+                //         });
+                //             $bc.setSource("db.invoice_document", {
+                //             run: true
+                //         });
 
-// }
+                // }
 
-function Document_lang(x, id) {
-    const langid = x && x.value ? x.value : "";
-    console.log("Selected Language ID:", langid);
-    
-    // ابتدا setSource را برای invoiceDocumentLang انجام دهید
-    $bc.setSource("db.invoiceDocumentLang", {
-        lid: langid,
-        run: true
-    });
-    
-    // منتظر بمانید تا اولین درخواست تکمیل شود، سپس invoice_document را بروزرسانی کنید
-    // setTimeout(function() {
-    //     $bc.setSource("db.invoice_document", {
-    //         run: true
-    //     });
-    // }, 500); // تاخیر 500ms برای اطمینان از پردازش
-}
+                function Document_lang(x, id) {
+                    const langid = x && x.value ? x.value : "";
+                    console.log("Selected Language ID:", langid);
 
-// async function Document_lang(x, id, targetSelector = '#invoice_Documnet_Content') {
-//     // 1. دریافت languageid
-//     const lid = (typeof x === 'object' && x?.value !== undefined) 
-//         ? x.value.trim() 
-//         : String(x).trim();
+                    // ابتدا setSource را برای invoiceDocumentLang انجام دهید
+                    $bc.setSource("db.invoiceDocumentLang", {
+                        lid: langid,
+                        run: true
+                    });
 
-//     if (!lid || !/^\d+$/.test(lid)) {
-//         return showError(targetSelector, 'زبان نامعتبر است (باید عدد باشد)');
-//     }
+                    // منتظر بمانید تا اولین درخواست تکمیل شود، سپس invoice_document را بروزرسانی کنید
+                    // setTimeout(function() {
+                    //     $bc.setSource("db.invoice_document", {
+                    //         run: true
+                    //     });
+                    // }, 500); // تاخیر 500ms برای اطمینان از پردازش
+                }
 
-//     if (!id) {
-//         return showError(targetSelector, 'شناسه فاکتور (id) الزامی است');
-//     }
+                // async function Document_lang(x, id, targetSelector = '#invoice_Documnet_Content') {
+                //     // 1. دریافت languageid
+                //     const lid = (typeof x === 'object' && x?.value !== undefined) 
+                //         ? x.value.trim() 
+                //         : String(x).trim();
 
-//     // 2. ساخت URL
-//     const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
+                //     if (!lid || !/^\d+$/.test(lid)) {
+                //         return showError(targetSelector, 'زبان نامعتبر است (باید عدد باشد)');
+                //     }
 
-//     const container = document.querySelector(targetSelector);
-//     if (!container) {
-//         return console.error(`عنصر ${targetSelector} پیدا نشد`);
-//     }
+                //     if (!id) {
+                //         return showError(targetSelector, 'شناسه فاکتور (id) الزامی است');
+                //     }
 
-//     // 3. نمایش لودینگ
-//     container.innerHTML = `
-//         <div style="text-align:center; padding:20px; color:#666;">
-//             <i class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
-//             <p style="margin-top:10px;">در حال بارگذاری سند...</p>
-//         </div>`;
+                //     // 2. ساخت URL
+                //     const url = `Panel_Invoice_Items_Load.bc?languageid=${encodeURIComponent(lid)}&id=${encodeURIComponent(id)}`;
 
-//     try {
-//         // 4. فچ HTML خام
-//         const response = await fetch(url, {
-//             method: 'GET',
-//             credentials: 'include', // برای کوکی و سشن
-//             headers: {
-//                 'X-Requested-With': 'XMLHttpRequest',
-//                 'Accept': 'text/html'
-//             }
-//         });
+                //     const container = document.querySelector(targetSelector);
+                //     if (!container) {
+                //         return console.error(`عنصر ${targetSelector} پیدا نشد`);
+                //     }
 
-//         if (!response.ok) {
-//             throw new Error(`خطا ${response.status}: ${response.statusText}`);
-//         }
+                //     // 3. نمایش لودینگ
+                //     container.innerHTML = `
+                //         <div style="text-align:center; padding:20px; color:#666;">
+                //             <i class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
+                //             <p style="margin-top:10px;">در حال بارگذاری سند...</p>
+                //         </div>`;
 
-//         // 5. دریافت HTML به صورت متن
-//         const htmlText = await response.text();
+                //     try {
+                //         // 4. فچ HTML خام
+                //         const response = await fetch(url, {
+                //             method: 'GET',
+                //             credentials: 'include', // برای کوکی و سشن
+                //             headers: {
+                //                 'X-Requested-With': 'XMLHttpRequest',
+                //                 'Accept': 'text/html'
+                //             }
+                //         });
 
-//         // 6. تزریق مستقیم HTML
-//         container.innerHTML = htmlText;
+                //         if (!response.ok) {
+                //             throw new Error(`خطا ${response.status}: ${response.statusText}`);
+                //         }
 
-//     } catch (error) {
-//         console.error('خطا در Document_lang:', error);
-//         showError(targetSelector, `خطا در بارگذاری: ${error.message}`);
-//     }
-// }
+                //         // 5. دریافت HTML به صورت متن
+                //         const htmlText = await response.text();
 
-// // ——————————————————————
-// // تابع کمکی نمایش خطا
-// function showError(selector, message) {
-//     const el = document.querySelector(selector);
-//     if (el) {
-//         el.innerHTML = `
-//             <div style="text-align:center; padding:20px; background:#ffe6e6; color:#c00; border-radius:8px; margin:10px 0; border:1px solid #fcc;">
-//                 <strong>خطا:</strong> ${escapeHtml(message)}
-//             </div>`;
-//     }
-// }
+                //         // 6. تزریق مستقیم HTML
+                //         container.innerHTML = htmlText;
 
-// // تابع کمکی XSS
-// function escapeHtml(text) {
-//     const div = document.createElement('div');
-//     div.textContent = text;
-//     return div.innerHTML;
-// }
+                //     } catch (error) {
+                //         console.error('خطا در Document_lang:', error);
+                //         showError(targetSelector, `خطا در بارگذاری: ${error.message}`);
+                //     }
+                // }
+
+                // // ——————————————————————
+                // // تابع کمکی نمایش خطا
+                // function showError(selector, message) {
+                //     const el = document.querySelector(selector);
+                //     if (el) {
+                //         el.innerHTML = `
+                //             <div style="text-align:center; padding:20px; background:#ffe6e6; color:#c00; border-radius:8px; margin:10px 0; border:1px solid #fcc;">
+                //                 <strong>خطا:</strong> ${escapeHtml(message)}
+                //             </div>`;
+                //     }
+                // }
+
+                // // تابع کمکی XSS
+                // function escapeHtml(text) {
+                //     const div = document.createElement('div');
+                //     div.textContent = text;
+                //     return div.innerHTML;
+                // }
 
 
 
@@ -5090,7 +5089,8 @@ function Document_lang(x, id) {
                     font-weight: 400;
                     font-style: normal
                 }
-/* 
+
+                /* 
                 .invoice_Documnet_Content {
     display: flex
 ;
@@ -5098,20 +5098,20 @@ function Document_lang(x, id) {
 } */
 
                 .invoice_Documnet_Flex {
-    display: flex
-;
-    gap: 3em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
+                    display: flex;
+                    gap: 3em;
+                    margin-top: 1em;
+                    margin-bottom: 1em;
+                }
 
-                .flex-pdf-icon{
+                .flex-pdf-icon {
                     display: flex;
                     width: fit-content;
                     justify-content: center;
                     align-items: center;
                     flex-direction: column;
                 }
+
                 .invoice_Details .typeDate_8,
                 .invoice_Details .typeDate_9 {
                     font-size: 18px !important;
