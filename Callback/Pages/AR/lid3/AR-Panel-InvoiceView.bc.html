@@ -5,6 +5,11 @@
 </basis>
 
 <basis core="group" name="1" if="[##db.checkrkey.userid|(0)##]<>0">
+
+    <basis core="call" lid="3" file="Client_BasisCore_Script.inc"></basis>
+
+
+
     <basis core="external.fly.ws" procedurename="dbsource" source="cmsDbService2" name="db">
         <member name="get_unit_currency" method="cms" query='{
                 "name": "db",
@@ -161,24 +166,6 @@
                 ] 
             }' />
             </basis>
-            <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
-                <member method="cms" name="Document" query='
-             {
-                   "name": "db",
-                "mid": "20",
-                "member": 
-                [
-                      {
-                        "name": "q",
-                        "type": "view",
-                        "id": "[##cms.query.id##]",
-                        "rkey": "[##cms.cookie.rkey##]",
-                        "lid":"3",
-                        "request": "invoice_Document",
-                    }
-                ]
-            }' preview="" />
-            </basis>
 
             <basis core="inlinesource" name="db">
                 <member name="CustomerPayment" leftTblCol="db.banks.bankcode" rightTblCol="db.payment.banktype"
@@ -191,7 +178,6 @@
                     </member>
                 </basis>
                 <basis core='inlinesource' name='db'>
-                    <member name='Document_Tree' format="json" preview=""> {"root":[##db.Document.result##]} </member>
                     <member name='invoice_NoteList' format="json" preview="">{"root":[##db.invoiceNote_List.result##]}
                     </member>
                     <member name='InvoiceNote' format="json"
@@ -255,12 +241,11 @@
 
                 <body>
                     <div class="Panel_Container">
-                        <basis core="call" lid="3" file="AR-Panel-Menu.inc" />
+                        <basis core="call" lid="3" file="AR-Panel-Menu-v2.inc" />
 
                         <div class="Panel_Wrraper_Box">
                             <basis core="call" lid="3" file="AR-Panel-Dashboard-Header.inc" />
                             <basis core="call" lid="3" file="AR-Panel-Icon.inc" />
-
                             <div class="Panel_invoice_View">
                                 <div class="Panel_Box">
                                     <div class="Panel_Box_title">
@@ -2629,6 +2614,39 @@
                         </div>
 
                         <ul class="invoice_Documents_state">
+                                                        <li>
+                                <label class="Panel_radio_Box">
+                                    <input type="radio" name="Document_lang" value="3"
+                                        onclick="Document_lang(this, [##cms.query.id##])" checked>
+                                    <span class="Panel_check_mark"></span>
+                                    عربي </label>
+                            </li>
+                            
+                                                        <li>
+                                <label class="Panel_radio_Box">
+                                    <input type="radio" name="Document_lang" value="2"
+                                        onclick="Document_lang(this, [##cms.query.id##])">
+                                    <span class="Panel_check_mark"></span>
+                                    إنجليزي
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="Panel_radio_Box">
+                                    <input type="radio" name="Document_lang" value="1"
+                                        onclick="Document_lang(this, [##cms.query.id##])" >
+                                    <span class="Panel_check_mark"></span>
+                            الفارسية
+                                </label>
+                            </li>
+
+
+
+
+                        </ul>
+
+
+                        <ul class="invoice_Documents_state">
                             <li>
                                 <label class="Panel_radio_Box">
                                     <input type="radio" name="Document_show" value="1" id="withHead"
@@ -2650,88 +2668,58 @@
                     </div>
 
                     <div class="invoice_Documents_bottom">
-                        <basis core="tree" datamembername="db.Document_Tree" idcol="id" parentidcol="parentid"
-                            nullvalue="null">
 
-                            <face filter="Field in ('Error') and value in ('invoice is Cancel')">
-                                <div>لا يمكن تنزيل الوثائق الخاصة بالعقود الملغاة </div>
-                            </face>
 
-                            <face filter="Field in ('Error') and value in ('invoice is not Clear')">
-                                <div>لا يمكن تنزيل الوثائق الخاصة بالعقود التي لم يتم تسويتها </div>
-                            </face>
 
-                            <face filter="Field in ('doucument')">
-                                <div class="invoice_Documnet">@child</div>
-                            </face>
 
-                            <face filter="Field in ('title') and value in ('invoice')">
-                                <div class="invoice_Documnet_title">
-                                    قم بتنزيل العقد
-                                </div>
-                            </face>
 
-                            <face filter="Field in ('title') and value in ('ticket')">
-                                <div class="invoice_Documnet_title">
-                                    تنزيل التذاكر
-                                </div>
-                            </face>
 
-                            <face filter="Field in ('title') and value in ('voucher')">
-                                <div class="invoice_Documnet_title">
-                                    تحميل القسيمة
-                                </div>
-                            </face>
 
-                            <face filter="Field in ('title') and value in ('insurance')">
-                                <div class="invoice_Documnet_title">
-                                    تحميل التأمين
-                                </div>
-                            </face>
 
-                            <face filter="Field in ('title') and value in ('visa')">
-                                <div class="invoice_Documnet_title">
-                                    قم بتنزيل الوثائق التي تم تحميلها
-                                </div>
-                            </face>
-                            <face filter="Field in ('title') and value in ('uploadvisa')">
-                                <div class="invoice_Documnet_title">
-                                    تحمیل تأشيرة
-                                </div>
-                            </face>
-
-                            <face filter="Field in ('links','links_upload')">
-                                <div class="invoice_Documnet_Content">
-                                    @Child
-                                    <div class="clr"></div>
-                                </div>
-                            </face>
-
-                            <face filter="Field in ('link','link_upload') and type in ('object')">@Child</face>
-                            <face filter="Field in ('whead')">
-                                <div class="invoice_pdf whead">@Child</div>
-                            </face>
-                            <face filter="Field in ('wohead')">
-                                <div class="invoice_pdf wohead" style="display:none">@Child</div>
-                            </face>
-                            <face filter="Field in ('whead_upload')">
-                                <div class="invoice_pdf">@Child</div>
-                            </face>
-                            <face filter="Field in ('link','link_upload') and type in ('scalar.string')">
-                                <a href="@value" class="Invoice-Doucument" target="_blank">
-                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-
-                                    <a href="@value" target="_blank">
-                                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png" width="128" height="128"
-                                            alt="Pdf Icon">
-                            </face>
-
-                            <face filter="Field in ('name','name_upload')">
-                                <span>@value</span>
-                                </a>
-                            </face>
-                            <face filter="type in ('object','array')">@Child</face>
+                        <!-- API Call -->
+                        <basis core="api" name="api.Webservice" source="basisfly"
+                            url="https://www.basisfly.com/panel/main/view/[##cms.cookie.rkey##]" method="post"
+                            triggers="db.invoiceDocumentLang" body='{
+            "name": "db", 
+            "mid": "20", 
+            "member": [
+                {
+                    "name": "q",
+                    "type": "view",
+                    "id": "[##cms.query.id##]",
+                    "rkey": "[##cms.cookie.rkey##]",
+                    "request": "invoice_document",
+                    "lid": "{##db.invoiceDocumentLang.value|(3)##}",
+                    "link": "[##cms.request.host##]"
+                }
+            ] 
+        }' content-type="application/json" run="atclient">
                         </basis>
+
+
+                        <!-- Print Result -->
+                        <basis core="print" datamembername="db.invoice_document" run="atclient">
+
+
+                            <layout>
+                                <script type="text/template">
+
+                                    <div class="invoice_Documnet_Content" id="invoice_Documnet_Content">
+                                        @child
+                                </div>
+                            </script>
+                            </layout>
+                            <face>
+                                <script type="text/template">
+
+                                    {{  
+                                        return renderPDFLinks($data); 
+                                    }}
+            </script>
+                            </face>
+                        </basis>
+
+
                     </div>
                 </div>
             </div>
@@ -3274,16 +3262,128 @@
                     $(this).closest(".invoice_Documnet").find(".invoice_Documnet_Content").show()
                 })
 
-                function Document_show(x) {
-                    if (parseInt($(x).val()) == 1) {
-                        $(".wohead").hide()
-                        $(".whead").show()
+                
+
+                function escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+
+function getDocumentTitleContent(title) {
+    switch (title) {
+        case 'invoice':
+            return 'تحميل العقد<span class="lang-invoice">(Ar)</span>';
+        case 'ticket':
+            return 'تحميل التذكرة<span class="lang-invoice">(Ar)</span>';
+        case 'voucher':
+            return 'تحميل الفاوتشر<span class="lang-invoice">(Ar)</span>';
+        case 'insurance':
+            return 'تحميل التأمين<span class="lang-invoice">(Ar)</span>';
+        case 'visa':
+            return 'تحميل المستندات المرفوعة<span class="lang-invoice">(Ar)</span>';
+        case 'uploadvisa':
+            return 'تحميل التأشيرة<span class="lang-invoice">(Ar)</span>';
+        default:
+            return '';
+    }
+}
+
+
+                function renderPDFLinks(data) {
+                    const docs = Array.isArray(data) ? data : [data];
+                    let html1 = '';
+                    let html2 = '';
+
+                    // 👇 وضعیت رادیوی با/لا يوجد رأس
+                    let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
+                    if (isNaN(showVal)) {
+                        showVal = 1; // دیفالت: مع ترويسة
                     }
-                    if (parseInt($(x).val()) == 0) {
-                        $(".whead").hide()
-                        $(".wohead").show()
+                    const showWhead = (showVal === 1);
+
+                    docs.forEach(jsondata => {
+                        if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
+                            return;
+                        }
+
+                        const title = jsondata.doucument.title;
+                        const titleHtml = getDocumentTitleContent(title);
+
+                        if (titleHtml) {
+                            html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                        }
+
+                        jsondata.doucument.links.forEach(item => {
+                            const links = item.link;
+
+                            // مع ترويسة
+                            if (links.whead && links.whead.new_link) {
+                                const wheadStyle = showWhead ? '' : 'style="display:none;"';
+                                html2 += `
+                    <a href="${links.whead.new_link}"
+                       class="Invoice-Doucument flex-pdf-icon whead"
+                       ${wheadStyle}
+                       target="_blank"
+                       data-href="${links.whead.new_link}">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                             width="50" height="50" alt="Pdf Icon" />
+                        <span>${escapeHtml(links.whead.name)} (مع ترويسة)</span>
+                    </a>`;
+                            }
+
+                            // لا يوجد رأس
+                            if (links.wohead && links.wohead.new_link) {
+                                const woheadStyle = showWhead ? 'style="display:none;"' : '';
+                                html2 += `
+                    <a href="${links.wohead.new_link}"
+                       class="Invoice-Doucument flex-pdf-icon wohead"
+                       ${woheadStyle}
+                       target="_blank"
+                       data-href="${links.wohead.new_link}">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                             width="50" height="50" alt="Pdf Icon" />
+                        <span>${escapeHtml(links.wohead.name)} (لا يوجد رأس)</span>
+                    </a>`;
+                            }
+                        });
+                    });
+
+                    return `<div class="invoice_Documnet">
+        ${html1}
+        <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
+    </div>`;
+                }
+
+                // فقط برای عوض کردن بعد از کلیک روی رادیویی با/لا يوجد رأس
+                function applyDocumentShow() {
+                    var val = parseInt($('input[name="Document_show"]:checked').val(), 10);
+
+                    if (val === 1) {           // مع ترويسة
+                        $(".wohead").hide();
+                        $(".whead").show();
+                    } else if (val === 0) {    // لا يوجد رأس
+                        $(".whead").hide();
+                        $(".wohead").show();
                     }
                 }
+
+                function Document_show(x) {
+                    applyDocumentShow();
+                }
+
+                // فقط زبان رو عوض می‌کنیم؛
+                function Document_lang(x, id) {
+                    const langid = x && x.value ? x.value : "";
+                    console.log("Selected Language ID:", langid);
+                    $bc.setSource("db.invoiceDocumentLang", langid);
+                }
+
+
+
+         
 
                 $(".wheelchair").each(function () {
                     if ($(this).val() == "1") {
