@@ -258,11 +258,38 @@
                                                 ([##cms.query.id##])</basis>
                                         </span>
 
+
+                                        
                                         <basis core="group" if="[##db.InvoiceOpen.value##]=1">
-                                            <a href="/AR-InvoicePdf.bc?id=[##cms.query.id##]&open=[##cms.query.open##]"
-                                                class="Panel_Edit_icon pdf" title="تنزيل العقد المسبق"
+                                            <basis core="api" name="api.Webservice" source="basisfly"
+                                                url="https://basisfly.com/panel/main/view/[##cms.cookie.rkey##]"
+                                                method="post" body='{
+                                                    "name": "db", 
+                                                    "mid": "20", 
+                                                    "member": [
+                                                        {
+                                                            "name": "q",
+                                                            "type": "view",
+                                                            "id": "[##cms.query.id##]",
+                                                            "request": "invoice_scalar_value"
+                                                        }
+                                                    ] 
+                                                }' content-type="application/json" run="atclient">
+                                            </basis>
+                                            <basis core="print" datamembername="db.invoice_scalar_value" run="atclient">
+                                                <face>
+                                                    <script type="text/template">
+
+                                                <a href="/pdf/invoice?token=@token@"
+                                                class="Panel_Edit_icon pdf"  title="تنزيل العقد المسبق"
                                                 target="_blank"></a>
+
+
+                                                    </script>
+                                                </face>
+                                            </basis>
                                         </basis>
+
                                     </div>
 
                                     <div class="Panel_Box_Content">
