@@ -441,22 +441,47 @@
                                 </div>
 
                                 <div id="Invoice-Tab">
-                                    <div class="Tab_Section">
-                                        <a class="Tab_Title" onclick="show_information(event,'1')"
-                                            id="defaultOpen">Purchase specifications</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'2')">Financial</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'3')">Documents</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'4')">Payment</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'5')">Notes
-                                            <span class="noteCount">[##db.InvoiceNote.Value##]</span>
-                                        </a>
-                                        <basis core="group" if="[##db.InvoiceOpen.value##]=0">
-                                            <a class="Tab_Title" onclick="show_information(event,'6')">Request a refund
-                                                and change
-                                                <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+
+                                    
+                                <div id="Invoice-Tab">
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' <> '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')"
+                                                id="defaultOpen">Purchase specifications</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">Financial</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')">Documents</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">Payment</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">Notes
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
                                             </a>
-                                        </basis>
-                                    </div>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">Request a
+                                                    refund
+                                                    and change
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' = '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')">Purchase specifications</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">Financial</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')" id="defaultOpen" >Documents</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">Payment</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">Notes
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
+                                            </a>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">Request a
+                                                    refund
+                                                    and change
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
+                                    
 
                                     <div id="1" class="Tab_Content">
                                         <!-- account ############################################################################################## -->

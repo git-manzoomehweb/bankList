@@ -394,21 +394,42 @@
                                 </div>
 
                                 <div id="Invoice-Tab">
-                                    <div class="Tab_Section">
-                                        <a class="Tab_Title" onclick="show_information(event,'1')"
-                                            id="defaultOpen">معلومات الحجز</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'2')">الأمور المالية</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'3')">وثائق</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'4')">الدفع</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'5')">ملاحظات
-                                            <span class="noteCount">[##db.InvoiceNote.Value##]</span>
-                                        </a>
-                                        <basis core="group" if="[##db.InvoiceOpen.value##]=0">
-                                            <a class="Tab_Title" onclick="show_information(event,'6')">طلب الغاء وتغيير
-                                                <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' <> '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')"
+                                                id="defaultOpen">معلومات الحجز</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">الأمور
+                                                المالية</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')">وثائق</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">الدفع</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">ملاحظات
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
                                             </a>
-                                        </basis>
-                                    </div>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">طلب الغاء
+                                                    وتغيير
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' = '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')">معلومات الحجز</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">الأمور المالية</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')"  id="defaultOpen">وثائق</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">الدفع</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">ملاحظات
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
+                                            </a>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">طلب الغاء
+                                                    وتغيير
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
 
                                     <div id="1" class="Tab_Content">
                                         <!-- account ############################################################################################## -->

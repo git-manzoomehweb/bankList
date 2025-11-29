@@ -1,4 +1,4 @@
-<basis core="call"  file="Client_CheckRkey.inc"></basis> <!-- updated login -->
+<basis core="call" file="Client_CheckRkey.inc"></basis> <!-- updated login -->
 
 <basis core="group" name="0" if="[##db.checkrkey.userid|(0)##]=0">
     <p style="text-align:center;font-family:tahoma">لا يسمح لك للوصول إلى هذه الصفحة</p>
@@ -32,12 +32,12 @@
                 {"root": [##db.get_unit_currency.result##]}
             </member>
         </basis>
-        <basis core="dbsource" source="accounting"  name="db" factorid="[##cms.query.id##]"
+        <basis core="dbsource" source="accounting" name="db" factorid="[##cms.query.id##]"
             ownerid="[##cms.cms.ownerid##]">
             <member name="StatusAccount" type="list" request="accreport" preview="" />
         </basis>
 
-        <basis core="dbsource" source="accounting"  name="db" factorid="[##cms.query.id##]"
+        <basis core="dbsource" source="accounting" name="db" factorid="[##cms.query.id##]"
             ownerid="[##cms.cms.ownerid##]">
             <member name="Remaining_amount" type="list" request="accreport" preview=""
                 postsql="select taraz from [db.Remaining_amount] where description = 'taraz'" />
@@ -234,7 +234,7 @@
                     </basis>
                     <meta charset="utf-8">
                     <style type="text/css">
-                        <basis core="call"  file="Panel_User_css.inc" />
+                        <basis core="call" file="Panel_User_css.inc" />
                     </style>
                     <link rel="stylesheet" href="/css/Panel-master-css.css" type="text/css">
                     <script src="[##cms.cms.cdn##]/_js/jquery-1.8.0.min.js"></script>
@@ -242,11 +242,11 @@
 
                 <body>
                     <div class="Panel_Container">
-                        <basis core="call"  file="AR-Panel-Menu-v2.inc" />
+                        <basis core="call" file="AR-Panel-Menu-v2.inc" />
 
                         <div class="Panel_Wrraper_Box">
-                            <basis core="call"  file="AR-Panel-Dashboard-Header.inc" />
-                            <basis core="call"  file="AR-Panel-Icon.inc" />
+                            <basis core="call" file="AR-Panel-Dashboard-Header.inc" />
+                            <basis core="call" file="AR-Panel-Icon.inc" />
 
                             <div class="Panel_invoice_View">
                                 <div class="Panel_Box">
@@ -259,7 +259,7 @@
                                         </span>
 
 
-                                        
+
                                         <basis core="group" if="[##db.InvoiceOpen.value##]=1">
                                             <basis core="api" name="api.Webservice" source="basisfly"
                                                 url="https://basisfly.com/panel/main/view/[##cms.cookie.rkey##]"
@@ -312,9 +312,11 @@
                                                 <p>
                                                     <span>[##cms.query.id##]</span>
                                                     <basis core="group" if="[##db.InvoiceOpen.value##]=0">
-                                                        <span>الحجز</span></basis>
+                                                        <span>الحجز</span>
+                                                    </basis>
                                                     <basis core="group" if="[##db.InvoiceOpen.value##]=1">
-                                                        <span>حجزمبدنی</span></basis>
+                                                        <span>حجزمبدنی</span>
+                                                    </basis>
                                                 </p>
                                                 <p><i class="fa fa-barcode"></i></p>
                                             </div>
@@ -399,21 +401,45 @@
                                 </div>
 
                                 <div id="Invoice-Tab">
-                                    <div class="Tab_Section">
-                                        <a class="Tab_Title" onclick="show_information(event,'1')"
-                                            id="defaultOpen">معلومات الحجز</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'2')">الأمور المالية</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'3')">وثائق</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'4')">الدفع</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'5')">ملاحظات
-                                            <span class="noteCount">[##db.InvoiceNote.Value##]</span>
-                                        </a>
-                                        <basis core="group" if="[##db.InvoiceOpen.value##]=0">
-                                            <a class="Tab_Title" onclick="show_information(event,'6')">طلب الغاء وتغيير
-                                                <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+
+
+
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' <> '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')"
+                                                id="defaultOpen">معلومات الحجز</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">الأمور
+                                                المالية</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')">وثائق</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">الدفع</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">ملاحظات
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
                                             </a>
-                                        </basis>
-                                    </div>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">طلب الغاء
+                                                    وتغيير
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' = '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')">معلومات الحجز</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">الأمور المالية</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')"  id="defaultOpen">وثائق</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">الدفع</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">ملاحظات
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
+                                            </a>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">طلب الغاء
+                                                    وتغيير
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
 
                                     <div id="1" class="Tab_Content">
                                         <!-- account ############################################################################################## -->
@@ -713,7 +739,8 @@
                                                         style="direction: rtl;">الكبار (إضافي)</td>
                                                 </face>
                                                 <face filter="Field in ('wheelchair') and type in ('Scalar.String')">
-                                                    <input type="hidden" value="@value" class="wheelchair"></face>
+                                                    <input type="hidden" value="@value" class="wheelchair">
+                                                </face>
                                                 <face filter="type in ('Array','object')">@Child</face>
                                             </basis>
                                         </basis:111>
@@ -830,7 +857,8 @@
                                                         style="direction: rtl;">الكبار (إضافي)</td>
                                                 </face>
                                                 <face filter="Field in ('wheelchair') and type in ('Scalar.String')">
-                                                    <input type="hidden" value="@value" class="wheelchair"></face>
+                                                    <input type="hidden" value="@value" class="wheelchair">
+                                                </face>
                                                 <face filter="type in ('Array','object')">@Child</face>
                                             </basis>
                                         </basis:112>
@@ -2643,15 +2671,15 @@
                         </div>
 
                         <ul class="invoice_Documents_state">
-                                                        <li>
+                            <li>
                                 <label class="Panel_radio_Box">
                                     <input type="radio" name="Document_lang" value="3"
                                         onclick="Document_lang(this, [##cms.query.id##])" checked>
                                     <span class="Panel_check_mark"></span>
                                     عربي </label>
                             </li>
-                            
-                                                        <!-- <li>
+
+                            <!-- <li>
                                 <label class="Panel_radio_Box">
                                     <input type="radio" name="Document_lang" value="2"
                                         onclick="Document_lang(this, [##cms.query.id##])">
@@ -3016,7 +3044,7 @@
                                 <div class="clr"></div>
                             </li>
                         </ul>
-                        <div class="passengerlist invoice_resize" >
+                        <div class="passengerlist invoice_resize">
                             <table class="invoice_tbl">
                                 <thead>
                                     <tr>
@@ -3217,7 +3245,7 @@
             </div>
             </div>
             </div>
-            <basis core="call"  file="AR-Panel-Dashboard-Footer.inc" />
+            <basis core="call" file="AR-Panel-Dashboard-Footer.inc" />
             </div>
 
             <div class="clr"></div>
@@ -3291,7 +3319,7 @@
                     $(this).closest(".invoice_Documnet").find(".invoice_Documnet_Content").show()
                 })
 
-                
+
 
                 function escapeHtml(text) {
                     const div = document.createElement('div');
@@ -3299,170 +3327,170 @@
                     return div.innerHTML;
                 }
 
-function getDocumentTitleContent(title) {
-    switch (title) {
-        case 'invoice':
-            return 'تحميل العقد<span class="lang-invoice">(Ar)</span>';
-        case 'ticket':
-            return 'تحميل التذكرة<span class="lang-invoice">(Ar)</span>';
-        case 'voucher':
-            return 'تحميل الفاوتشر<span class="lang-invoice">(Ar)</span>';
-        case 'insurance':
-            return 'تحميل التأمين<span class="lang-invoice">(Ar)</span>';
-        case 'visa':
-            return 'تحميل المستندات المرفوعة<span class="lang-invoice">(Ar)</span>';
-        case 'uploadvisa':
-            return 'تحميل التأشيرة<span class="lang-invoice">(Ar)</span>';
-        default:
-            return '';
-    }
-}
+                function getDocumentTitleContent(title) {
+                    switch (title) {
+                        case 'invoice':
+                            return 'تحميل العقد<span class="lang-invoice">(Ar)</span>';
+                        case 'ticket':
+                            return 'تحميل التذكرة<span class="lang-invoice">(Ar)</span>';
+                        case 'voucher':
+                            return 'تحميل الفاوتشر<span class="lang-invoice">(Ar)</span>';
+                        case 'insurance':
+                            return 'تحميل التأمين<span class="lang-invoice">(Ar)</span>';
+                        case 'visa':
+                            return 'تحميل المستندات المرفوعة<span class="lang-invoice">(Ar)</span>';
+                        case 'uploadvisa':
+                            return 'تحميل التأشيرة<span class="lang-invoice">(Ar)</span>';
+                        default:
+                            return '';
+                    }
+                }
 
 
-    //             function renderPDFLinks(data) {
-    //                 const docs = Array.isArray(data) ? data : [data];
-    //                 let html1 = '';
-    //                 let html2 = '';
+                //             function renderPDFLinks(data) {
+                //                 const docs = Array.isArray(data) ? data : [data];
+                //                 let html1 = '';
+                //                 let html2 = '';
 
-    //                 // 👇 وضعیت رادیوی با/لا يوجد رأس
-    //                 let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
-    //                 if (isNaN(showVal)) {
-    //                     showVal = 1; // دیفالت: مع ترويسة
-    //                 }
-    //                 const showWhead = (showVal === 1);
+                //                 // 👇 وضعیت رادیوی با/لا يوجد رأس
+                //                 let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
+                //                 if (isNaN(showVal)) {
+                //                     showVal = 1; // دیفالت: مع ترويسة
+                //                 }
+                //                 const showWhead = (showVal === 1);
 
-    //                 docs.forEach(jsondata => {
-    //                     if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
-    //                         return;
-    //                     }
+                //                 docs.forEach(jsondata => {
+                //                     if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
+                //                         return;
+                //                     }
 
-    //                     const title = jsondata.doucument.title;
-    //                     const titleHtml = getDocumentTitleContent(title);
+                //                     const title = jsondata.doucument.title;
+                //                     const titleHtml = getDocumentTitleContent(title);
 
-    //                     if (titleHtml) {
-    //                         html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
-    //                     }
+                //                     if (titleHtml) {
+                //                         html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                //                     }
 
-    //                     jsondata.doucument.links.forEach(item => {
-    //                         const links = item.link;
+                //                     jsondata.doucument.links.forEach(item => {
+                //                         const links = item.link;
 
-    //                         // مع ترويسة
-    //                         if (links.whead && links.whead.new_link) {
-    //                             const wheadStyle = showWhead ? '' : 'style="display:none;"';
-    //                             html2 += `
-    //                 <a href="${links.whead.new_link}"
-    //                    class="Invoice-Doucument flex-pdf-icon whead"
-    //                    ${wheadStyle}
-    //                    target="_blank"
-    //                    data-href="${links.whead.new_link}">
-    //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-    //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
-    //                          width="50" height="50" alt="Pdf Icon" />
-    //                     <span>${escapeHtml(links.whead.name)} (مع ترويسة)</span>
-    //                 </a>`;
-    //                         }
+                //                         // مع ترويسة
+                //                         if (links.whead && links.whead.new_link) {
+                //                             const wheadStyle = showWhead ? '' : 'style="display:none;"';
+                //                             html2 += `
+                //                 <a href="${links.whead.new_link}"
+                //                    class="Invoice-Doucument flex-pdf-icon whead"
+                //                    ${wheadStyle}
+                //                    target="_blank"
+                //                    data-href="${links.whead.new_link}">
+                //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                //                          width="50" height="50" alt="Pdf Icon" />
+                //                     <span>${escapeHtml(links.whead.name)} (مع ترويسة)</span>
+                //                 </a>`;
+                //                         }
 
-    //                         // لا يوجد رأس
-    //                         if (links.wohead && links.wohead.new_link) {
-    //                             const woheadStyle = showWhead ? 'style="display:none;"' : '';
-    //                             html2 += `
-    //                 <a href="${links.wohead.new_link}"
-    //                    class="Invoice-Doucument flex-pdf-icon wohead"
-    //                    ${woheadStyle}
-    //                    target="_blank"
-    //                    data-href="${links.wohead.new_link}">
-    //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-    //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
-    //                          width="50" height="50" alt="Pdf Icon" />
-    //                     <span>${escapeHtml(links.wohead.name)} (لا يوجد رأس)</span>
-    //                 </a>`;
-    //                         }
-    //                     });
-    //                 });
+                //                         // لا يوجد رأس
+                //                         if (links.wohead && links.wohead.new_link) {
+                //                             const woheadStyle = showWhead ? 'style="display:none;"' : '';
+                //                             html2 += `
+                //                 <a href="${links.wohead.new_link}"
+                //                    class="Invoice-Doucument flex-pdf-icon wohead"
+                //                    ${woheadStyle}
+                //                    target="_blank"
+                //                    data-href="${links.wohead.new_link}">
+                //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                //                          width="50" height="50" alt="Pdf Icon" />
+                //                     <span>${escapeHtml(links.wohead.name)} (لا يوجد رأس)</span>
+                //                 </a>`;
+                //                         }
+                //                     });
+                //                 });
 
-    //                 return `<div class="invoice_Documnet">
-    //     ${html1}
-    //     <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
-    // </div>`;
-    //             }
+                //                 return `<div class="invoice_Documnet">
+                //     ${html1}
+                //     <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
+                // </div>`;
+                //             }
 
                 // فقط برای عوض کردن بعد از کلیک روی رادیویی با/لا يوجد رأس
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               function getInvoiceErrorMessage(row) {
-    if (row && (row.Field === "Error" || row.field === "Error")) {
-        const val = row.value || row.Value || "";
-        if (val === "invoice is Cancel") {
-            return "لا يمكن تحميل المستندات للعقود الملغاة";
-        }
-        if (val === "invoice is not Clear") {
-            return "لا يتوفر تنزيل المستندات للعقود غير المستقرة";
-        }
-    }
 
-    if (row && (row.Error || row.error)) {
-        const val = row.Error || row.error;
-        if (val === "invoice is Cancel") {
-            return "لا يمكن تحميل المستندات للعقود الملغاة";
-        }
-        if (val === "invoice is not Clear") {
-            return "لا يتوفر تنزيل المستندات للعقود غير المستقرة";
-        }
-    }
 
-    if (row && row.msg && row.msg === "no data") {
-        return "لا يتوفر تنزيل المستندات للعقود غير المستقرة وغير الصادرة";
-    }
 
-    return "";
-}
 
-function renderPDFLinks(data) {
-    const docs = Array.isArray(data) ? data : [data];
-    let html1 = '';
-    let html2 = '';
-    let errorHtml = '';
 
-    let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
-    if (isNaN(showVal)) {
-        showVal = 1; 
-    }
-    const showWhead = (showVal === 1);
 
-    docs.forEach(jsondata => {
-        if (!jsondata.doucument) {
-            const msg = getInvoiceErrorMessage(jsondata);
-            if (msg) {
-                errorHtml = `<div>${msg}</div>`;
-            }
-            return;
-        }
 
-        if (!Array.isArray(jsondata.doucument.links)) {
-            return;
-        }
 
-        const title = jsondata.doucument.title;
-        const titleHtml = getDocumentTitleContent(title);
 
-        if (titleHtml) {
-            html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
-        }
 
-        jsondata.doucument.links.forEach(item => {
-            const links = item.link;
+                function getInvoiceErrorMessage(row) {
+                    if (row && (row.Field === "Error" || row.field === "Error")) {
+                        const val = row.value || row.Value || "";
+                        if (val === "invoice is Cancel") {
+                            return "لا يمكن تحميل المستندات للعقود الملغاة";
+                        }
+                        if (val === "invoice is not Clear") {
+                            return "لا يتوفر تنزيل المستندات للعقود غير المستقرة";
+                        }
+                    }
 
-            if (links.whead && links.whead.new_link) {
-                const wheadStyle = showWhead ? '' : 'style="display:none;"';
-                html2 += `
+                    if (row && (row.Error || row.error)) {
+                        const val = row.Error || row.error;
+                        if (val === "invoice is Cancel") {
+                            return "لا يمكن تحميل المستندات للعقود الملغاة";
+                        }
+                        if (val === "invoice is not Clear") {
+                            return "لا يتوفر تنزيل المستندات للعقود غير المستقرة";
+                        }
+                    }
+
+                    if (row && row.msg && row.msg === "no data") {
+                        return "لا يتوفر تنزيل المستندات للعقود غير المستقرة وغير الصادرة";
+                    }
+
+                    return "";
+                }
+
+                function renderPDFLinks(data) {
+                    const docs = Array.isArray(data) ? data : [data];
+                    let html1 = '';
+                    let html2 = '';
+                    let errorHtml = '';
+
+                    let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
+                    if (isNaN(showVal)) {
+                        showVal = 1;
+                    }
+                    const showWhead = (showVal === 1);
+
+                    docs.forEach(jsondata => {
+                        if (!jsondata.doucument) {
+                            const msg = getInvoiceErrorMessage(jsondata);
+                            if (msg) {
+                                errorHtml = `<div>${msg}</div>`;
+                            }
+                            return;
+                        }
+
+                        if (!Array.isArray(jsondata.doucument.links)) {
+                            return;
+                        }
+
+                        const title = jsondata.doucument.title;
+                        const titleHtml = getDocumentTitleContent(title);
+
+                        if (titleHtml) {
+                            html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                        }
+
+                        jsondata.doucument.links.forEach(item => {
+                            const links = item.link;
+
+                            if (links.whead && links.whead.new_link) {
+                                const wheadStyle = showWhead ? '' : 'style="display:none;"';
+                                html2 += `
                     <a href="${links.whead.new_link}"
                        class="Invoice-Doucument flex-pdf-icon whead"
                        ${wheadStyle}
@@ -3473,11 +3501,11 @@ function renderPDFLinks(data) {
                              width="50" height="50" alt="Pdf Icon" />
                         <span>${escapeHtml(links.whead.name)} (مع العنوان)</span>
                     </a>`;
-            }
+                            }
 
-            if (links.wohead && links.wohead.new_link) {
-                const woheadStyle = showWhead ? 'style="display:none;"' : '';
-                html2 += `
+                            if (links.wohead && links.wohead.new_link) {
+                                const woheadStyle = showWhead ? 'style="display:none;"' : '';
+                                html2 += `
                     <a href="${links.wohead.new_link}"
                        class="Invoice-Doucument flex-pdf-icon wohead"
                        ${woheadStyle}
@@ -3488,35 +3516,35 @@ function renderPDFLinks(data) {
                              width="50" height="50" alt="Pdf Icon" />
                         <span>${escapeHtml(links.wohead.name)} (بدون العنوان)</span>
                     </a>`;
-            }
-        });
-    });
+                            }
+                        });
+                    });
 
-    if (!html1 && !html2 && errorHtml) {
-        return `<div class="invoice_Documnet_Error">${errorHtml}</div>`;
-    }
+                    if (!html1 && !html2 && errorHtml) {
+                        return `<div class="invoice_Documnet_Error">${errorHtml}</div>`;
+                    }
 
-    if (!html1 && !html2) {
-        return '';
-    }
+                    if (!html1 && !html2) {
+                        return '';
+                    }
 
-    return `<div class="invoice_Documnet">
+                    return `<div class="invoice_Documnet">
         ${html1}
         <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
     </div>`;
-}
+                }
 
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
+
+
+
+
+
+
+
+
+
+
+
                 function applyDocumentShow() {
                     var val = parseInt($('input[name="Document_show"]:checked').val(), 10);
 
@@ -3542,7 +3570,7 @@ function renderPDFLinks(data) {
 
 
 
-         
+
 
                 $(".wheelchair").each(function () {
                     if ($(this).val() == "1") {

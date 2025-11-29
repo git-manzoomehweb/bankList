@@ -444,22 +444,45 @@
                                 </div>
 
                                 <div id="Invoice-Tab">
-                                    <div class="Tab_Section">
-                                        <a class="Tab_Title" onclick="show_information(event,'1')"
-                                            id="defaultOpen">Purchase specifications</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'2')">Financial</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'3')">Documents</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'4')">Payment</a>
-                                        <a class="Tab_Title" onclick="show_information(event,'5')">Notes
-                                            <span class="noteCount">[##db.InvoiceNote.Value##]</span>
-                                        </a>
-                                        <basis core="group" if="[##db.InvoiceOpen.value##]=0">
-                                            <a class="Tab_Title" onclick="show_information(event,'6')">Request a refund
-                                                and change
-                                                <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' <> '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')"
+                                                id="defaultOpen">Purchase specifications</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">Financial</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')">Documents</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">Payment</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">Notes
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
                                             </a>
-                                        </basis>
-                                    </div>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">Request a
+                                                    refund
+                                                    and change
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
+                                    <basis core="group" name="doc-active" if="'[##cms.query.doc##]' = '1'">
+                                        <div class="Tab_Section">
+                                            <a class="Tab_Title" onclick="show_information(event,'1')">Purchase specifications</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'2')">Financial</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'3')" id="defaultOpen" >Documents</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'4')">Payment</a>
+                                            <a class="Tab_Title" onclick="show_information(event,'5')">Notes
+                                                <span class="noteCount">[##db.InvoiceNote.Value##]</span>
+                                            </a>
+                                            <basis core="group" if="[##db.InvoiceOpen.value##]=0">
+                                                <a class="Tab_Title" onclick="show_information(event,'6')">Request a
+                                                    refund
+                                                    and change
+                                                    <span class="noteCount">([##db.Invoicerequest.Value|(0)##])</span>
+                                                </a>
+                                            </basis>
+                                        </div>
+                                    </basis>
+
+
 
                                     <div id="1" class="Tab_Content">
                                         <!-- account ############################################################################################## -->
@@ -3092,7 +3115,7 @@
                         </div>
 
                         <ul class="invoice_Documents_state">
-                                                        <li>
+                            <li>
                                 <label class="Panel_radio_Box">
                                     <input type="radio" name="Document_lang" value="2"
                                         onclick="Document_lang(this, [##cms.query.id##])" checked>
@@ -3195,7 +3218,7 @@
                             </face>
                         </basis>
 
-                        
+
                     </div>
                 </div>
             </div>
@@ -3783,174 +3806,174 @@
                 })
 
 
-                                function escapeHtml(text) {
+                function escapeHtml(text) {
                     const div = document.createElement('div');
                     div.textContent = text;
                     return div.innerHTML;
                 }
 
-function getDocumentTitleContent(title) {
-    switch (title) {
-        case 'invoice':
-            return 'Download Contract<span class="lang-invoice">(En)</span>';
-        case 'ticket':
-            return 'Download Ticket<span class="lang-invoice">(En)</span>';
-        case 'voucher':
-            return 'Download Voucher<span class="lang-invoice">(En)</span>';
-        case 'insurance':
-            return 'Download Insurance<span class="lang-invoice">(En)</span>';
-        case 'visa':
-            return 'Download Uploaded Documents<span class="lang-invoice">(En)</span>';
-        case 'uploadvisa':
-            return 'Download Visa<span class="lang-invoice">(En)</span>';
-        default:
-            return '';
-    }
-}
+                function getDocumentTitleContent(title) {
+                    switch (title) {
+                        case 'invoice':
+                            return 'Download Contract<span class="lang-invoice">(En)</span>';
+                        case 'ticket':
+                            return 'Download Ticket<span class="lang-invoice">(En)</span>';
+                        case 'voucher':
+                            return 'Download Voucher<span class="lang-invoice">(En)</span>';
+                        case 'insurance':
+                            return 'Download Insurance<span class="lang-invoice">(En)</span>';
+                        case 'visa':
+                            return 'Download Uploaded Documents<span class="lang-invoice">(En)</span>';
+                        case 'uploadvisa':
+                            return 'Download Visa<span class="lang-invoice">(En)</span>';
+                        default:
+                            return '';
+                    }
+                }
 
 
-    //             function renderPDFLinks(data) {
-    //                 const docs = Array.isArray(data) ? data : [data];
-    //                 let html1 = '';
-    //                 let html2 = '';
+                //             function renderPDFLinks(data) {
+                //                 const docs = Array.isArray(data) ? data : [data];
+                //                 let html1 = '';
+                //                 let html2 = '';
 
-    //                 // 👇 وضعیت رادیوی با/without letterhead
-    //                 let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
-    //                 if (isNaN(showVal)) {
-    //                     showVal = 1; // دیفالت: with letterhead
-    //                 }
-    //                 const showWhead = (showVal === 1);
+                //                 // 👇 وضعیت رادیوی با/without letterhead
+                //                 let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
+                //                 if (isNaN(showVal)) {
+                //                     showVal = 1; // دیفالت: with letterhead
+                //                 }
+                //                 const showWhead = (showVal === 1);
 
-    //                 docs.forEach(jsondata => {
-    //                     if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
-    //                         return;
-    //                     }
+                //                 docs.forEach(jsondata => {
+                //                     if (!jsondata.doucument || !Array.isArray(jsondata.doucument.links)) {
+                //                         return;
+                //                     }
 
-    //                     const title = jsondata.doucument.title;
-    //                     const titleHtml = getDocumentTitleContent(title);
+                //                     const title = jsondata.doucument.title;
+                //                     const titleHtml = getDocumentTitleContent(title);
 
-    //                     if (titleHtml) {
-    //                         html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
-    //                     }
+                //                     if (titleHtml) {
+                //                         html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                //                     }
 
-    //                     jsondata.doucument.links.forEach(item => {
-    //                         const links = item.link;
+                //                     jsondata.doucument.links.forEach(item => {
+                //                         const links = item.link;
 
-    //                         // with letterhead
-    //                         if (links.whead && links.whead.new_link) {
-    //                             const wheadStyle = showWhead ? '' : 'style="display:none;"';
-    //                             html2 += `
-    //                 <a href="${links.whead.new_link}"
-    //                    class="Invoice-Doucument flex-pdf-icon whead"
-    //                    ${wheadStyle}
-    //                    target="_blank"
-    //                    data-href="${links.whead.new_link}">
-    //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-    //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
-    //                          width="50" height="50" alt="Pdf Icon" />
-    //                     <span>${escapeHtml(links.whead.name)} (with letterhead)</span>
-    //                 </a>`;
-    //                         }
+                //                         // with letterhead
+                //                         if (links.whead && links.whead.new_link) {
+                //                             const wheadStyle = showWhead ? '' : 'style="display:none;"';
+                //                             html2 += `
+                //                 <a href="${links.whead.new_link}"
+                //                    class="Invoice-Doucument flex-pdf-icon whead"
+                //                    ${wheadStyle}
+                //                    target="_blank"
+                //                    data-href="${links.whead.new_link}">
+                //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                //                          width="50" height="50" alt="Pdf Icon" />
+                //                     <span>${escapeHtml(links.whead.name)} (with letterhead)</span>
+                //                 </a>`;
+                //                         }
 
-    //                         // without letterhead
-    //                         if (links.wohead && links.wohead.new_link) {
-    //                             const woheadStyle = showWhead ? 'style="display:none;"' : '';
-    //                             html2 += `
-    //                 <a href="${links.wohead.new_link}"
-    //                    class="Invoice-Doucument flex-pdf-icon wohead"
-    //                    ${woheadStyle}
-    //                    target="_blank"
-    //                    data-href="${links.wohead.new_link}">
-    //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-    //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
-    //                          width="50" height="50" alt="Pdf Icon" />
-    //                     <span>${escapeHtml(links.wohead.name)} (without letterhead)</span>
-    //                 </a>`;
-    //                         }
-    //                     });
-    //                 });
+                //                         // without letterhead
+                //                         if (links.wohead && links.wohead.new_link) {
+                //                             const woheadStyle = showWhead ? 'style="display:none;"' : '';
+                //                             html2 += `
+                //                 <a href="${links.wohead.new_link}"
+                //                    class="Invoice-Doucument flex-pdf-icon wohead"
+                //                    ${woheadStyle}
+                //                    target="_blank"
+                //                    data-href="${links.wohead.new_link}">
+                //                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                //                     <img src="[##cms.cms.cdn##]/_images/Panel-PDF.png"
+                //                          width="50" height="50" alt="Pdf Icon" />
+                //                     <span>${escapeHtml(links.wohead.name)} (without letterhead)</span>
+                //                 </a>`;
+                //                         }
+                //                     });
+                //                 });
 
-    //                 return `<div class="invoice_Documnet">
-    //     ${html1}
-    //     <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
-    // </div>`;
-    //             }
+                //                 return `<div class="invoice_Documnet">
+                //     ${html1}
+                //     <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
+                // </div>`;
+                //             }
 
                 // فقط برای عوض کردن بعد از کلیک روی رادیویی با/without letterhead
-                
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
+
                 function getInvoiceErrorMessage(row) {
-    if (row && (row.Field === "Error" || row.field === "Error")) {
-        const val = row.value || row.Value || "";
-        if (val === "invoice is Cancel") {
-            return "It is not possible to download documents for canceled contracts.";
-        }
-        if (val === "invoice is not Clear") {
-            return "It is not possible to download documents for unsettled contracts.";
-        }
-    }
+                    if (row && (row.Field === "Error" || row.field === "Error")) {
+                        const val = row.value || row.Value || "";
+                        if (val === "invoice is Cancel") {
+                            return "It is not possible to download documents for canceled contracts.";
+                        }
+                        if (val === "invoice is not Clear") {
+                            return "It is not possible to download documents for unsettled contracts.";
+                        }
+                    }
 
-    if (row && (row.Error || row.error)) {
-        const val = row.Error || row.error;
-        if (val === "invoice is Cancel") {
-            return "It is not possible to download documents for canceled contracts.";
-        }
-        if (val === "invoice is not Clear") {
-            return "It is not possible to download documents for unsettled contracts.";
-        }
-    }
+                    if (row && (row.Error || row.error)) {
+                        const val = row.Error || row.error;
+                        if (val === "invoice is Cancel") {
+                            return "It is not possible to download documents for canceled contracts.";
+                        }
+                        if (val === "invoice is not Clear") {
+                            return "It is not possible to download documents for unsettled contracts.";
+                        }
+                    }
 
-    if (row && row.msg && row.msg === "no data") {
-        return "It is not possible to download documents for unsettled and unissued contracts.";
-    }
+                    if (row && row.msg && row.msg === "no data") {
+                        return "It is not possible to download documents for unsettled and unissued contracts.";
+                    }
 
-    return "";
-}
+                    return "";
+                }
 
-function renderPDFLinks(data) {
-    const docs = Array.isArray(data) ? data : [data];
-    let html1 = '';
-    let html2 = '';
-    let errorHtml = '';
+                function renderPDFLinks(data) {
+                    const docs = Array.isArray(data) ? data : [data];
+                    let html1 = '';
+                    let html2 = '';
+                    let errorHtml = '';
 
-    let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
-    if (isNaN(showVal)) {
-        showVal = 1; 
-    }
-    const showWhead = (showVal === 1);
+                    let showVal = parseInt($('input[name="Document_show"]:checked').val(), 10);
+                    if (isNaN(showVal)) {
+                        showVal = 1;
+                    }
+                    const showWhead = (showVal === 1);
 
-    docs.forEach(jsondata => {
-        if (!jsondata.doucument) {
-            const msg = getInvoiceErrorMessage(jsondata);
-            if (msg) {
-                errorHtml = `<div>${msg}</div>`;
-            }
-            return;
-        }
+                    docs.forEach(jsondata => {
+                        if (!jsondata.doucument) {
+                            const msg = getInvoiceErrorMessage(jsondata);
+                            if (msg) {
+                                errorHtml = `<div>${msg}</div>`;
+                            }
+                            return;
+                        }
 
-        if (!Array.isArray(jsondata.doucument.links)) {
-            return;
-        }
+                        if (!Array.isArray(jsondata.doucument.links)) {
+                            return;
+                        }
 
-        const title = jsondata.doucument.title;
-        const titleHtml = getDocumentTitleContent(title);
+                        const title = jsondata.doucument.title;
+                        const titleHtml = getDocumentTitleContent(title);
 
-        if (titleHtml) {
-            html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
-        }
+                        if (titleHtml) {
+                            html1 += `<div class="invoice_Documnet_title">${titleHtml}</div>`;
+                        }
 
-        jsondata.doucument.links.forEach(item => {
-            const links = item.link;
+                        jsondata.doucument.links.forEach(item => {
+                            const links = item.link;
 
-            if (links.whead && links.whead.new_link) {
-                const wheadStyle = showWhead ? '' : 'style="display:none;"';
-                html2 += `
+                            if (links.whead && links.whead.new_link) {
+                                const wheadStyle = showWhead ? '' : 'style="display:none;"';
+                                html2 += `
                     <a href="${links.whead.new_link}"
                        class="Invoice-Doucument flex-pdf-icon whead"
                        ${wheadStyle}
@@ -3961,11 +3984,11 @@ function renderPDFLinks(data) {
                              width="50" height="50" alt="Pdf Icon" />
                         <span>${escapeHtml(links.whead.name)} (With Header)</span>
                     </a>`;
-            }
+                            }
 
-            if (links.wohead && links.wohead.new_link) {
-                const woheadStyle = showWhead ? 'style="display:none;"' : '';
-                html2 += `
+                            if (links.wohead && links.wohead.new_link) {
+                                const woheadStyle = showWhead ? 'style="display:none;"' : '';
+                                html2 += `
                     <a href="${links.wohead.new_link}"
                        class="Invoice-Doucument flex-pdf-icon wohead"
                        ${woheadStyle}
@@ -3976,30 +3999,30 @@ function renderPDFLinks(data) {
                              width="50" height="50" alt="Pdf Icon" />
                         <span>${escapeHtml(links.wohead.name)} (Without Header)</span>
                     </a>`;
-            }
-        });
-    });
+                            }
+                        });
+                    });
 
-    if (!html1 && !html2 && errorHtml) {
-        return `<div class="invoice_Documnet_Error">${errorHtml}</div>`;
-    }
+                    if (!html1 && !html2 && errorHtml) {
+                        return `<div class="invoice_Documnet_Error">${errorHtml}</div>`;
+                    }
 
-    if (!html1 && !html2) {
-        return '';
-    }
+                    if (!html1 && !html2) {
+                        return '';
+                    }
 
-    return `<div class="invoice_Documnet">
+                    return `<div class="invoice_Documnet">
         ${html1}
         <div class="invoice_Documnet_Flex invoice_Documnet_Content">${html2}</div>
     </div>`;
-}
+                }
 
 
 
-                
-                
-                
-                
+
+
+
+
                 function applyDocumentShow() {
                     var val = parseInt($('input[name="Document_show"]:checked').val(), 10);
 
