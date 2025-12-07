@@ -431,7 +431,7 @@
                                     </basis>
                                     <basis core="group" if="'[##db.paymentid.Column1##]' <> 'not ok'">
                                         <basis core="group" name="Delay_save_inputs"
-                                            if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,202,203,204,205,207,208,209)">
+                                            if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,202,203,204,205,207,208,209,210)">
                                             <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]"
                                                 procedurename="dbsource" name="db">
                                                 <member name="save_inputs" method="cms" query='{
@@ -1896,7 +1896,7 @@
                                                 </basis>
                                             </basis>
                                         </basis>
-                                        <basis core="group" name="api" if="[##cms.form.bank_id##]  in (202,203,204,207,208,209)">
+                                        <basis core="group" name="api" if="[##cms.form.bank_id##]  in (202,203,204,207,208,209,210)">
                                             <div class="sectionInfo"></div>
                                             <basis core="call" file="Client_BasisCore_Script.inc"></basis>
                                             <basis core="api" name="api.token" run="AtClient"
@@ -2563,7 +2563,7 @@
                                     </basis>
                                     <basis core="group" if="'[##db.paymentid.Column1##]' <> 'not ok'">
                                         <basis core="group" name="Delay_save_inputs"
-                                            if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,202,203,204,205,207,208,209)">
+                                            if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,202,203,204,205,207,208,209,210)">
                                             <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]"
                                                 procedurename="dbsource" name="db">
                                                 <member name="save_inputs" method="cms" query='{
@@ -4028,7 +4028,7 @@
                                                 </basis>
                                             </basis>
                                         </basis>
-                                        <basis core="group" name="api" if="[##cms.form.bank_id##]  in (202,203,204,207,208,209)">
+                                        <basis core="group" name="api" if="[##cms.form.bank_id##]  in (202,203,204,207,208,209,210)">
                                             <div class="sectionInfo"></div>
                                             <basis core="call" file="Client_BasisCore_Script.inc"></basis>
                                             <basis core="api" name="api.token" run="AtClient"

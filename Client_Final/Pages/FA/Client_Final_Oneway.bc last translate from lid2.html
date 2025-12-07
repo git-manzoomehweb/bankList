@@ -5,17 +5,17 @@
         display: none
     }
 
-    <basis core="call" file="Client_Final_Css_en.inc" />
+    <basis core="call" file="Client_Final_Css.inc" />
 </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.basiscore.net/basisfly.com/css/reservation_ConfirmStyle.css" />
 <script type="text/javascript">
     <basis core="call" file="Client_Reservation_js.inc" />
 </script>
 <script src="https://cdn.basiscore.net/basisfly.com/js/reservation_ConfirmJs.js" type="text/javascript"></script>
-<basis core="dbsource" source="basiscore" name="about" mid="5" lid="2" usedforid="[##cms.cms.ownerid##]">
+<basis core="call" file="Client_BasisCore_Script.inc"></basis>
+<basis core="dbsource" source="basiscore" name="about" mid="5" usedforid="[##cms.cms.ownerid##]">
     <member core="view" name="txt" type="view" postsql="select Answer from [about.txt] where prpID = '8000'" />
 </basis>
-<basis core="call" file="Client_BasisCore_Script.inc"></basis>
 <basis core="group" name="FirstDelay">
     <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
         <member name="factor" method="flight" query='{
@@ -26,7 +26,6 @@
                     "type": "scalar",
                     "name": "q",
                     "request": "factorpreformNew",
-                    "lid": "2",
                     "agencycounter": "[##cms.form.agencycounter##]",
                     "agencycountername": "[##cms.form.agencycountername##]",
                     "code":"[##cms.form.c_code##]",
@@ -44,18 +43,18 @@
                     "ownerid": "[##cms.cms.ownerid##]",
                     "factorid": "0",
                     "targetunit": "10",
-                    "factortype": "7",
+                    "factortype": "1",
                     "passengerinfo": [##cms.json.header##],
                     "products": [
                         {
-                            "type": "7",
+                            "type": "1",
                             "productid": "[##cms.form.productid##]",
                             "adults": "[##cms.form.adultcount##]",
                             "childs": "[##cms.form.childcount##]",
                             "infants": "[##cms.form.infantcount##]",
+                            "classname": "[##cms.form.classname##]",
                             "dateinfo": {
-                                "begindate": "[##cms.form.arrivalTime##]",
-                                "enddate": "[##cms.form.departureTime##]"
+                                "begindate": "[##cms.form.arrivalTime##]"
                             },
                             "unit": "10"
                         }
@@ -97,7 +96,7 @@
                         "request": "webservice_Detail",
                         "id": [##cms.form.bank_id|("")##],
                         "dmnid": [##cms.cms.domainid##],
-                        "lid":"2"
+                        "lid":"1"
                     }
                 ]
             }' />
@@ -152,23 +151,23 @@
                             <div id="bgLoadding-box"></div>
                             <basis core="group" name="InnerDelay">
                                 <div class="Confirm">
-                                    <div class="title-success"><span> Your pre-contract was successfully registered
+                                    <div class="title-success"><span> پیش‌قرارداد شما با موفقیت ثبت شد.
                                         </span></div>
                                     <div class="Section_box">
                                         <div class="Section">
-                                            <div class="QuestionForm">Invoice number</div>
+                                            <div class="QuestionForm">شماره فاکتور</div>
                                             <div class="AnswerForm"><span>[##db.Factorid.Value|(0)##]</span></div>
                                             <div class="clr"></div>
                                         </div>
                                         <div class="Section">
-                                            <div class="QuestionForm">Invoice price</div>
+                                            <div class="QuestionForm">قیمت فاکتور</div>
                                             <div class="AnswerForm"><span
                                                     class="answer slice-price">[##db.totalwithcommision.Value##]</span><span
                                                     class="mtype"></span></div>
                                             <div class="clr"></div>
                                         </div>
                                         <div class="Section">
-                                            <div class="QuestionForm">Invoice payable price</div>
+                                            <div class="QuestionForm">مبلغ قابل پرداخت فاکتور</div>
                                             <div class="AnswerForm"><span
                                                     class="answer slice-price">[##db.firstpay.Value##]</span><span
                                                     class="mtype"></span></div>
@@ -177,10 +176,10 @@
                                     </div>
                                     <div class="Section">
                                         <div class="redirecPanel"><a
-                                                href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
-                                                target="_blank"> Click </a>to view the pre-contract in your user panel
+                                                href="[##site.address.domain##]/Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
+                                                target="_blank"> کلیک کنید </a>برای مشاهده پیش قرارداد در پنل کاربری خود
                                         </div>
-                                        <div class="link_homepage"><a href="/EN">Return to the main page of the site</a>
+                                        <div class="link_homepage"><a href="/">بازگشت به صفحه اصلی سایت</a>
                                         </div>
                                         <div class="clr"></div>
                                     </div>
@@ -222,21 +221,20 @@
                                              "paytype": "[##cms.form.paytype##]",
                                              "totalfinal": "[##db.firstpay.Value##]",
                                              "supplier": "[##cms.form.supplier##]",
-                                             "factortype": "7"
+                                             "factortype": "1"
                                             
                                          }
                                      ]
                                  }' preview="" />
                                 </basis>
-                                <form method="post" action="/Client_CallBack_en.bc" id="Credit_payment_form">
+                                <form method="post" action="/Client_CallBack.bc" id="Credit_payment_form">
                                     <input type="hidden" value="1" name="Credit_payment" />
                                     <input type="hidden" value="[##db.Factorid.Value|(0)##]" name="ResNum" />
                                 </form>
                                 <div id="bgLoadding-box"></div>
                                 <div id="payment-Loadding">
                                     <div class="loader2"></div>
-                                    <div id="text-loading">Issuing pre-contract, please
-                                        wait a moment ...
+                                    <div id="text-loading">در حال صدور پیش‌قرارداد، لطفاً لحظه‌ای منتظر بمانید ...
                                     </div>
                                 </div>
                                 <script type="text/javascript">
@@ -248,8 +246,7 @@
                                 <div id="bgLoadding-box"></div>
                                 <div id="payment-Loadding">
                                     <div class="loader2"></div>
-                                    <div id="text-loading">Connecting to the electronic payment gateway, please
-                                        wait a moment ...
+                                    <div id="text-loading">در حال اتصال به درگاه پرداخت الکترونیکی، لطفاً لحظه‌ای منتظر بمانید ...
                                     </div>
                                 </div>
                                 <basis core="dbsource" source="accounting" name="db" bankid="[##db.bankid.Value##]"
@@ -258,38 +255,34 @@
                                     <member name="paymentid" type="scalar" request="paymentid" preview="" />
                                 </basis>
                                 <basis core="group" if="'[##db.paymentid.Column1##]' = 'not ok'">
-                                    <div id="text-loading">It is not possible to connect to the electronic
-                                        payment gateway.</div>
+                                    <div id="text-loading">امکان اتصال به درگاه پرداخت الکترونیکی وجود ندارد.</div>
                                     <basis core="group" name="Nobank" if="'[##cms.form.bank_id##]' = '-1'">
                                         <div class="company_own">
                                             <div class="message-box">
-                                                <div class="title-success"><span> Your pre-contract was successfully
-                                                        registered </span></div>
-                                                <div class="message-info"><span class="question">Invoice number
+                                                <div class="title-success"><span> پیش‌قرارداد شما با موفقیت ثبت شد. </span></div>
+                                                <div class="message-info"><span class="question">شماره فاکتور
                                                         :</span><span class="answer">[##db.Factorid.Value|(0)##]</span>
                                                 </div>
-                                                <div class="message-info"><span class="question">Invoice price:
+                                                <div class="message-info"><span class="question">قیمت فاکتور:
                                                     </span><span
                                                         class="answer slice-price">[##db.totalwithcommision.Value##]</span>
                                                 </div>
-                                                <div class="message-info"><span class="question"> Invoice payable price
+                                                <div class="message-info"><span class="question"> مبلغ قابل پرداخت فاکتور
                                                         :</span><span
                                                         class="answer slice-price">[##db.firstpay.Value##]</span>
                                                 </div>
                                                 <div class="Section">
                                                     <div class="redirecPanel"><a
-                                                            href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
-                                                            target="_blank"> Click </a>to view the pre-contract
-                                                        in your user panel</div>
+                                                            href="[##site.address.domain##]/Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
+                                                            target="_blank"> کلیک کنید </a>برای مشاهده پیش قرارداد
+در پنل کاربری خود</div>
                                                     <basis core="group" name="redirectpage"
                                                         if="'[##cms.form.share##]' = '1'">
-                                                        <div class="link_homepage"><a href="/flight_share.bc">Return to
-                                                                the main page of the site</a></div>
+                                                        <div class="link_homepage"><a href="/flight_share.bc">بازگشت به صفحه اصلی سایت</a></div>
                                                     </basis>
                                                     <basis core="group" name="redirecthomepagehome"
                                                         if="'[##cms.form.share##]' <> '1'">
-                                                        <div class="link_homepage"><a href="/EN">Return to the main page
-                                                                of the site</a></div>
+                                                        <div class="link_homepage"><a href="/">بازگشت به صفحه اصلی سایت</a></div>
                                                     </basis>
                                                 </div>
                                                 <div class="clr"></div>
@@ -306,7 +299,7 @@
                                 </basis>
                                 <basis core="group" if="'[##db.paymentid.Column1##]' <> 'not ok'">
                                     <basis core="group" name="Delay_save_inputs"
-                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,96,198,202,203,204,205,207,208,209,210)">
+                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,203,204,205,206,207,208,209,210)">
                                         <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource"
                                             name="db">
                                             <member name="save_inputs" method="cms" query='{
@@ -326,7 +319,7 @@
                                                     "bank_id": "[##cms.form.bank_id##]",
                                                     "bankid": "[##db.bankid.Value##]",
                                                     "paymentid": "[##db.paymentid.Column1##]",
-                                                    "factortype": "7"
+                                                    "factortype": "1"
                                                 }
                                             ]
                                         }' preview="" />
@@ -336,9 +329,7 @@
                                                 <member name="merchantID" format="json"
                                                     postsql="select value from [db.merchantID] where field = 'merchantid'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="saman" name="saman"
@@ -375,12 +366,12 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 token: $("#json").val(),
                                                                 action: $("#action").val(),
-                                                                callback: "[##site.address.domain##]/Client_CallBack_en.bc",
+                                                                callback: "[##site.address.domain##]/Client_CallBack.bc",
                                                                 bank_id: 31
                                                             },
                                                             success: function (result) {
@@ -403,9 +394,7 @@
                                                 <member name="password" format="json"
                                                     postsql="select value from [db.password] where field = 'password'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="mellat" name="mellat"
@@ -424,7 +413,7 @@
                                                             <param name="localTime" value="[##cms.cms.time2##]" />
                                                             <param name="additionalData" value="" />
                                                             <param name="callBackUrl"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="payerId" value="0" />
                                                         </params>
                                                     </member>
@@ -442,7 +431,7 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 token: $("#json").val(),
@@ -466,9 +455,7 @@
                                                 <member name="terminalID" format="json"
                                                     postsql="select value from [db.terminalID] where field = 'terminalid'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
 
@@ -488,7 +475,7 @@
                                                                 value="[##cms.cms.date##] [##cms.cms.time##]" />
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="redirectAddress"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="action" value="1003" />
                                                         </params>
                                                     </member>
@@ -503,9 +490,7 @@
                                                 <member name="api" format="json"
                                                     postsql="select value from [db.api] where field = 'api'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="pay" name="pay"
@@ -516,7 +501,7 @@
                                                             <param name="api" value="[##db.api.Value##]" />
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="redirect"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="factorNumber"
                                                                 value="[##db.paymentid.Column1##]" />
                                                             <param name="description" value="" />
@@ -537,7 +522,7 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 token: $("#json").val(),
@@ -564,9 +549,7 @@
                                                 <member name="password" format="json"
                                                     postsql="select value from [db.password] where field = 'password'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="easyPayment" name="asanPardakht"
@@ -586,7 +569,7 @@
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="extraInfo" value="extra Information" />
                                                             <param name="callback"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="factorID" value="0" />
                                                         </params>
                                                     </member>
@@ -605,12 +588,12 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 token: $("#json").val(),
                                                                 action: $("#action").val(),
-                                                                callback: "[##site.address.domain##]/Client_CallBack_en.bc",
+                                                                callback: "[##site.address.domain##]/Client_CallBack.bc",
                                                                 bank_id: 38
                                                             },
                                                             success: function (result) {
@@ -624,16 +607,14 @@
                                         </basis>
                                         <basis core="group" name="Sekhavat" if="[##cms.form.bank_id##] = 39">
                                             <basis core="inlinesource" name="db">
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <input type="hidden" value="1" id="action" />
                                                 <div class="sectionInfo"></div>
                                                 <script type="text/javascript">
                                                     $.ajax({
-                                                        url: "/Client_Get_Token_en.bc",
+                                                        url: "/Client_Get_Token.bc",
                                                         type: "post",
                                                         data: {
                                                             paymentid: "[##db.paymentid.Column1##]",
@@ -643,9 +624,9 @@
                                                             paytype: "[##cms.form.paytype##]",
                                                             supplier: "[##cms.form.supplier##]",
                                                             action: $("#action").val(),
-                                                            callback: "[##site.address.domain##]/Client_CallBack_en.bc",
+                                                            callback: "[##site.address.domain##]/Client_CallBack.bc",
                                                             bank_id: 39,
-                                                            factortype: 7
+                                                            factortype: 1
                                                         },
                                                         success: function (result) {
                                                             $(".sectionInfo").empty().html(result)
@@ -659,9 +640,7 @@
                                                 <member name="token" format="json"
                                                     postsql="select value from [db.token] where field = 'token'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="gardeshPay" name="gardeshPay"
@@ -673,7 +652,7 @@
                                                             <param name="invoiceNumber"
                                                                 value="[##db.paymentid.Column1##]" />
                                                             <param name="callback"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="token" value="[##db.token.Value##]" />
                                                         </params>
                                                     </member>
@@ -696,9 +675,7 @@
                                                 <member name="token" format="json"
                                                     postsql="select value from [db.token] where field = 'token'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="newSepah" name="newsepah"
@@ -711,7 +688,7 @@
                                                             <param name="Amount" value="[##db.firstpay.Value##]" />
                                                             <param name="OrderId" value="[##db.paymentid.Column1##]" />
                                                             <param name="CallBackUrl"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                         </params>
                                                     </member>
                                                 </basis>
@@ -737,9 +714,7 @@
                                                 <member name="currency" format="json"
                                                     postsql="select value from [db.currency] where field = 'currency'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="ArcaPayment" name="ArcaPayment"
@@ -753,7 +728,7 @@
                                                             <param name="userName" value="[##db.username.Value##]" />
                                                             <param name="password" value="[##db.password.Value##]" />
                                                             <param name="returnUrl"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc?iN=[##db.paymentid.Column1##]" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc?iN=[##db.paymentid.Column1##]" />
                                                             <param name="factorId"
                                                                 value="[##db.Factorid.Value|(0)##]" />
                                                         </params>
@@ -780,9 +755,7 @@
                                                 <member name="terminalid" format="json"
                                                     postsql="select value from [db.terminalid] where field = 'terminalid'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="refah" name="refah"
@@ -792,7 +765,7 @@
                                                             <param name="Action" value="Token" />
                                                             <param name="Amount" value="[##db.firstpay.Value##]" />
                                                             <param name="callBackUrl"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="ResNum" value="[##db.paymentid.Column1##]" />
                                                             <param name="CellNumber" value="" />
                                                             <param name="TerminalId"
@@ -813,7 +786,7 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 token: $("#json").val(),
@@ -849,32 +822,32 @@
                                             <section class="form-container">
                                                 <div class="form-content">
                                                     <form
-                                                        action="/[##cms.form.callback|(Client_CallBack_en.bc)##]?iN=[##db.paymentid.Column1##]"
+                                                        action="/[##cms.form.callback|(Client_CallBack.bc)##]?iN=[##db.paymentid.Column1##]"
                                                         method="post">
                                                         <div class="infos-content">
                                                             <div class="info-content">
                                                                 <div class="content">
-                                                                    <p class="title">Card Information</p>
+                                                                    <p class="title">اطلاعات کارت</p>
                                                                     <div class="item">
-                                                                        <label>Card Type</label>
+                                                                        <label>نوع کارت</label>
                                                                         <select name="cardtype" class="cardtype">
                                                                             <option value="visa">visa</option>
                                                                             <option value="master">master</option>
                                                                             <option value="payPal">payPal</option>
                                                                         </select>
                                                                     </div>
-                                                                    <div class="item"><label>Card Holder Name</label>
+                                                                    <div class="item"><label>نام صاحب کارت</label>
                                                                         <input type="text" autocomplete="off"
                                                                             onkeyup="this.value=this.value.replace(/[^a-zA-Z _.]/g, '')" />
                                                                     </div>
-                                                                    <div class="item"><label>Card Number *</label>
+                                                                    <div class="item"><label>شماره کارت *</label>
                                                                         <input type="text" required autocomplete="off"
                                                                             onkeyup="separate_number(event,this),this.value=this.value.replace(/[^0-9._ ]/g, '')" />
                                                                         <input type="hidden" name="cardnumber" />
                                                                     </div>
                                                                     <div class="item exp-cvv">
                                                                         <div class="exp-content">
-                                                                            <label>Exp Month / Year *</label>
+                                                                            <label>ماه / سال انقضا *</label>
                                                                             <input name="expmonth" type="text" required
                                                                                 autocomplete="off" maxlength="2"
                                                                                 onkeyup="focus_input(event,this,'month'),this.value=this.value.replace(/[^0-9.]/g, '')" />
@@ -889,12 +862,12 @@
                                                                                 onkeyup="this.value=this.value.replace(/[^0-9.]/g, '')" />
                                                                         </div>
                                                                         <div class="zip-content">
-                                                                            <label>Zip / Postal Code</label>
+                                                                            <label>کد پستی / کد منطقه</label>
                                                                             <input type="text" autocomplete="off" />
                                                                         </div>
                                                                         <div class="clr"></div>
                                                                     </div>
-                                                                    <button type="submit">Continue To Checkout</button>
+                                                                    <button type="submit">ادامه به صفحه پرداخت</button>
                                                                 </div>
                                                             </div>
 
@@ -913,9 +886,7 @@
                                                 <member name="password" format="json"
                                                     postsql="select value from [db.password] where field = 'password'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                                 <member name="bankid" format="json"
                                                     postsql="select value from [db.bankid] where field = 'bankid'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
@@ -931,7 +902,7 @@
                                                             <param name="password" value="[##db.password.Value##]" />
                                                             <param name="orderid" value="[##db.paymentid.Column1##]" />
                                                             <param name="redirect_url"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                         </params>
                                                     </member>
@@ -952,7 +923,7 @@
                                                         var obj_1 = obj["rayancard_m1"]["url"]
 
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 payment_url: obj_1,
@@ -979,9 +950,7 @@
                                                 <member name="merchantID" format="json"
                                                     postsql="select value from [db.merchantID] where field = 'merchantid'">
                                                     {"root":[##db.webservice_detail.result##]} </member>
-                                                <member name="callback" format="json"
-                                                    postsql="select value from [db.callback] where field = 'callback'">
-                                                    {"root":[##db.webservice_detail.result##]} </member>
+
                                             </basis>
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="IranKishPayment" name="irankish"
@@ -996,7 +965,7 @@
                                                             <param name="merchantid"
                                                                 value="[##db.merchantID.Value##]" />
                                                             <param name="callbackurl"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc" />
                                                             <param name="requestid"
                                                                 value="[##db.paymentid.Column1##]" />
                                                         </params>
@@ -1018,7 +987,7 @@
                                                         var obj_2 = obj["irankish_m1"]["result"]["token"];
                                                         var obj_status = obj["irankish_m1"]["status"]
                                                         $.ajax({
-                                                            url: "/Client_Get_Token_en.bc",
+                                                            url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
                                                                 token: obj_2,
@@ -1049,8 +1018,8 @@
                                                             <param name="token" value="[##db.token.Value##]" />
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="call_back_url"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc?iN=[##db.paymentid.Column1##]" />
-                                                            <param name="description" value="flight" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc?iN=[##db.paymentid.Column1##]" />
+                                                            <param name="description" value="پرواز" />
                                                         </params>
                                                     </member>
                                                 </basis>
@@ -1092,7 +1061,7 @@
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="orderid" value="[##db.paymentid.Column1##]" />
                                                             <param name="call_back_url"
-                                                                value="[##site.address.domain##]/Client_CallBack_en.bc?iN=[##db.paymentid.Column1##]" />
+                                                                value="[##site.address.domain##]/Client_CallBack.bc?iN=[##db.paymentid.Column1##]" />
                                                             <param name="hash_key" value="[##db.hash_key.Value##]" />
                                                         </params>
 
@@ -1114,9 +1083,6 @@
                                             <member name="merchantID" format="json"
                                                 postsql="select value from [db.merchantID] where field = 'merchantid'">
                                                 {"root":[##db.webservice_detail.result##]} </member>
-                                            <member name="callback" format="json"
-                                                postsql="select value from [db.callback] where field = 'callback'">
-                                                {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="zarrinPal" name="zarrinPal"
                                             source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
@@ -1128,7 +1094,7 @@
                                                     <param name="Email" value="" />
                                                     <param name="Mobile" value="" />
                                                     <param name="CallbackURL"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                 </params>
                                             </member>
                                         </basis>
@@ -1146,7 +1112,7 @@
                                                     document.getElementById("action").value = 1;
                                                 }
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: $("#json").val(),
@@ -1161,7 +1127,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1175,9 +1141,6 @@
                                             <member name="token" format="json"
                                                 postsql="select value from [db.token] where field = 'token'">
                                                 {"root":[##db.webservice_detail.result##]} </member>
-                                            <member name="callback" format="json"
-                                                postsql="select value from [db.callback] where field = 'callback'">
-                                                {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="kipaaPayment" name="kipaa"
                                             source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
@@ -1186,7 +1149,7 @@
                                                 <params>
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="callback"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                     <param name="token" value="[##db.token.Value##]" />
                                                 </params>
                                             </member>
@@ -1204,7 +1167,7 @@
                                                     document.getElementById("action").value = 0;
                                                 }
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: obj_2["Content"]["payment_token"],
@@ -1220,7 +1183,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1234,9 +1197,7 @@
                                             <member name="token" format="json"
                                                 postsql="select value from [db.token] where field = 'token'">
                                                 {"root":[##db.webservice_detail.result##]} </member>
-                                            <member name="callback" format="json"
-                                                postsql="select value from [db.callback] where field = 'callback'">
-                                                {"root":[##db.webservice_detail.result##]} </member>
+
                                         </basis>
                                         <basis core="external.ws.ws" service="aghayePardakht" name="aghayePardakht"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
@@ -1245,7 +1206,7 @@
                                                     <param name="pin" value="[##db.token.Value##]" />
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="callback"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                     <param name="invoice_id" value="[##db.Factorid.Value|(0)##]" />
                                                 </params>
                                             </member>
@@ -1259,7 +1220,7 @@
                                                 var obj_1 = obj["aghayePardakht_m1"]["url"]
                                                 var split_obj_1 = obj_1.split('/')
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: split_obj_1[4],
@@ -1273,7 +1234,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1293,9 +1254,7 @@
                                             <member name="serviceId" format="json"
                                                 postsql="select value from [db.serviceId] where field = 'serviceId'">
                                                 {"root":[##db.webservice_detail.result##]} </member>
-                                            <member name="callback" format="json"
-                                                postsql="select value from [db.callback] where field = 'callback'">
-                                                {"root":[##db.webservice_detail.result##]} </member>
+
                                         </basis>
                                         <basis core="external.ws.ws" service="ayandeh" name="ayandeh"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
@@ -1304,7 +1263,7 @@
                                                     <param name="username" value="[##db.username.value##]" />
                                                     <param name="password" value="[##db.password.value##]" />
                                                     <param name="callBackUrl"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                     <param name="serviceId" value="[##db.serviceId.value##]" />
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="mobile" value="" />
@@ -1317,7 +1276,7 @@
                                             <div class="sectionInfo"></div>
                                             <script type="text/javascript">
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: $("#json").val(),
@@ -1330,7 +1289,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1350,9 +1309,7 @@
                                             <member name="merchantConfigurationId" format="json"
                                                 postsql="select value from [db.merchantConfigurationId] where field = 'merchantConfigurationId'">
                                                 {"root":[##db.webservice_detail.result##]} </member>
-                                            <member name="callback" format="json"
-                                                postsql="select value from [db.callback] where field = 'callback'">
-                                                {"root":[##db.webservice_detail.result##]} </member>
+
                                         </basis>
                                         <basis core="external.ws.ws" service="shahrBank" name="shahr"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
@@ -1365,7 +1322,7 @@
                                                     <param name="localInvoiceId" value="[##db.Factorid.Value|(0)##]" />
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="callbackurl"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                 </params>
                                             </member>
                                         </basis>
@@ -1377,7 +1334,7 @@
                                                 var obj_1 = obj["shahr_m1"]["url"]
                                                 var obj_2 = obj["shahr_m1"]["token"]
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: obj_2,
@@ -1391,7 +1348,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1405,9 +1362,7 @@
                                             <member name="api_key" format="json"
                                                 postsql="select value from [db.api_key] where field = 'api_key'">
                                                 {"root":[##db.webservice_detail.result##]} </member>
-                                            <member name="callback" format="json"
-                                                postsql="select value from [db.callback] where field = 'callback'">
-                                                {"root":[##db.webservice_detail.result##]} </member>
+
                                         </basis>
                                         <basis core="external.ws.ws" service="vandarPayment" name="vandar"
                                             source="cmsDbService" procedurename="sbserviceprocedure1" preview="">
@@ -1416,7 +1371,7 @@
                                                     <param name="api_key" value="[##db.api_key.value##]" />
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="callback"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                     <param name="mobile"
                                                         value="[##cms.form._root.account.mobile|cms.form._root.account.Agencymobile##]" />
                                                     <param name="payment_id" value="[##db.paymentid.Column1##]" />
@@ -1438,7 +1393,7 @@
                                                     document.getElementById("action").value = 1;
                                                 }
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: $("#json").val(),
@@ -1451,7 +1406,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1482,9 +1437,9 @@
                                                     <param name="currency" value="[##db.moneyType.Value##]" />
                                                     <param name="title" value="flight" />
                                                     <param name="return_url"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                     <param name="cancel_url"
-                                                        value="[##site.address.domain##]/Client_CallBack_en.bc" />
+                                                        value="[##site.address.domain##]/Client_CallBack.bc" />
                                                 </params>
                                             </member>
                                         </basis>
@@ -1502,7 +1457,7 @@
                                                     document.getElementById("action").value = 1;
                                                 }
                                                 $.ajax({
-                                                    url: "/Client_Get_Token_en.bc",
+                                                    url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: $("#json").val(),
@@ -1515,7 +1470,7 @@
                                                         paytype: "[##cms.form.paytype##]",
                                                         agencyid: "[##cms.form.agencyid|(0)##]",
                                                         factorid: "[##db.Factorid.Value|(0)##]",
-                                                        factortype: 7
+                                                        factortype: 1
                                                     },
                                                     success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
@@ -1532,14 +1487,14 @@
                                         "doc_type": "5",
                                         "factorid": [##db.Factorid.Value|(0)##],
                                         "site_url": "[##site.address.domain##]",
-                                        "callback_url": "Client_CallBack_en.bc?iN=[##db.paymentid.Column1##]",
+                                        "callback_url": "Client_CallBack.bc?iN=[##db.paymentid.Column1##]",
                                         "mobile": "[##cms.form._root.account.mobile|cms.form._root.account.Agencymobile##]",
                                         "email": "[##cms.form._root.account.email|cms.form._root.account.Agencyemail##]",
                                         "description": "booking",
                                         "tax_amount": "0",
                                         "discount_amount": "0",
                                         "cart_items": {
-                                            "title": "booking MultiCity Flight",
+                                                "title": "پرواز یکطرفه",
                                             "source": "",
                                             "destination": "",
                                             "service_type": "",
@@ -1554,7 +1509,7 @@
                                                 try {
                                                     const source = args.source?.rows;
                                                     if (source[0].url_gateway) {
-                                                        fetch("/Client_Get_Token_en.bc", {
+                                                        fetch("/Client_Get_Token.bc", {
                                                             method: "POST",
                                                             headers: {
                                                                 "Content-Type": "application/x-www-form-urlencoded",
@@ -1569,7 +1524,7 @@
                                                                 agencyid: "[##cms.form.agencyid|(0)##]",
                                                                 factorid: "[##db.Factorid.Value|(0)##]",
                                                                 session: source[0].session,
-                                                                factortype: 7,
+                                                                factortype: 1,
                                                                 action: 1
 
                                                             })
@@ -1591,7 +1546,7 @@
                                                     } else {
                                                         const div = document.createElement('div');
                                                         div.id = 'text-loading';
-                                                        div.textContent = 'It is not possible to connect to the electronic payment gateway.';
+                                                        div.textContent = 'امکان اتصال به درگاه پرداخت الکترونیکی وجود ندارد.';
                                                         document.body.appendChild(div);
 
 
@@ -1618,7 +1573,7 @@
                     <basis core="group" name="DelayFactorpreformE" if="'[##db.TypeFactorpreform.Value##]'='1'">
                         <input type="hidden" value="[##db.CodeFactorpreform.Value##]" class="CodeFactorpreform" />
                         <basis core="group" name="DelayFactorpreformECode" if="'[##db.CodeFactorpreform.Value##]'='1'">
-                            <form method="post" action="/Client_Show_Multicity_En_ver.2.bc" class="FormRedirect">
+                            <form method="post" action="/Client_Show_Oneway_ver.2.bc?lid=1" class="FormRedirect">
                                 <input type="hidden" value='[##cms.form.idnows##]' name="idnows" />
                                 <input type="hidden" value='[##cms.form.idws##]' name="idws" />
                                 <input type="hidden" value='[##cms.form.childcount##]' name="childcount" />
@@ -1641,14 +1596,13 @@
                                 <input type="hidden" value="[##cms.form.fdate##]" name="fdate" />
                                 <input type="hidden" value='[##cms.form.engine##]' name="engine" />
                                 <input type="hidden" value='[##cms.form.flight_id##]' name="flight_id" />
-                                <input type="hidden" value='[##cms.form.tripgroup##]' name="tripgroup" />
                             </form>
                             <script type="text/javascript">
                                 $.confirm({
                                     title: 'Warning',
                                     content: '[##db.DescriptionFactorpreform.Value##]',
-                                    confirmButton: 'Move to previous page',
-                                    cancelButton: 'Move to Home',
+                                    confirmButton: 'انتقال به صفحه قبل ',
+                                    cancelButton: 'انتقال به صفحه اصلی',
                                     animation: 'top',
                                     closeAnimation: 'scale',
                                     onOpen: function () { },
@@ -1656,7 +1610,7 @@
                                         $(".FormRedirect").submit()
                                     },
                                     cancel: function () {
-                                        window.location = '/EN'
+                                        window.location = '[##cms.Host.FA_redirect|(/)##]'
                                     }
                                 })
                             </script>
@@ -1666,14 +1620,14 @@
                             <script type="text/javascript">
                                 $.confirm({
                                     title: 'Warning',
-                                    content: '[##db.DescriptionFactorpreform.Value##]. (Contact agency support)',
+                                    content: '[##db.DescriptionFactorpreform.Value##]. (با پشتیبانی آژانس تماس بگیرید)',
                                     confirmButton: '',
-                                    cancelButton: 'Move to Home',
+                                    cancelButton: 'انتقال به صفحه اصلی',
                                     animation: 'top',
                                     closeAnimation: 'scale',
                                     onOpen: function () { },
                                     cancel: function () {
-                                        window.location = '/EN'
+                                        window.location = '[##cms.Host.FA_redirect|(/)##]'
                                     }
                                 })
                             </script>
@@ -1681,7 +1635,7 @@
                     </basis>
                     <basis core="group" name="DelayFactorpreformE" if="'[##db.TypeFactorpreform.Value##]'='2'">
                         <input type="hidden" value="[##db.CodeFactorpreform.Value##]" class="CodeFactorpreform" />
-                        <form method="post" class="FactorForm" action="/Client_Final_Alert_en.bc">
+                        <form method="post" class="FactorForm" action="/Client_Final_Alert.bc">
                             <input type="hidden" value="[##cms.form.accounttype##]" name="accounttype" />
                             <input type="hidden" value="[##cms.form.bank_id##]" name="bank_id" />
                             <input type="hidden" value="[##db.Factorid.Value##]" name="factorid" />
@@ -1707,12 +1661,12 @@
                             <input type="hidden" value="[##cms.form._root.account.birthdate##]" name="birthdate" />
                             <input type="hidden" value="[##cms.form._root.account.codepost##]" name="codepost" />
                             <input type="hidden" value="[##cms.form._root.account.fax##]" name="fax" />
-                            <input type="hidden" value="7" name="factortype" />
+                            <input type="hidden" value="1" name="factortype" />
                         </form>
                         <script type="text/javascript">
                             $.confirm({
                                 title: 'Warning',
-                                content: '<p class="DescriptionFactorpreform">[##db.DescriptionFactorpreform.Value##]<p> Do you want to continue the booking process with the amount of<span class="NewpriceFactorpreform"> [##db.NewpriceFactorpreform.Value##]</span> [##cms.form.moneytype##] ?',
+                                content: '<p class="DescriptionFactorpreform">[##db.DescriptionFactorpreform.Value##]<p> آیا می‌خواهید فرایند رزرو را با مبلغ<span class="NewpriceFactorpreform"> [##db.NewpriceFactorpreform.Value##]</span> [##cms.form.moneytype##] ?',
                                 confirmButton: 'Yes',
                                 cancelButton: 'No',
                                 animation: 'top',
@@ -1722,7 +1676,7 @@
                                     $(".FactorForm").submit()
                                 },
                                 cancel: function () {
-                                    window.location = '/EN'
+                                    window.location = '/'
                                 }
                             })
                             $(".NewpriceFactorpreform").text(function (index, value) {
@@ -1734,7 +1688,7 @@
                     </basis>
                     <basis core="group" name="DelayFactorpreformE" if="'[##db.TypeFactorpreform.Value##]'='3'">
                         <input type="hidden" value="[##db.CodeFactorpreform.Value##]" class="CodeFactorpreform" />
-                        <form method="post" class="FactorForm" action="/Client_Final_Alert_en.bc">
+                        <form method="post" class="FactorForm" action="/Client_Final_Alert.bc">
                             <input type="hidden" value="[##cms.form.accounttype##]" name="accounttype" />
                             <input type="hidden" value="[##cms.form.bank_id##]" name="bank_id" />
                             <input type="hidden" value="[##db.Factorid.Value##]" name="factorid" />
@@ -1760,12 +1714,12 @@
                             <input type="hidden" value="[##cms.form._root.account.birthdate##]" name="birthdate" />
                             <input type="hidden" value="[##cms.form._root.account.codepost##]" name="codepost" />
                             <input type="hidden" value="[##cms.form._root.account.fax##]" name="fax" />
-                            <input type="hidden" value="7" name="factortype" />
+                            <input type="hidden" value="1" name="factortype" />
                         </form>
                         <script type="text/javascript">
                             $.confirm({
                                 title: 'Warning',
-                                content: '<p class="DescriptionFactorpreform">[##db.DescriptionFactorpreform.Value##]</p> Do you want to continue the booking process on the<span class="NewtimeFactorpreform"> [##db.NewtimeFactorpreform.Value##]</span>  ?',
+                                content: '<p class="DescriptionFactorpreform">[##db.DescriptionFactorpreform.Value##]</p> آیا می‌خواهید فرایند رزرو را با مبلغng process on the<span class="NewtimeFactorpreform"> [##db.NewtimeFactorpreform.Value##]</span>  ?',
                                 confirmButton: 'Yes',
                                 cancelButton: 'No',
                                 animation: 'top',
@@ -1775,7 +1729,7 @@
                                     $(".FactorForm").submit()
                                 },
                                 cancel: function () {
-                                    window.location = '/EN'
+                                    window.location = '[##cms.Host.FA_redirect|(/)##]'
                                 }
                             })
                         </script>

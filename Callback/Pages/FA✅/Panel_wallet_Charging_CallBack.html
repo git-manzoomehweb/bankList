@@ -2110,7 +2110,7 @@
             </basis>
 
 
-            <basis core="group" name="api" if="[##db.get_inputs_bank_id.Value##] in (202,203,204,207,208,209)">
+            <basis core="group" name="api" if="[##db.get_inputs_bank_id.Value##] in (202,203,204,207,208,209,210)">
                 <basis core="inlinesource" name="db">
                     <member name="get_inputs_session" format="json"
                         postsql="select  value  from [db.get_inputs_session] as a where Field = 'session'" preview="">
@@ -2192,6 +2192,11 @@
                         }
                         document.querySelector(".formbank").querySelector("input[name=bankName]").value = 'Muscat';
 
+                    }else if (bank_id === '210') {
+                        params = {
+                            "RefNum": "[##cms.form.RefNum##]"
+                        };
+                        document.querySelector(".formbank").querySelector("input[name=bankName]").value = 'samanOPG';
                     }
 
 
