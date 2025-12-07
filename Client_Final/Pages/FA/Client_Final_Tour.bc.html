@@ -11,7 +11,8 @@
 <script type="text/javascript">
     <basis core="call" file="Client_Reservation_js.inc" />
 </script>
-<script src="https://cdn.basiscore.net/basisfly.com/js/reservation_ConfirmJs.js" type="text/javascript"></script>
+<script src="https://cdn.basiscore.net/basisfly.com/js/reservation_ConfirmJs.js" type="text/javascript">
+</script>
 <basis core="call" file="Client_BasisCore_Script.inc"></basis>
 <basis core="dbsource" source="basiscore" name="about" mid="5" lid="1" usedforid="[##cms.cms.ownerid##]">
     <member core="view" name="txt" type="view" postsql="select Answer from [about.txt] where prpID = '8000'" />
@@ -19,58 +20,63 @@
 <basis core="group" name="FirstDelay">
     <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
         <member name="factor" method="tour_final" query='{
-        "name": "db",
-        "mid": "20",
-        "member":[ { 
-        "type":"scalar",
-        "name": "q",
-        "request": "factorpreformfinal",
-        "userid":"[##cms.form.userid##]",
-        "accounttype":"[##cms.form.accounttype##]",
-        "mid":"[##cms.form.mid##]",
-        "supplier":"[##cms.form.supplier##]",
-        "code":"[##cms.form.c_code##]",
-        "club_discount":"[##cms.form.club_discount##]",
-        "invoicedesc":"[##cms.form.invoicedesc##]",
-        "currency_request":"[##cms.form.currency_request##]",
-        "provider":[##cms.form.mainprovider|("0")##],
-        "clear":"[##cms.form.clear##]",
-        "trackingNo":"[##cms.cookie.trackingid##]",
-        "ownerid":"[##cms.cms.ownerid##]",
-        "factorid":"0",
-        "agencycounter":"[##cms.form.agencycounter##]",
-        "agencycountername":"[##cms.form.agencycountername##]",
-        "targetunit":"10",
-        "factortype":"[##cms.form.factor_type##]",
-        "passengerinfo":[##cms.json.header##],
-        "tourInfo":[##cms.form.tourInfo|("")##],
-        "products":[{
-            "type":"[##cms.form.factor_type##]",
-            "productid":"[##cms.form.id##]",
-            "hotelgroupid" : "[##cms.form.hotelgroupid##]",
-            "roomid":[[##cms.form.roomid##]],
-            "adults":"[##cms.form.adultcount##]",
-            "childwithbedcount":"[##cms.form.childwithbedcount##]",
-            "childwithoutbedcount":"[##cms.form.childwithoutbedcount##]",
-            "infants":"[##cms.form.infantcount##]",
-            "dateinfo":{
-            "begindate" : "[##cms.form.fdate##]",
-            "enddate" : "[##cms.form.tdate##]"
-            },
-            "unit" : "10"
-            }],
-          }]
-       
-       }' preview="" />
+                "name": "db",
+                "mid": "20",
+                "member": [
+                    {
+                        "type": "scalar",
+                        "name": "q",
+                        "request": "factorpreformfinal",
+                        "userid": "[##cms.form.userid##]",
+                        "accounttype": "[##cms.form.accounttype##]",
+                        "mid": "[##cms.form.mid##]",
+                        "supplier": "[##cms.form.supplier##]",
+                        "code": "[##cms.form.c_code##]",
+                        "club_discount": "[##cms.form.club_discount##]",
+                        "invoicedesc": "[##cms.form.invoicedesc##]",
+                        "currency_request": "[##cms.form.currency_request##]",
+                        "provider": [##cms.form.mainprovider|("0")##],
+                        "clear": "[##cms.form.clear##]",
+                        "trackingNo": "[##cms.cookie.trackingid##]",
+                        "ownerid": "[##cms.cms.ownerid##]",
+                        "factorid": "0",
+                        "agencycounter": "[##cms.form.agencycounter##]",
+                        "agencycountername": "[##cms.form.agencycountername##]",
+                        "targetunit": "10",
+                        "factortype": "[##cms.form.factor_type##]",
+                        "passengerinfo": [##cms.json.header##],
+                        "tourInfo": [##cms.form.tourInfo|("")##],
+                        "products": [
+                            {
+                                "type": "[##cms.form.factor_type##]",
+                                "productid": "[##cms.form.id##]",
+                                "hotelgroupid": "[##cms.form.hotelgroupid##]",
+                                "roomid": [
+                                    [##cms.form.roomid##]
+                                ],
+                                "adults": "[##cms.form.adultcount##]",
+                                "childwithbedcount": "[##cms.form.childwithbedcount##]",
+                                "childwithoutbedcount": "[##cms.form.childwithoutbedcount##]",
+                                "infants": "[##cms.form.infantcount##]",
+                                "dateinfo": {
+                                    "begindate": "[##cms.form.fdate##]",
+                                    "enddate": "[##cms.form.tdate##]"
+                                },
+                                "unit": "10"
+                            }
+                        ],
+                    }
+                ]
+            }' preview="" />
     </basis>
     <basis core="group" name="SecondDelay">
         <basis core="inlinesource" name="db">
             <member name="TypeFactorpreform" format="json" preview=""
-                postsql="select value from [db.TypeFactorpreform] where field = 'type'">
-                {"root":[##db.factor.result##]}</member>
+                postsql="select value from [db.TypeFactorpreform] where field = 'type'"> {"root":[##db.factor.result##]}
+            </member>
             <member name="CodeFactorpreform" format="json" preview=""
-                postsql="select value from [db.CodeFactorpreform] where field = 'code'">
-                {"root":[##db.factor.result##]}</member>
+                postsql="select value from [db.CodeFactorpreform] where field = 'code'"> {"root":[##db.factor.result##]}
+            </member>
             <member name="DescriptionFactorpreform" format="json" preview=""
                 postsql="select value from [db.DescriptionFactorpreform] where field = 'description'">
                 {"root":[##db.factor.result##]}</member>
@@ -83,23 +89,22 @@
             <member name="NewtimeFactorpreform" format="json" preview=""
                 postsql="select value from [db.NewtimeFactorpreform] where field = 'newtime'">
                 {"root":[##db.factor.result##]}</member>
-
         </basis>
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
             <member method="cms" name="webservice_detail" query='{
-                "name": "db",
-                "mid": "20",
-                "member": [
-                    {
-                        "name": "q",
-                        "type": "list",
-                        "request": "webservice_Detail",
-                        "id": [##cms.form.bank_id|("")##],
-                        "dmnid": [##cms.cms.domainid##],
-                        "lid":"1"
-                    }
-                ]
-            }' />
+                    "name": "db",
+                    "mid": "20",
+                    "member": [
+                        {
+                            "name": "q",
+                            "type": "list",
+                            "request": "webservice_Detail",
+                            "id": [##cms.form.bank_id|("")##],
+                            "dmnid": [##cms.cms.domainid##],
+                            "lid": "1"
+                        }
+                    ]
+                }' />
         </basis>
         <basis core="group" name="DetailDelay">
             <basis core="inlinesource" name="db">
@@ -111,94 +116,46 @@
             <basis core="group" name="PriceDelay1">
                 <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
                     <member name="FinalPrice" method="invoice" query='{
-                   "name": "db",
-                   "mid": "20",
-                   "member": [
-                      {
-                         "type": "list",
-                         "name": "q",
-                         "request": "finalprice",
-                         "trackingNo": "[##db.Factorid.Value|(0)##]",
-                         "unit": "[##db.unit.Value##]"
-                      }
-                   ]
-                }
-                ' />
+                            "name": "db",
+                            "mid": "20",
+                            "member": [
+                                {
+                                    "type": "list",
+                                    "name": "q",
+                                    "request": "finalprice",
+                                    "trackingNo": "[##db.Factorid.Value|(0)##]",
+                                    "unit": "[##db.unit.Value##]"
+                                }
+                            ]
+                        }' />
                 </basis>
                 <basis core="group" name="PriceDelay2">
                     <basis core="inlinesource" name="db">
                         <member name="firstpay" format="json" preview=""
                             postsql="select value from [db.firstpay] where field = 'firstprice'">
-                            {"root":[##db.FinalPrice.result##]}
-                        </member>
+                            {"root":[##db.FinalPrice.result##]} </member>
                         <member name="total" format="json" preview=""
                             postsql="select value from [db.total] where field = 'totalprice'">
-                            {"root":[##db.FinalPrice.result##]}
-                        </member>
+                            {"root":[##db.FinalPrice.result##]} </member>
                         <member name="totalwithcommision" format="json" preview=""
                             postsql="select value from [db.totalwithcommision] where field = 'totalwithcommision'">
-                            {"root":[##db.FinalPrice.result##]}
-                        </member>
+                            {"root":[##db.FinalPrice.result##]} </member>
                         <member name="coupon" format="json" preview=""
                             postsql="select value from [db.coupon] where field = 'coupon'">
-                            {"root":[##db.FinalPrice.result##]}
-                        </member>
+                            {"root":[##db.FinalPrice.result##]} </member>
                     </basis>
                     <basis core="dbsource" source="hosting" name="site">
                         <member name="address" type="list" request="siteaddress" />
                     </basis>
                     <basis core="group" name="DelayFactorpreformS" if="'[##db.TypeFactorpreform.Value##]'='0'">
-
                         <basis core="group" name="type" if="[##cms.form.accounttype##] = 1">
-
-
                             <div id="bgLoadding-box"></div>
-                            <basis core="dbsource" source="trust_login" name="db" usedforid="602">
-                                <member name="Form" request="jsonform" type="scalar" />
-                            </basis>
                             <basis core="group" name="InnerDelay">
-                                <basis core="inlinesource" name="db">
-                                    <member name="jsonform" format="json" preview=""
-                                        postsql="select  Id , ParentId , case when trim(Field) is null  then  (select field from [db.jsonform] where id = a.parentid ) else field end as field, value , type , path  from [db.jsonform] as a">
-                                        {"root":[##db.Form.json##]}</member>
-                                </basis>
                                 <form action="" method="post" class="Confirm">
-                                    <div class="title-success"><span> پیش قرارداد شما با موفقیت ثبت گردید </span>
-                                    </div>
-                                    <input type="hidden" name="userid" value="[##cms.form.userid##]" />
-                                    <input type="hidden" value="[##db.Factorid.Value|(0)##]" name="factorid" />
-                                    <div>
-                                        <basis core="tree" datamembername="db.jsonform" idcol="id"
-                                            parentidcol="parentid" nullvalue="null">
-                                            <face filter="Field in ('schemaID')">
-                                                <input type="hidden" value="@value" name="_root.schemaID" readonly />
-                                            </face>
-                                            <face filter="Field in ('schemaName')">
-                                                <input type="hidden" value="@value" name="_root.schemaName" readonly />
-                                            </face>
-                                            <face filter="type in ('object','array')">@Child</face>
-                                        </basis>
-                                    </div>
-                                    <div class="Section_box">
-                                        <basis core="tree" datamembername="db.jsonform" idcol="id"
-                                            parentidcol="parentid" nullvalue="null">
-                                            <face filter="Field in ('obj') and type in ('object')">
-                                                <div class="Section">@Child
-                                                    <div class="clr"></div>
-                                                </div>
-                                            </face>
-                                            <face filter="Field in ('question') and value <> 'توضیحات'">
-                                                <div class="QuestionForm">@value</div>
-                                            </face>
-                                            <face filter="Field in ('answer')">
-                                                <div class="AnswerForm">@value<span class="mtype"></span></div>
-                                            </face>
-                                            <face filter="Field in ('prpid','typeid','value')">@value</face>
-                                            <face filter="type in ('object','array')">@Child</face>
-                                        </basis>
-                                    </div>
+                                    <div class="title-success"><span> پیش قرارداد شما با موفقیت ثبت گردید </span> </div>
                                     <div class="Section">
-                                        <div class="redirecPanel">برای مشاهده پیش قرارداد در پنل کاربری خود <a
+                                        <div class="redirecPanel">برای مشاهده پیش قرارداد ([##db.Factorid.Value|(0)##])
+                                            در پنل کاربری خود <a
                                                 href="[##site.address.domain##]/Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
                                                 target="_blank"> کلیک </a>کنید</div>
                                         <div class="link_homepage"><a href="[##cms.Host.FA_redirect|(/)##]">بازگشت به
@@ -206,129 +163,29 @@
                                         <div class="clr"></div>
                                     </div>
                                 </form>
-                                <div class="Hide_Box" style="display:none">
-                                    <input type="hidden" value="[##db.total.Value##]" class="total">
-                                    <input type="hidden" value="[##db.firstpay.Value##]" class="totalcom">
-                                    <input type="hidden"
-                                        value="/reservation/invoice/view.bc?cat=202&id=[##db.Factorid.Value|(0)##]&open=1"
-                                        class="link">
-                                    <input type="hidden" value="[##db.Factorid.Value|(0)##]" class="invoiceid">
-                                    <input type="hidden" value="[##cms.form.moneytype##]" class="moneytype">
-                                </div>
-                                <script type="text/javascript">
-                                    $(".Section_box").find(".Section").each(function (i) {
-                                        if (i == 0) {
-                                            $(this).find(".AnswerForm").find("input[type=text]").val($(
-                                                ".invoiceid").val())
-                                            $(this).find(".AnswerForm").find("input[type=text]").prop(
-                                                'readonly', true);
-                                        }
-
-                                        if (i == 1) {
-                                            $(this).find(".AnswerForm").find(".part").each(function (
-                                                j) {
-                                                if (j == 0) {
-                                                    $(this).find("input[type=text]").val(
-                                                        parseInt($(
-                                                            ".total").val())
-                                                            .toLocaleString())
-                                                    $(this).find("input[type=text]").addClass(
-                                                        "Seprator")
-                                                    $(this).find("input[type=text]").prop(
-                                                        'readonly',
-                                                        true);
-                                                }
-
-                                                if (j == 1) {
-                                                    $(this).find("input[type=text]").val($(
-                                                        ".moneytype")
-                                                        .val())
-                                                    $(this).closest(".AnswerForm").find(
-                                                        ".mtype")
-                                                        .text(
-                                                            $(".moneytype").val())
-                                                    $(this).hide()
-                                                }
-                                            })
-                                        }
-
-                                        if (i == 2) {
-                                            $(this).find(".AnswerForm").find(".part").each(function (
-                                                j) {
-                                                if (j == 0) {
-                                                    $(this).find("input[type=text]").val(
-                                                        parseInt($(
-                                                            ".totalcom").val())
-                                                            .toLocaleString())
-                                                    $(this).find("input[type=text]").addClass(
-                                                        "Seprator")
-                                                    $(this).find("input[type=text]").prop(
-                                                        'readonly', true);
-
-                                                }
-
-                                                if (j == 1) {
-                                                    $(this).find("input[type=text]").val($(
-                                                        ".moneytype")
-                                                        .val())
-                                                    $(this).closest(".AnswerForm").find(
-                                                        ".mtype")
-                                                        .text(
-                                                            $(".moneytype").val())
-                                                    $(this).hide()
-                                                }
-                                            })
-                                        }
-
-                                        if (i == 3) {
-                                            $(this).find(".AnswerForm").find("input[type=text]").val($(
-                                                ".link")
-                                                .val())
-                                            $(this).hide()
-                                            $(this).css("margin", "0")
-                                        }
-                                    })
-
-                                    $(".Confirm").submit(function (e) {
-                                        $(".Seprator").each(function () {
-                                            var x = $(this).val();
-                                            var y = x.split(",");
-                                            var z = "";
-
-                                            for (var i = 0; i < y.length; i++) {
-                                                z += y[i]
-                                            };
-
-                                            $(this).val(z)
-                                        })
-
-                                    });
-                                </script>
                             </basis>
-
                         </basis>
                         <basis core="group" name="type" if="[##cms.form.accounttype##] in (3,2)">
                             <basis core="group" name="pay_type" if="'[##cms.form.paytype##]' = 'credit'">
                                 <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource" name="db">
                                     <member name="save_inputs" method="cms" query='{
-                                     "name": "db",
-                                     "mid": "20",
-                                     "member": [
-                                         {
-                                             "request": "save_inputs",
-                                             "id": "[##db.Factorid.Value|(0)##]",
-                                             "trackingid": "[##cms.cookie.trackingid##]",
-                                             "rkey": "[##cms.cookie.rkey##]",
-                                             "factorid": "[##db.Factorid.Value|(0)##]",
-                                             "agencyid": "[##cms.form.agencyid|(0)##]",
-                                             "paytype": "[##cms.form.paytype##]",
-                                             "totalfinal": "[##db.firstpay.Value##]",
-                                             "supplier": "[##cms.form.supplier##]",
-                                             "factortype": "[##cms.form.factor_type##]"
-                                            
-                                         }
-                                     ]
-                                 }' preview="" />
+                                            "name": "db",
+                                            "mid": "20",
+                                            "member": [
+                                                {
+                                                    "request": "save_inputs",
+                                                    "id": "[##db.Factorid.Value|(0)##]",
+                                                    "trackingid": "[##cms.cookie.trackingid##]",
+                                                    "rkey": "[##cms.cookie.rkey##]",
+                                                    "factorid": "[##db.Factorid.Value|(0)##]",
+                                                    "agencyid": "[##cms.form.agencyid|(0)##]",
+                                                    "paytype": "[##cms.form.paytype##]",
+                                                    "totalfinal": "[##db.firstpay.Value##]",
+                                                    "supplier": "[##cms.form.supplier##]",
+                                                    "factortype": "[##cms.form.factor_type##]"
+                                                }
+                                            ]
+                                        }' preview="" />
                                 </basis>
                                 <form method="post" action="/Client_CallBack.bc" id="Credit_payment_form">
                                     <input type="hidden" value="1" name="Credit_payment" />
@@ -337,25 +194,21 @@
                                 <div id="bgLoadding-box"></div>
                                 <div id="payment-Loadding">
                                     <div class="loader2"></div>
-                                    <div id="text-loading">در حال صدور پیش قرارداد , لطفا چند لحظه صبر کنید
-                                        ...</div>
+                                    <div id="text-loading">در حال صدور پیش قرارداد , لطفا چند لحظه صبر کنید ...</div>
                                 </div>
                                 <script type="text/javascript">
-                                    $("#Credit_payment_form").submit()
-                                </script>
 
+                                    $("#Credit_payment_form").submit()
+
+
+                                </script>
                             </basis>
                             <basis core="group" name="pay_type" if="'[##cms.form.paytype##]' <> 'credit'">
-
-
-
-
                                 <div id="bgLoadding-box"></div>
                                 <div id="payment-Loadding">
                                     <div class="loader2"></div>
-                                    <div id="text-loading">در حال اتصال به درگاه پرداخت الکترونیک , لطفا چند
-                                        لحظه صبر کنید
-                                        ...</div>
+                                    <div id="text-loading">در حال اتصال به درگاه پرداخت الکترونیک , لطفا چند لحظه صبر
+                                        کنید ...</div>
                                 </div>
                                 <basis core="dbsource" source="accounting" name="db" bankid="[##db.bankid.Value##]"
                                     unit="[##db.unit.Value##]" factorid="[##db.Factorid.Value|(0)##]"
@@ -363,8 +216,7 @@
                                     <member name="paymentid" type="scalar" request="paymentid" preview="" />
                                 </basis>
                                 <basis core="group" if="'[##db.paymentid.Column1##]' = 'not ok'">
-                                    <div id="text-loading">امکان اتصال به درگاه پرداخت الکترونیک وجود ندارد.
-                                    </div>
+                                    <div id="text-loading">امکان اتصال به درگاه پرداخت الکترونیک وجود ندارد. </div>
                                     <basis core="group" name="Nobank" if="'[##cms.form.bank_id##]' = '-1'">
                                         <div class="company_own">
                                             <div class="message-box">
@@ -377,22 +229,18 @@
                                                     </span><span
                                                         class="answer slice-price">[##db.totalwithcommision.Value##]</span>
                                                 </div>
-                                                <div class="message-info"><span class="question">مبلغ قابل
-                                                        پرداخت :</span><span
-                                                        class="answer slice-price">[##db.firstpay.Value##]</span>
-                                                </div>
+                                                <div class="message-info"><span class="question">مبلغ قابل پرداخت
+                                                        :</span><span
+                                                        class="answer slice-price">[##db.firstpay.Value##]</span> </div>
                                                 <div class="Section">
-                                                    <div class="redirecPanel">
-                                                        برای مشاهده پیش قرارداد در پنل کاربری خود
+                                                    <div class="redirecPanel"> برای مشاهده پیش قرارداد در پنل کاربری خود
                                                         <a href="[##site.address.domain##]/Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
-                                                            target="_blank"> کلیک </a>
-                                                        کنید.
+                                                            target="_blank"> کلیک </a> کنید.
                                                     </div>
                                                     <basis core="group" name="redirectpage"
                                                         if="'[##cms.form.share##]' = '1'">
                                                         <div class="link_homepage"><a href="/flight_share.bc">بازگشت به
-                                                                صفحه اصلی
-                                                                سایت</a></div>
+                                                                صفحه اصلی سایت</a></div>
                                                     </basis>
                                                     <basis core="group" name="redirecthomepagehome"
                                                         if="'[##cms.form.share##]' <> '1'">
@@ -405,11 +253,12 @@
                                             </div>
                                         </div>
                                         <script type="text/javascript">
-                                            $("#bgLoadding-box,#payment-Loadding,#text-loading").hide()
+
+                                            $("#bgLoadding-box,#payment-Loadding,#text-loading").hide();
                                             $(".slice-price").each(function () {
-                                                $(this).text($(this).text().replace(
-                                                    /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                                                $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
                                             })
+
                                         </script>
                                     </basis>
                                 </basis>
@@ -419,26 +268,26 @@
                                         <basis core="external.fly.ws" source="cmsDbService2" procedurename="dbsource"
                                             name="db">
                                             <member name="save_inputs" method="cms" query='{
-                                            "name": "db",
-                                            "mid": "20",
-                                            "member": [
-                                                {
-                                                    "request": "save_inputs",
-                                                    "id": "[##db.paymentid.Column1##]",
-                                                    "trackingid": "[##cms.cookie.trackingid##]",
-                                                    "rkey": "[##cms.cookie.rkey##]",
-                                                    "factorid": "[##db.Factorid.Value|(0)##]",
-                                                    "agencyid": "[##cms.form.agencyid|(0)##]",
-                                                    "paytype": "[##cms.form.paytype##]",
-                                                    "totalfinal": "[##db.firstpay.Value##]",
-                                                    "supplier": "[##cms.form.supplier##]",
-                                                    "bank_id": "[##cms.form.bank_id##]",
-                                                    "bankid": "[##db.bankid.Value##]",
-                                                    "paymentid": "[##db.paymentid.Column1##]",
-                                                    "factortype": "[##cms.form.factor_type##]"
-                                                }
-                                            ]
-                                        }' preview="" />
+                                                    "name": "db",
+                                                    "mid": "20",
+                                                    "member": [
+                                                        {
+                                                            "request": "save_inputs",
+                                                            "id": "[##db.paymentid.Column1##]",
+                                                            "trackingid": "[##cms.cookie.trackingid##]",
+                                                            "rkey": "[##cms.cookie.rkey##]",
+                                                            "factorid": "[##db.Factorid.Value|(0)##]",
+                                                            "agencyid": "[##cms.form.agencyid|(0)##]",
+                                                            "paytype": "[##cms.form.paytype##]",
+                                                            "totalfinal": "[##db.firstpay.Value##]",
+                                                            "supplier": "[##cms.form.supplier##]",
+                                                            "bank_id": "[##cms.form.bank_id##]",
+                                                            "bankid": "[##db.bankid.Value##]",
+                                                            "paymentid": "[##db.paymentid.Column1##]",
+                                                            "factortype": "[##cms.form.factor_type##]"
+                                                        }
+                                                    ]
+                                                }' preview="" />
                                         </basis>
                                         <basis core="group" name="Saman" if="[##cms.form.bank_id##] = 31">
                                             <basis core="inlinesource" name="db">
@@ -476,6 +325,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -493,10 +343,10 @@
                                                                 bank_id: 31
                                                             },
                                                             success: function (result) {
-                                                                $(".sectionInfo").empty().html(
-                                                                    result)
+                                                                $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -543,6 +393,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/'"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -559,10 +410,10 @@
                                                                 bank_id: 32
                                                             },
                                                             success: function (result) {
-                                                                $(".sectionInfo").empty().html(
-                                                                    result)
+                                                                $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -580,7 +431,6 @@
                                                     {"root":[##db.webservice_detail.result##]} </member>
                                             </basis>
                                             <basis core="group" name="bankgroup">
-
                                                 <basis core="external.ws.ws" service="pasargadBank" name="pasargad"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
                                                     preview="true">
@@ -602,9 +452,7 @@
                                                         </params>
                                                     </member>
                                                 </basis>
-                                                <basis core="group" name="delay4">
-                                                    [##pasargad.m1.result##]
-                                                </basis>
+                                                <basis core="group" name="delay4"> [##pasargad.m1.result##] </basis>
                                             </basis>
                                         </basis>
                                         <basis core="group" name="Pay" if="[##cms.form.bank_id##] = 34">
@@ -632,12 +480,12 @@
                                                         </params>
                                                     </member>
                                                 </basis>
-
                                                 <basis core="group" name="InnerDelay">
                                                     <input type="hidden" value='[##pay.m1.result##]' id="json" />
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/'"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -654,10 +502,10 @@
                                                                 bank_id: 34
                                                             },
                                                             success: function (result) {
-                                                                $(".sectionInfo").empty().html(
-                                                                    result)
+                                                                $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -706,6 +554,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -723,10 +572,10 @@
                                                                 bank_id: 38
                                                             },
                                                             success: function (result) {
-                                                                $(".sectionInfo").empty().html(
-                                                                    result)
+                                                                $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -741,6 +590,7 @@
                                                 <input type="hidden" value="1" id="action" />
                                                 <div class="sectionInfo"></div>
                                                 <script type="text/javascript">
+
                                                     $.ajax({
                                                         url: "/Client_Get_Token.bc",
                                                         type: "post",
@@ -760,6 +610,7 @@
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
+
                                                 </script>
                                             </basis>
                                         </basis>
@@ -789,13 +640,15 @@
                                                 </basis>
                                                 <basis core="group" name="delay4">
                                                     <script type="text/javascript">
-                                                        var obj = new Object([##gardeshPay.m1.result##])
-                                                        var obj_1 = obj["gardeshPay_m1"]["answer"]
-                                                        var obj_2 = JSON.parse(obj_1)
-                                                        var field_1 = obj_2["data"]["url"] + '/'
-                                                        var field_2 = obj_2["data"]["token"]
+
+                                                        var obj = new Object([##gardeshPay.m1.result##]);
+                                                        var obj_1 = obj["gardeshPay_m1"]["answer"];
+                                                        var obj_2 = JSON.parse(obj_1);
+                                                        var field_1 = obj_2["data"]["url"] + '/';
+                                                        var field_2 = obj_2["data"]["token"];
                                                         var url_redirect = field_1.concat(field_2);
-                                                        window.location = url_redirect
+                                                        window.location = url_redirect;
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -826,11 +679,13 @@
                                                 </basis>
                                                 <basis core="group" name="delay4">
                                                     <script type="text/javascript">
-                                                        var obj = new Object([##newsepah.m1.result##])
-                                                        var obj_1 = obj["newsepah_m1"]["Token"]
-                                                        var field_1 = 'https://pec.shaparak.ir/NewIPG/?Token='
+
+                                                        var obj = new Object([##newsepah.m1.result##]);
+                                                        var obj_1 = obj["newsepah_m1"]["Token"];
+                                                        var field_1 = 'https://pec.shaparak.ir/NewIPG/?Token=';
                                                         var url_redirect = field_1.concat(obj_1);
-                                                        window.location = url_redirect
+                                                        window.location = url_redirect;
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -870,16 +725,20 @@
                                                 </basis>
                                                 <basis core="group" name="delay4">
                                                     <script type="text/javascript">
-                                                        var obj = new Object([##ArcaPayment.m1.result##])
-                                                        var obj_1 = obj["ArcaPayment_m1"]["answer"];;
+
+
+                                                        var obj = new Object([##ArcaPayment.m1.result##]);
+                                                        var obj_1 = obj["ArcaPayment_m1"]["answer"];
                                                         var obj_2 = JSON.parse(obj_1);
                                                         if (obj_2.errorCode == 0) {
                                                             var url_redirect = obj_2["formUrl"];
-                                                            window.location = url_redirect
+                                                            window.location = url_redirect;
                                                         } else {
                                                             $("#payment-Loadding,#bgLoadding-box").show();
                                                             $("#text-loading").text(obj_2.errorMessage);
                                                         }
+
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -914,6 +773,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -930,10 +790,10 @@
                                                                 bank_id: 65
                                                             },
                                                             success: function (result) {
-                                                                $(".sectionInfo").empty().html(
-                                                                    result)
+                                                                $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -974,6 +834,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -982,8 +843,7 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         var obj = new Object([##rayancard.m1.result##]);
-                                                        var obj_1 = obj["rayancard_m1"]["url"]
-
+                                                        var obj_1 = obj["rayancard_m1"]["url"];
                                                         $.ajax({
                                                             url: "/Client_Get_Token.bc",
                                                             type: "post",
@@ -997,6 +857,7 @@
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -1040,6 +901,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/'"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -1049,7 +911,7 @@
                                                         }
                                                         var obj = new Object([##irankish.m1.result##]);
                                                         var obj_2 = obj["irankish_m1"]["result"]["token"];
-                                                        var obj_status = obj["irankish_m1"]["status"]
+                                                        var obj_status = obj["irankish_m1"]["status"];
                                                         $.ajax({
                                                             url: "/Client_Get_Token.bc",
                                                             type: "post",
@@ -1063,6 +925,7 @@
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -1103,6 +966,7 @@
                                                     <input type="hidden" value="" id="action" />
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
+
                                                         var str = document.getElementById("json").value;
                                                         str = str.replace(/"/g, ' ');
                                                         if (str == 'Time Out') {
@@ -1111,8 +975,7 @@
                                                             document.getElementById("action").value = 1;
                                                         }
                                                         var obj = new Object([##basa.m1.result##]);
-                                                        var obj_1 = obj["basa_m1"]["url"]
-
+                                                        var obj_1 = obj["basa_m1"]["url"];
                                                         $.ajax({
                                                             url: "/Client_Get_Token.bc",
                                                             type: "post",
@@ -1126,6 +989,7 @@
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -1156,9 +1020,13 @@
                                                 <basis core="group" name="InnerDelay">
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
-                                                        var obj = new Object([##pod.m1.result##])
-                                                        var url_redirect = obj["pod_m1"]["url"]
-                                                        window.location = url_redirect
+
+
+                                                        var obj = new Object([##pod.m1.result##]);
+                                                        var url_redirect = obj["pod_m1"]["url"];
+                                                        window.location = url_redirect;
+
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -1194,15 +1062,18 @@
                                                                 value="[##site.address.domain##]/[##db.callback.Value##]?iN=[##db.paymentid.Column1##]" />
                                                             <param name="hash_key" value="[##db.hash_key.Value##]" />
                                                         </params>
-
                                                     </member>
                                                 </basis>
                                                 <basis core="group" name="InnerDelay">
                                                     <div class="sectionInfo"></div>
                                                     <script type="text/javascript">
-                                                        var obj = new Object([##sadad.m1.result##])
-                                                        var url_redirect = obj["sadad_m1"]["url"]
-                                                        window.location = url_redirect
+
+
+                                                        var obj = new Object([##sadad.m1.result##]);
+                                                        var url_redirect = obj["sadad_m1"]["url"];
+                                                        window.location = url_redirect;
+
+
                                                     </script>
                                                 </basis>
                                             </basis>
@@ -1236,8 +1107,9 @@
                                             <input type="hidden" value="" id="action" />
                                             <div class="sectionInfo"></div>
                                             <script type="text/javascript">
+
                                                 var str = document.getElementById("json").value;
-                                                var split_str = str.split('/')
+                                                var split_str = str.split('/');
                                                 str = str.replace(/'"/g, ' ');
                                                 if (str == 'Time Out') {
                                                     document.getElementById("action").value = 0;
@@ -1251,8 +1123,7 @@
                                                         token: $("#json").val(),
                                                         action: $("#action").val(),
                                                         bank_id: 35,
-                                                        Authority: split_str[5].replace(/[^\x00-\x7F]/g,
-                                                            ""),
+                                                        Authority: split_str[5].replace(/[^\x00-\x7F]/g, ""),
                                                         paymentid: "[##db.paymentid.Column1##]",
                                                         bankid: "[##db.bankid.Value##]",
                                                         supplier: "[##cms.form.supplier##]",
@@ -1266,6 +1137,7 @@
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1294,22 +1166,20 @@
                                             <div class="sectionInfo"></div>
                                             <input type="hidden" value="" id="action" />
                                             <script type="text/javascript">
-                                                var obj = new Object([##kipaa.m1.result##])
+
+                                                var obj = new Object([##kipaa.m1.result##]);
                                                 var obj_1 = obj["kipaa_m1"]["answer"]
-                                                var obj_2 = JSON.parse(obj_1)
+                                                var obj_2 = JSON.parse(obj_1);
                                                 if (obj_2["Status"] == '200') {
                                                     document.getElementById("action").value = 1;
                                                 } else {
                                                     document.getElementById("action").value = 0;
-                                                }
-                                                $.ajax({
+                                                } $.ajax({
                                                     url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
                                                         token: obj_2["Content"]["payment_token"],
-                                                        payment_url: "https://" + obj_2["Content"][
-                                                            "payment_url"
-                                                        ],
+                                                        payment_url: "https://" + obj_2["Content"]["payment_url"],
                                                         action: $("#action").val(),
                                                         bank_id: 51,
                                                         paymentid: "[##db.paymentid.Column1##]",
@@ -1325,6 +1195,7 @@
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1349,14 +1220,14 @@
                                                 </params>
                                             </member>
                                         </basis>
-
                                         <basis core="group" name="InnerDelay">
                                             <div class="sectionInfo"></div>
                                             <input type="hidden" value="1" id="action" />
                                             <script type="text/javascript">
-                                                var obj = new Object([##aghayePardakht.m1.result##])
+
+                                                var obj = new Object([##aghayePardakht.m1.result##]);
                                                 var obj_1 = obj["aghayePardakht_m1"]["url"]
-                                                var split_obj_1 = obj_1.split('/')
+                                                var split_obj_1 = obj_1.split('/');
                                                 $.ajax({
                                                     url: "/Client_Get_Token.bc",
                                                     type: "post",
@@ -1378,6 +1249,7 @@
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1415,6 +1287,7 @@
                                             <input type="hidden" value="1" id="action" />
                                             <div class="sectionInfo"></div>
                                             <script type="text/javascript">
+
                                                 $.ajax({
                                                     url: "/Client_Get_Token.bc",
                                                     type: "post",
@@ -1435,6 +1308,7 @@
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1472,9 +1346,10 @@
                                             <input type="hidden" value="1" id="action" />
                                             <div class="sectionInfo"></div>
                                             <script type="text/javascript">
+
                                                 var obj = new Object([##shahr.m1.result##]);
-                                                var obj_1 = obj["shahr_m1"]["url"]
-                                                var obj_2 = obj["shahr_m1"]["token"]
+                                                var obj_1 = obj["shahr_m1"]["url"];
+                                                var obj_2 = obj["shahr_m1"]["token"];
                                                 $.ajax({
                                                     url: "/Client_Get_Token.bc",
                                                     type: "post",
@@ -1496,6 +1371,7 @@
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1533,6 +1409,8 @@
                                             <input type="hidden" value="1" id="action" />
                                             <div class="sectionInfo"></div>
                                             <script type="text/javascript">
+
+
                                                 var obj = new Object([##fadax.m1.result##]);
                                                 var obj_1 = obj["fadax_m1"]["url"];
                                                 var obj_2 = obj["fadax_m1"]["token"];
@@ -1540,7 +1418,6 @@
                                                 if (obj_1 == 'none') {
                                                     $("#text-loading").text('در حال حاضر امکان اتصال به درگاه بانک وجود ندارد');
                                                     $("#text-loading").append('<a style="display: block;margin: 40px auto;color: white;width: fit-content;text-decoration: none;text-align: center;padding: 5px;border: 1px solid #fff;border-radius: 5px;text-align: center;" href="[##cms.Host.FA_redirect|(/)##]">بازگشت به صفحه اصلی</a>');
-
                                                 } else {
                                                     $.ajax({
                                                         url: "/Client_Get_Token.bc",
@@ -1565,6 +1442,8 @@
                                                         }
                                                     });
                                                 }
+
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1602,6 +1481,8 @@
                                             <input type="hidden" value="1" id="action" />
                                             <div class="sectionInfo"></div>
                                             <script type="text/javascript">
+
+
                                                 var obj = new Object([##fadax.m1.result##]);
                                                 var obj_1 = obj["fadax_m1"]["url"];
                                                 var obj_2 = obj["fadax_m1"]["token"];
@@ -1609,7 +1490,6 @@
                                                 if (obj_1 == 'none') {
                                                     $("#text-loading").text('در حال حاضر امکان اتصال به درگاه بانک وجود ندارد');
                                                     $("#text-loading").append('<a style="display: block;margin: 40px auto;color: white;width: fit-content;text-decoration: none;text-align: center;padding: 5px;border: 1px solid #fff;border-radius: 5px;text-align: center;" href="[##cms.Host.FA_redirect|(/)##]">بازگشت به صفحه اصلی</a>');
-
                                                 } else {
                                                     $.ajax({
                                                         url: "/Client_Get_Token.bc",
@@ -1634,6 +1514,8 @@
                                                         }
                                                     });
                                                 }
+
+
                                             </script>
                                         </basis>
                                     </basis>
@@ -1677,6 +1559,7 @@
                                                 <input type="hidden" value="" id="action" />
                                                 <div class="sectionInfo"></div>
                                                 <script type="text/javascript">
+
                                                     var str = document.getElementById("json").value;
                                                     str = str.replace(/"/g, ' ');
                                                     if (str == 'Time Out') {
@@ -1686,7 +1569,7 @@
                                                     }
                                                     var obj = new Object([##pasargad.m1.result##]);
                                                     var obj_1 = obj["pasargad_m1"]["data"]["url"]
-                                                    var obj_2 = obj["pasargad_m1"]["data"]["urlId"]
+                                                    var obj_2 = obj["pasargad_m1"]["data"]["urlId"];
                                                     $.ajax({
                                                         url: "/Client_Get_Token.bc",
                                                         type: "post",
@@ -1709,6 +1592,7 @@
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
+
                                                 </script>
                                             </basis>
                                         </basis>
@@ -1752,6 +1636,7 @@
                                                 <input type="hidden" value="" id="action" />
                                                 <div class="sectionInfo"></div>
                                                 <script type="text/javascript">
+
                                                     var str = document.getElementById("json").value;
                                                     str = str.replace(/"/g, ' ');
                                                     if (str == 'Time Out') {
@@ -1779,6 +1664,7 @@
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
+
                                                 </script>
                                             </basis>
                                         </basis>
@@ -1828,6 +1714,7 @@
                                                 <input type="hidden" value="" id="action" />
                                                 <div class="sectionInfo"></div>
                                                 <script type="text/javascript">
+
                                                     var str = document.getElementById("json").value;
                                                     str = str.replace(/"/g, ' ');
                                                     if (str == 'Time Out') {
@@ -1838,7 +1725,7 @@
                                                     var obj = new Object([##snap.m1.result##]);
                                                     var paymentToken = obj["snap_m1"]["response"]["paymentToken"]
                                                     var authentication = obj["snap_m1"]["authentication"]
-                                                    var paymentPageUrl = obj["snap_m1"]["response"]["paymentPageUrl"]
+                                                    var paymentPageUrl = obj["snap_m1"]["response"]["paymentPageUrl"];
                                                     $.ajax({
                                                         url: "/Client_Get_Token.bc",
                                                         type: "post",
@@ -1862,11 +1749,13 @@
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
+
                                                 </script>
                                             </basis>
                                         </basis>
                                     </basis>
-                                    <basis core="group" name="api" if="[##cms.form.bank_id##] in (203,204,202,207,208,209,210) ">
+                                    <basis core="group" name="api"
+                                        if="[##cms.form.bank_id##] in (203,204,202,207,208,209,210) ">
                                         <basis core="inlinesource" name="db">
                                             <member name="callback" format="json"
                                                 postsql="select value from [db.callback] where field = 'callback'">
@@ -1875,28 +1764,31 @@
                                         <basis core="api" name="api.token" run="AtClient"
                                             url='https://basisfly.com/pay/Token/[##cms.cookie.rkey##]' method="post"
                                             body='{
-                                            "bankid": [##db.bankid.Value##],
-                                            "doc_type": "5",
-                                            "factorid": [##db.Factorid.Value|(0)##],
-                                            "site_url": "[##site.address.domain##]",
-                                            "callback_url": "[##db.callback.Value##]?iN=[##db.paymentid.Column1##]",
-                                            "mobile": "[##cms.form._root.account.mobile|cms.form._root.account.Agencymobile##]",
-                                            "email": "[##cms.form._root.account.email|cms.form._root.account.Agencyemail##]",
-                                            "description": "booking",
-                                            "tax_amount": "0",
-                                            "discount_amount": "0",
-                                            "cart_items": {
-                                                "title": "تور",
-                                                "source": "",
-                                                "destination": "",
-                                                "service_type": "",
-                                                "travel_type": ""
-                                            }
-                                        }'>
+                                                "bankid": [##db.bankid.Value##
+                                                ],
+                                                "doc_type": "5",
+                                                "factorid": [##db.Factorid.Value|(0)##
+                                                ],
+                                                "site_url": "[##site.address.domain##]",
+                                                "callback_url": "[##db.callback.Value##]?iN=[##db.paymentid.Column1##]",
+                                                "mobile": "[##cms.form._root.account.mobile|cms.form._root.account.Agencymobile##]",
+                                                "email": "[##cms.form._root.account.email|cms.form._root.account.Agencyemail##]",
+                                                "description": "booking",
+                                                "tax_amount": "0",
+                                                "discount_amount": "0",
+                                                "cart_items": {
+                                                    "title": "تور",
+                                                    "source": "",
+                                                    "destination": "",
+                                                    "service_type": "",
+                                                    "travel_type": ""
+                                                }
+                                            }'>
                                         </basis>
                                         <basis core="callback" run="atclient" triggers="api.token"
                                             method="manipulation"></basis>
                                         <script type="text/javascript">
+
                                             const manipulation = async (args) => {
                                                 try {
                                                     const source = args.source?.rows;
@@ -1918,46 +1810,32 @@
                                                                 session: source[0].session,
                                                                 factortype: "[##cms.form.factor_type##]",
                                                                 action: 1
-
                                                             })
-                                                        })
-                                                            .then(response => response.text())
-                                                            .then(result => {
-                                                                if (source[0].method == 'POST') {
-                                                                    const tempDiv = document.createElement('div');
-                                                                    tempDiv.innerHTML = source[0].form;
-                                                                    const form = tempDiv.querySelector('form');
-                                                                    document.body.appendChild(form);
-                                                                    form.submit();
-                                                                } else {
-                                                                    window.location = source[0].url_gateway
-                                                                }
-                                                            })
-                                                            .catch(error => console.error("Error:", error));
-
+                                                        }).then(response => response.text()).then(result => {
+                                                            if (source[0].method == 'POST') {
+                                                                const tempDiv = document.createElement('div');
+                                                                tempDiv.innerHTML = source[0].form;
+                                                                const form = tempDiv.querySelector('form');
+                                                                document.body.appendChild(form);
+                                                                form.submit();
+                                                            } else {
+                                                                window.location = source[0].url_gateway
+                                                            }
+                                                        }).catch(error => console.error("Error:", error));
                                                     } else {
                                                         const div = document.createElement('div');
                                                         div.id = 'text-loading';
                                                         div.textContent = 'امکان اتصال به درگاه پرداخت الکترونیک وجود ندارد.';
                                                         document.body.appendChild(div);
-
-
                                                     }
                                                 } catch (err) {
                                                     console.error('manipulation=' + err.lineNumber + ',' + err.message);
                                                 }
                                             };
+
                                         </script>
-
-
-
-
-
                                     </basis>
                                 </basis>
-
-
-
                             </basis>
                         </basis>
                     </basis>
@@ -1979,6 +1857,7 @@
                                 <input type="hidden" name="edit" value="0" />
                             </form>
                             <script type="text/javascript">
+
                                 $.confirm({
                                     title: 'اخطار',
                                     content: '[##db.DescriptionFactorpreform.Value##]',
@@ -1994,11 +1873,13 @@
                                         window.location = '[##cms.Host.FA_redirect|(/)##]'
                                     }
                                 })
+
                             </script>
                         </basis>
                         <basis core="group" name="DelayFactorpreformECode"
                             if="'[##db.CodeFactorpreform.Value##]'<>'1' and '[##db.CodeFactorpreform.Value##]'<>'0'">
                             <script type="text/javascript">
+
                                 $.confirm({
                                     title: 'اخطار',
                                     content: '[##db.DescriptionFactorpreform.Value##]. (با پشتیبانی آژانس تماس بگیرید)',
@@ -2011,6 +1892,7 @@
                                         window.location = '[##cms.Host.FA_redirect|(/)##]'
                                     }
                                 })
+
                             </script>
                         </basis>
                     </basis>
@@ -2032,6 +1914,7 @@
                                 name="firstname" />
                             <input type="hidden" value="[##cms.form._root.account.fullname.lastname##]"
                                 name="lastname" />
+
                             <input type="hidden" value="[##cms.form._root.account.email##]" name="email" />
                             <input type="hidden" value="[##cms.form._root.account.gender##]" name="gender" />
                             <input type="hidden" value="[##cms.form._root.account.tel##]" name="tel" />
@@ -2045,6 +1928,7 @@
                             <input type="hidden" value="[##cms.form.nationalCodeSiBank##]" name="nationalCodeSiBank" />
                         </form>
                         <script type="text/javascript">
+
                             $.confirm({
                                 title: 'اخطار',
                                 content: '<p class="DescriptionFactorpreform">[##db.DescriptionFactorpreform.Value##]<p> مایل به ادامه فرآیند رزرو با مبلغ<span class="NewpriceFactorpreform"> [##db.NewpriceFactorpreform.Value##]</span> [##cms.form.moneytype##] هستید ؟',
@@ -2059,12 +1943,11 @@
                                 cancel: function () {
                                     window.location = '[##cms.Host.FA_redirect|(/)##]'
                                 }
-                            })
-                            $(".NewpriceFactorpreform").text(function (index, value) {
-                                return value
-                                    .replace(/\D/g, "")
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             });
+                            $(".NewpriceFactorpreform").text(function (index, value) {
+                                return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            });
+
                         </script>
                     </basis>
                     <basis core="group" name="DelayFactorpreformE" if="'[##db.TypeFactorpreform.Value##]'='3'">
@@ -2085,6 +1968,7 @@
                                 name="firstname" />
                             <input type="hidden" value="[##cms.form._root.account.fullname.lastname##]"
                                 name="lastname" />
+
                             <input type="hidden" value="[##cms.form._root.account.email##]" name="email" />
                             <input type="hidden" value="[##cms.form._root.account.gender##]" name="gender" />
                             <input type="hidden" value="[##cms.form._root.account.tel##]" name="tel" />
@@ -2098,6 +1982,7 @@
                             <input type="hidden" value="[##cms.form.nationalCodeSiBank##]" name="nationalCodeSiBank" />
                         </form>
                         <script type="text/javascript">
+
                             $.confirm({
                                 title: 'اخطار',
                                 content: '<p class="DescriptionFactorpreform">[##db.DescriptionFactorpreform.Value##]</p> مایل به ادامه فرآیند رزرو در تاریخ<span class="NewtimeFactorpreform"> [##db.NewtimeFactorpreform.Value##]</span>  هستید ؟',
@@ -2113,9 +1998,9 @@
                                     window.location = '[##cms.Host.FA_redirect|(/)##]'
                                 }
                             })
+
                         </script>
                     </basis>
-
                 </basis>
             </basis>
         </basis>
