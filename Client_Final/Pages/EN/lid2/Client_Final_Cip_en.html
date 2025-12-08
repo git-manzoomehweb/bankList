@@ -152,147 +152,22 @@
 
 
                             <div id="bgLoadding-box"></div>
-                            <basis core="dbsource" source="trust_login" name="db" usedforid="602">
-                                <member name="Form" request="jsonform" type="scalar" />
-                            </basis>
                             <basis core="group" name="InnerDelay">
-                                <basis core="inlinesource" name="db">
-                                    <member name="jsonform" format="json" preview=""
-                                        postsql="select  Id , ParentId , case when trim(Field) is null  then  (select field from [db.jsonform] where id = a.parentid ) else field end as field, value , type , path  from [db.jsonform] as a">
-                                        {"root":[##db.Form.json##]}</member>
-                                </basis>
-                                <div class="Confirm">
-                                    <div class="title-success"><span> Your pre-contract was successfully registered
-                                        </span></div>
-                                    <div class="Section_box">
-                                        <div class="Section">
-                                            <div class="QuestionForm">Invoice number</div>
-                                            <div class="AnswerForm"><span>[##db.Factorid.Value|(0)##]</span></div>
-                                            <div class="clr"></div>
-                                        </div>
-                                        <div class="Section">
-                                            <div class="QuestionForm">Invoice price</div>
-                                            <div class="AnswerForm"><span
-                                                    class="answer slice-price">[##db.totalwithcommision.Value##]</span><span
-                                                    class="mtype"></span></div>
-                                            <div class="clr"></div>
-                                        </div>
-                                        <div class="Section">
-                                            <div class="QuestionForm">Invoice payable price</div>
-                                            <div class="AnswerForm"><span
-                                                    class="answer slice-price">[##db.firstpay.Value##]</span><span
-                                                    class="mtype"></span></div>
-                                            <div class="clr"></div>
-                                        </div>
-                                    </div>
+                                <form action="" method="post" class="Confirm">
+                                    <div class="title-success"><span>
+                                            Your pre-contract has been successfully registered.
+                                        </span> </div>
                                     <div class="Section">
-                                        <div class="redirecPanel"><a
-                                                href="[##site.address.domain##]/EN-Panel-InvoiceView.bc?id=[##db.Factorid.Value|(0)##]"
-                                                target="_blank"> Click </a>to view the pre-contract in your user panel
-                                        </div>
-                                        <div class="link_homepage"><a href="/EN">Return to the main page of the site</a>
+                                        <div class="redirecPanel">To view the pre-contract ([##db.Factorid.Value|(0)##])
+                                            in your user panel, <a
+                                                href="[##site.address.domain##]/En-Panel-InvoiceView.bc?lid=2&id=[##db.Factorid.Value|(0)##]"
+                                                target="_blank"> click here </a></div>
+                                        <div class="link_homepage"><a href="[##cms.Host.FA_redirect|(/)##]">Return to
+                                                the main page of the site</a>
                                         </div>
                                         <div class="clr"></div>
                                     </div>
-                                </div>
-                                <div class="Hide_Box" style="display:none">
-                                    <input type="hidden" value="[##db.total.Value##]" class="total">
-                                    <input type="hidden" value="[##db.firstpay.Value##]" class="totalcom">
-                                    <input type="hidden"
-                                        value="/reservation/invoice/view.bc?cat=202&id=[##db.Factorid.Value|(0)##]&open=1"
-                                        class="link">
-                                    <input type="hidden" value="[##db.Factorid.Value|(0)##]" class="invoiceid">
-                                    <input type="hidden" value="[##cms.form.moneytype##]" class="moneytype">
-                                </div>
-                                <script type="text/javascript">
-                                    $(".Section_box").find(".Section").each(function (i) {
-                                        if (i == 0) {
-                                            $(this).find(".AnswerForm").find("input[type=text]").val($(
-                                                ".invoiceid").val())
-                                            $(this).find(".AnswerForm").find("input[type=text]").prop(
-                                                'readonly', true);
-                                        }
-
-                                        if (i == 1) {
-                                            $(this).find(".AnswerForm").find(".part").each(function (
-                                                j) {
-                                                if (j == 0) {
-                                                    $(this).find("input[type=text]").val(
-                                                        parseInt($(
-                                                            ".total").val())
-                                                            .toLocaleString())
-                                                    $(this).find("input[type=text]").addClass(
-                                                        "Seprator")
-                                                    $(this).find("input[type=text]").prop(
-                                                        'readonly',
-                                                        true);
-                                                }
-
-                                                if (j == 1) {
-                                                    $(this).find("input[type=text]").val($(
-                                                        ".moneytype")
-                                                        .val())
-                                                    $(this).closest(".AnswerForm").find(
-                                                        ".mtype")
-                                                        .text(
-                                                            $(".moneytype").val())
-                                                    $(this).hide()
-                                                }
-                                            })
-                                        }
-
-                                        if (i == 2) {
-                                            $(this).find(".AnswerForm").find(".part").each(function (
-                                                j) {
-                                                if (j == 0) {
-                                                    $(this).find("input[type=text]").val(
-                                                        parseInt($(
-                                                            ".totalcom").val())
-                                                            .toLocaleString())
-                                                    $(this).find("input[type=text]").addClass(
-                                                        "Seprator")
-                                                    $(this).find("input[type=text]").prop(
-                                                        'readonly', true);
-
-                                                }
-
-                                                if (j == 1) {
-                                                    $(this).find("input[type=text]").val($(
-                                                        ".moneytype")
-                                                        .val())
-                                                    $(this).closest(".AnswerForm").find(
-                                                        ".mtype")
-                                                        .text(
-                                                            $(".moneytype").val())
-                                                    $(this).hide()
-                                                }
-                                            })
-                                        }
-
-                                        if (i == 3) {
-                                            $(this).find(".AnswerForm").find("input[type=text]").val($(
-                                                ".link")
-                                                .val())
-                                            $(this).hide()
-                                            $(this).css("margin", "0")
-                                        }
-                                    })
-
-                                    $(".Confirm").submit(function (e) {
-                                        $(".Seprator").each(function () {
-                                            var x = $(this).val();
-                                            var y = x.split(",");
-                                            var z = "";
-
-                                            for (var i = 0; i < y.length; i++) {
-                                                z += y[i]
-                                            };
-
-                                            $(this).val(z)
-                                        })
-
-                                    });
-                                </script>
+                                </form>
                             </basis>
 
                         </basis>
@@ -1621,7 +1496,8 @@
                                             </script>
                                         </basis>
                                     </basis>
-                                    <basis core="group" name="api" if="[##cms.form.bank_id##] in (203,204,202,205,207,208,209,210)">
+                                    <basis core="group" name="api"
+                                        if="[##cms.form.bank_id##] in (203,204,202,205,207,208,209,210)">
                                         <basis core="api" name="api.token" run="AtClient"
                                             url='https://basisfly.com/pay/Token/[##cms.cookie.rkey##]' method="post"
                                             body='{
