@@ -457,7 +457,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="pasargadBank" name="pasargad"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="pasargadGateway"
                                                         merchantCode="[##db.merchantID.Value##]" sort="random">
                                                         <params>
@@ -650,8 +650,8 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="gardeshPay" name="gardeshPay"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
-                                                    <member name="m1" method="getToken" sort="random" preview="true">
+                                                    >
+                                                    <member name="m1" method="getToken" sort="random" >
                                                         <params>
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="invoiceNumber"
@@ -689,9 +689,9 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="newSepah" name="newsepah"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="SalePaymentRequest" sort="random"
-                                                        preview="true">
+                                                        >
                                                         <params>
                                                             <param name="LoginAccount" value="[##db.token.Value##]" />
                                                             <param name="Amount" value="[##db.firstpay.Value##]" />
@@ -732,7 +732,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="ArcaPayment" name="ArcaPayment"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1">
-                                                    <member name="m1" method="register" sort="random" preview="true">
+                                                    <member name="m1" method="register" sort="random" >
                                                         <params>
                                                             <param name="orderNumber"
                                                                 value="[##db.paymentid.Column1##]" />
@@ -779,7 +779,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="refah" name="refah"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1">
-                                                    <member name="m1" method="createToken" sort="random" preview="true">
+                                                    <member name="m1" method="createToken" sort="random" >
                                                         <params>
                                                             <param name="Action" value="Token" />
                                                             <param name="Amount" value="[##db.firstpay.Value##]" />
@@ -840,7 +840,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="rayanCardPayment" name="rayancard"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="acceptcode"
@@ -904,7 +904,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="IranKishPayment" name="irankish"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="terminalid"
@@ -972,7 +972,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="basaPayment" name="basa"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="acceptcode"
@@ -1030,7 +1030,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="pod" name="pod"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="token" value="[##db.token.Value##]" />
@@ -1073,8 +1073,8 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="sadadPayment" name="sadad"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
-                                                    <member name="m1" method="token" sort="random" preview="true">
+                                                    >
+                                                    <member name="m1" method="token" sort="random" >
                                                         <params>
                                                             <param name="merchantid"
                                                                 value="[##db.merchantid.Value##]" />
@@ -1114,8 +1114,8 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="zarrinPal" name="zarrinPal"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
-                                            <member name="m1" method="PaymentRequest" sort="random" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
+                                            <member name="m1" method="PaymentRequest" sort="random" >
                                                 <params>
                                                     <param name="MerchantID" value="[##db.merchantID.value##]" />
                                                     <param name="Amount" value="[##db.firstpay.Value##]" />
@@ -1178,9 +1178,9 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="kipaaPayment" name="kipaa"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
                                             <member name="m1" method="request_payment_token" sort="random"
-                                                preview="true">
+                                                >
                                                 <params>
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="callback"
@@ -1237,7 +1237,7 @@
                                         </basis>
                                         <basis core="external.ws.ws" service="aghayePardakht" name="aghayePardakht"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
-                                            <member name="m1" method="createToken" sort="random" preview="true">
+                                            <member name="m1" method="createToken" sort="random" >
                                                 <params>
                                                     <param name="pin" value="[##db.token.Value##]" />
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
@@ -1297,7 +1297,7 @@
                                         </basis>
                                         <basis core="external.ws.ws" service="ayandeh" name="ayandeh"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
-                                            <member name="m1" method="createToken" sort="random" preview="true">
+                                            <member name="m1" method="createToken" sort="random" >
                                                 <params>
                                                     <param name="username" value="[##db.username.value##]" />
                                                     <param name="password" value="[##db.password.value##]" />
@@ -1356,7 +1356,7 @@
                                         </basis>
                                         <basis core="external.ws.ws" service="shahrBank" name="shahr"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
-                                            <member name="m1" method="token" sort="random" preview="true">
+                                            <member name="m1" method="token" sort="random" >
                                                 <params>
                                                     <param name="usr" value="[##db.usr.value##]" />
                                                     <param name="pwd" value="[##db.pwd.value##]" />
@@ -1415,7 +1415,7 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="fadaxPayment" name="fadax"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
                                             <member name="m1" method="token" sort="random">
                                                 <params>
                                                     <param name="username" value="[##db.username.value##]" />
@@ -1487,7 +1487,7 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="fadaxMellat" name="fadax"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
                                             <member name="m1" method="token" sort="random">
                                                 <params>
                                                     <param name="username" value="[##db.username.value##]" />
@@ -1564,8 +1564,8 @@
                                         <basis core="group" name="bankgroup">
                                             <basis core="external.ws.ws" service="pasargad2" name="pasargad"
                                                 source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                preview="true">
-                                                <member name="m1" method="token" sort="random" preview="true">
+                                                >
+                                                <member name="m1" method="token" sort="random" >
                                                     <params>
                                                         <param name="paymentid" value="[##db.paymentid.Column1##]" />
                                                         <param name="amount" value="[##db.firstpay.Value##]" />
@@ -1642,7 +1642,7 @@
                                         <basis core="group" name="bankgroup">
                                             <basis core="external.ws.ws" service="siBank" name="si"
                                                 source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                preview="true">
+                                                >
                                                 <member name="m1" method="token" sort="random">
                                                     <params>
                                                         <param name="merchant" value="[##db.merchant.Value##]" />
@@ -1717,7 +1717,7 @@
                                         <basis core="group" name="bankgroup">
                                             <basis core="external.ws.ws" service="snapPayment" name="snap"
                                                 source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                preview="true">
+                                                >
                                                 <member name="m1" method="token" sort="random">
                                                     <params>
                                                         <param name="client_id" value="[##db.client_id.Value##]" />
@@ -2486,7 +2486,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="pasargadBank" name="pasargad"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="pasargadGateway"
                                                         merchantCode="[##db.merchantID.Value##]" sort="random">
                                                         <params>
@@ -2679,8 +2679,8 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="gardeshPay" name="gardeshPay"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
-                                                    <member name="m1" method="getToken" sort="random" preview="true">
+                                                    >
+                                                    <member name="m1" method="getToken" sort="random" >
                                                         <params>
                                                             <param name="amount" value="[##db.firstpay.Value##]" />
                                                             <param name="invoiceNumber"
@@ -2718,9 +2718,9 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="newSepah" name="newsepah"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="SalePaymentRequest" sort="random"
-                                                        preview="true">
+                                                        >
                                                         <params>
                                                             <param name="LoginAccount" value="[##db.token.Value##]" />
                                                             <param name="Amount" value="[##db.firstpay.Value##]" />
@@ -2761,7 +2761,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="ArcaPayment" name="ArcaPayment"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1">
-                                                    <member name="m1" method="register" sort="random" preview="true">
+                                                    <member name="m1" method="register" sort="random" >
                                                         <params>
                                                             <param name="orderNumber"
                                                                 value="[##db.paymentid.Column1##]" />
@@ -2808,7 +2808,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="refah" name="refah"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1">
-                                                    <member name="m1" method="createToken" sort="random" preview="true">
+                                                    <member name="m1" method="createToken" sort="random" >
                                                         <params>
                                                             <param name="Action" value="Token" />
                                                             <param name="Amount" value="[##db.firstpay.Value##]" />
@@ -2869,7 +2869,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="rayanCardPayment" name="rayancard"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="acceptcode"
@@ -2933,7 +2933,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="IranKishPayment" name="irankish"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="terminalid"
@@ -3001,7 +3001,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="basaPayment" name="basa"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="acceptcode"
@@ -3059,7 +3059,7 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="pod" name="pod"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
+                                                    >
                                                     <member name="m1" method="token" sort="random">
                                                         <params>
                                                             <param name="token" value="[##db.token.Value##]" />
@@ -3102,8 +3102,8 @@
                                             <basis core="group" name="bankgroup">
                                                 <basis core="external.ws.ws" service="sadadPayment" name="sadad"
                                                     source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                    preview="true">
-                                                    <member name="m1" method="token" sort="random" preview="true">
+                                                    >
+                                                    <member name="m1" method="token" sort="random" >
                                                         <params>
                                                             <param name="merchantid"
                                                                 value="[##db.merchantid.Value##]" />
@@ -3143,8 +3143,8 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="zarrinPal" name="zarrinPal"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
-                                            <member name="m1" method="PaymentRequest" sort="random" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
+                                            <member name="m1" method="PaymentRequest" sort="random" >
                                                 <params>
                                                     <param name="MerchantID" value="[##db.merchantID.value##]" />
                                                     <param name="Amount" value="[##db.firstpay.Value##]" />
@@ -3205,9 +3205,9 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="kipaaPayment" name="kipaa"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
                                             <member name="m1" method="request_payment_token" sort="random"
-                                                preview="true">
+                                                >
                                                 <params>
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
                                                     <param name="callback"
@@ -3264,7 +3264,7 @@
                                         </basis>
                                         <basis core="external.ws.ws" service="aghayePardakht" name="aghayePardakht"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
-                                            <member name="m1" method="createToken" sort="random" preview="true">
+                                            <member name="m1" method="createToken" sort="random" >
                                                 <params>
                                                     <param name="pin" value="[##db.token.Value##]" />
                                                     <param name="amount" value="[##db.firstpay.Value##]" />
@@ -3324,7 +3324,7 @@
                                         </basis>
                                         <basis core="external.ws.ws" service="ayandeh" name="ayandeh"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
-                                            <member name="m1" method="createToken" sort="random" preview="true">
+                                            <member name="m1" method="createToken" sort="random" >
                                                 <params>
                                                     <param name="username" value="[##db.username.value##]" />
                                                     <param name="password" value="[##db.password.value##]" />
@@ -3383,7 +3383,7 @@
                                         </basis>
                                         <basis core="external.ws.ws" service="shahrBank" name="shahr"
                                             source="cmsDbService" procedurename="sbserviceprocedure1">
-                                            <member name="m1" method="token" sort="random" preview="true">
+                                            <member name="m1" method="token" sort="random" >
                                                 <params>
                                                     <param name="usr" value="[##db.usr.value##]" />
                                                     <param name="pwd" value="[##db.pwd.value##]" />
@@ -3442,7 +3442,7 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="fadaxPayment" name="fadax"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
                                             <member name="m1" method="token" sort="random">
                                                 <params>
                                                     <param name="username" value="[##db.username.value##]" />
@@ -3514,7 +3514,7 @@
                                                 {"root":[##db.webservice_detail.result##]} </member>
                                         </basis>
                                         <basis core="external.ws.ws" service="fadaxMellat" name="fadax"
-                                            source="cmsDbService" procedurename="sbserviceprocedure1" preview="true">
+                                            source="cmsDbService" procedurename="sbserviceprocedure1" >
                                             <member name="m1" method="token" sort="random">
                                                 <params>
                                                     <param name="username" value="[##db.username.value##]" />
@@ -3591,8 +3591,8 @@
                                         <basis core="group" name="bankgroup">
                                             <basis core="external.ws.ws" service="pasargad2" name="pasargad"
                                                 source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                preview="true">
-                                                <member name="m1" method="token" sort="random" preview="true">
+                                                >
+                                                <member name="m1" method="token" sort="random" >
                                                     <params>
                                                         <param name="paymentid" value="[##db.paymentid.Column1##]" />
                                                         <param name="amount" value="[##db.firstpay.Value##]" />
@@ -3669,7 +3669,7 @@
                                         <basis core="group" name="bankgroup">
                                             <basis core="external.ws.ws" service="siBank" name="si"
                                                 source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                preview="true">
+                                                >
                                                 <member name="m1" method="token" sort="random">
                                                     <params>
                                                         <param name="merchant" value="[##db.merchant.Value##]" />
@@ -3744,7 +3744,7 @@
                                         <basis core="group" name="bankgroup">
                                             <basis core="external.ws.ws" service="snapPayment" name="snap"
                                                 source="cmsDbService" procedurename="sbserviceprocedure1"
-                                                preview="true">
+                                                >
                                                 <member name="m1" method="token" sort="random">
                                                     <params>
                                                         <param name="client_id" value="[##db.client_id.Value##]" />
