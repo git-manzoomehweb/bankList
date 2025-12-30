@@ -3865,12 +3865,11 @@
                                         "order_id": "[##cms.form.order_id##]",
                                         "enc_response": "[##cms.form.enc_response##]"
                                     }
-                                }else if (bank_id === '210') {
-                        params = {
-                            "RefNum": "[##cms.form.RefNum##]"
-                        };
-                        document.querySelector(".formbank").querySelector("input[name=bankName]").value = 'samanOPG';
-                    }
+                                } else if (bank_id === '210') {
+                                    params = {
+                                        "RefNum": "[##cms.form.RefNum##]"
+                                    };
+                                }
 
                                 $bc.setSource("cms.params", { params: JSON.stringify(params) });
                                 const manipulation = async (args) => {
