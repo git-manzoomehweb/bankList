@@ -168,12 +168,12 @@
                                         document.getElementById("action").value = 1;
                                             }
                                         $.ajax({
-                                        url:"/Panel_Charging_Get_Token.bc",
+                                        url:"/EN-Panel_Charging_Get_Token.bc",
                                         type:"post",
                                         data:{
                                             token: $("#json").val(),
                                             action : $("#action").val(),
-                                            callback : "[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc",
+                                            callback : "[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc",
                                             bank_id : 31
                                             },
                                             success: function(result){
@@ -203,7 +203,7 @@
                                         <param name="localDate" value="[##cms.cms.date2##]" />
                                         <param name="localTime" value="[##cms.cms.time2##]" />
                                         <param name="additionalData" value="" />
-                                        <param name="callBackUrl" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                        <param name="callBackUrl" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                         <param name="payerId" value="0" />
                                     </params>
                                 </member>
@@ -221,7 +221,7 @@
                                         document.getElementById("action").value = 1;
                                     }
                                     $.ajax({
-                                        url: "/Panel_Charging_Get_Token.bc",
+                                        url: "/EN-Panel_Charging_Get_Token.bc",
                                         type: "post",
                                         data: {
                                             token: $("#json").val(),
@@ -250,7 +250,7 @@
                                             <param name="invoiceNumber" value="[##db.paymentid.Column1##]" />
                                             <param name="invoiceDate" value="[##cms.cms.date##] [##cms.cms.time##]"/>
                                             <param name="amount" value="[##db.price.Value##]" />
-                                            <param name="redirectAddress" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                            <param name="redirectAddress" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                             <param name="action" value="1003" />
                                         </params>
                                     </member>
@@ -270,7 +270,7 @@
                                     <params>
                                         <param name="api" value="[##db.api.Value##]"/>
                                         <param name="amount" value="[##db.price.Value##]" />
-                                        <param name="redirect" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]"/>
+                                        <param name="redirect" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]"/>
                                         <param name="factorNumber" value="[##db.paymentid.Column1##]"/>
                                         <param name="description" value=""/>
                                     </params>
@@ -290,7 +290,7 @@
                                             document.getElementById("action").value = 1;
                                         }
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 token: $("#json").val(),
@@ -323,7 +323,7 @@
                                             <param name="paymentID" value="[##db.paymentid.Column1##]" />
                                             <param name="amount" value="[##db.price.Value##]" />
                                             <param name="extraInfo" value="extra Information" />
-                                            <param name="callback" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                            <param name="callback" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                             <param name="factorID" value="0" />
                                         </params>
                                     </member>
@@ -345,12 +345,12 @@
                                             document.getElementById("action").value = 1;
                                         }
                                         $.ajax({
-                                            url:"/Panel_Charging_Get_Token.bc",
+                                            url:"/EN-Panel_Charging_Get_Token.bc",
                                             type:"post",
                                             data:{
                                                 token: $("#json").val(),
                                                 action : $("#action").val(),
-                                                callback : "[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc",
+                                                callback : "[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc",
                                                 paymentid : "[##db.paymentid.Column1##]",
                                                 bank_id : 38
                                             },
@@ -367,13 +367,13 @@
                                     <div class="sectionInfo"></div>
                                     <script type="text/javascript">
                                         $.ajax({
-                                        url:"/Panel_Charging_Get_Token.bc",
+                                        url:"/EN-Panel_Charging_Get_Token.bc",
                                         type:"post",
                                         data:{
                                         paymentid: "[##db.paymentid.Column1##]",
                                         factorid: "[##db.factor.result|(0)##]",
                                         totalfinal: "[##db.price.Value##]",
-                                        callback : "[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc",
+                                        callback : "[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc",
                                         action : $("#action").val(),
                                         bank_id : 39
                                         },
@@ -393,7 +393,7 @@
                                     <params>
                                         <param name="amount" value="[##db.price.Value##]" />
                                         <param name="invoiceNumber" value="[##db.paymentid.Column1##]" />
-                                        <param name="callback" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                        <param name="callback" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                         <param name="token" value="[##db.token.Value##]" />
                                     </params>
                                     </member>
@@ -422,7 +422,7 @@
                                             <param name="LoginAccount" value="[##db.token.Value##]" />
                                             <param name="Amount" value="[##db.price.Value##]" />
                                             <param name="OrderId" value="[##db.paymentid.Column1##]" />
-                                            <param name="CallBackUrl" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                            <param name="CallBackUrl" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                         </params>
                                     </member>
                                 </basis>
@@ -453,7 +453,7 @@
                                             <param name="Amount"
                                                 value="[##db.price.Value##]" />
                                             <param name="callBackUrl"
-                                                value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                                value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                             <param name="ResNum"
                                                 value="[##db.paymentid.Column1##]" />
                                             <param name="CellNumber" value="" />
@@ -475,7 +475,7 @@
                                             document.getElementById("action").value = 1;
                                         }
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 token: $("#json").val(),
@@ -506,7 +506,7 @@
                                         <param name="acceptcode" value="[##db.acceptcode.Value##]"/>
                                         <param name="password" value="[##db.password.Value##]"/>
                                         <param name="orderid" value="[##db.paymentid.Column1##]"/>
-                                        <param name="redirect_url" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc"/>
+                                        <param name="redirect_url" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc"/>
                                         <param name="amount" value="[##db.price.Value##]"/>
                                     </params>
                                     </member>
@@ -527,7 +527,7 @@
                                         var obj_1 = obj["rayancard_m1"]["url"]
 
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 payment_url: obj_1,
@@ -567,7 +567,7 @@
                                         <param name="password" value="[##db.password.Value##]" />
                                         <param name="amount" value="[##db.price.Value##]" />
                                         <param name="merchantid" value="[##db.merchantID.Value##]" />
-                                        <param name="callbackurl" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc"/>
+                                        <param name="callbackurl" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc"/>
                                         <param name="requestid" value="[##db.paymentid.Column1##]"/>
                                     </params>
                                 </member>
@@ -588,7 +588,7 @@
                                         var obj_2 = obj["irankish_m1"]["result"]["token"];
                                         var obj_status = obj["irankish_m1"]["status"]
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 token: obj_2,
@@ -620,7 +620,7 @@
                                         <param name="acceptcode" value="[##db.acceptcode.Value##]"/>
                                         <param name="password" value="[##db.password.Value##]"/>
                                         <param name="orderid" value="[##db.paymentid.Column1##]"/>
-                                        <param name="redirect_url" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc"/>
+                                        <param name="redirect_url" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc"/>
                                         <param name="amount" value="[##db.price.Value##]"/>
                                     </params>
                                     </member>
@@ -641,7 +641,7 @@
                                         var obj_1 = obj["basa_m1"]["url"]
                         
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 payment_url: obj_1,
@@ -670,7 +670,7 @@
                                 <param name="Description" value="get token for payment" />
                                 <param name="Email" value="" />
                                 <param name="Mobile" value="" />
-                                <param name="CallbackURL" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                <param name="CallbackURL" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                 </params>
                             </member>
                             </basis>
@@ -688,7 +688,7 @@
                                     document.getElementById("action").value = 1;
                                 }
                                 $.ajax({
-                                    url: "/Panel_Charging_Get_Token.bc",
+                                    url: "/EN-Panel_Charging_Get_Token.bc",
                                     type: "post",
                                     data: {
                                         token: $("#json").val(),
@@ -723,7 +723,7 @@
                             <member name="m1" method="request_payment_token" sort="random" preview="true">
                                 <params>
                                     <param name="amount" value="[##db.price.Value##]" />
-                                    <param name="callback" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                    <param name="callback" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                     <param name="token" value="[##db.token.Value##]" />
                                 </params>
                             </member>
@@ -741,7 +741,7 @@
                                 document.getElementById("action").value = 0;
                             }
                             $.ajax({
-                                    url:"/Panel_Charging_Get_Token.bc",
+                                    url:"/EN-Panel_Charging_Get_Token.bc",
                                     type:"post",
                                     data:{
                                         token: obj_2["Content"]["payment_token"],
@@ -776,7 +776,7 @@
                                     <params>
                                         <param name="pin" value="[##db.token.Value##]" />
                                         <param name="amount" value="[##db.price.Value##]" />
-                                        <param name="callback" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                        <param name="callback" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                         <param name="invoice_id" value="[##cms.form.factorid|(0)##]" />
                                     </params>
                                 </member>
@@ -790,7 +790,7 @@
                             var obj_1 = obj["aghayePardakht_m1"]["url"]
                             var split_obj_1 = obj_1.split('/')  
                             $.ajax({
-                                    url:"/Panel_Charging_Get_Token.bc",
+                                    url:"/EN-Panel_Charging_Get_Token.bc",
                                     type:"post",
                                     data:{
                                         token: split_obj_1[4],
@@ -826,7 +826,7 @@
                                     <params>
                                         <param name="username" value="[##db.username.value##]" />
                                         <param name="password" value="[##db.password.value##]" />
-                                        <param name="callBackUrl" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                        <param name="callBackUrl" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                         <param name="serviceId" value="[##db.serviceId.value##]" />
                                         <param name="amount" value="[##db.price.Value##]" />
                                         <param name="mobile" value="" />
@@ -840,7 +840,7 @@
                             <div class="sectionInfo"></div>
                             <script type="text/javascript">
                                 $.ajax({
-                                    url:"/Panel_Charging_Get_Token.bc",
+                                    url:"/EN-Panel_Charging_Get_Token.bc",
                                     type: "post",
                                     data: {
                                         token: $("#json").val(),
@@ -883,7 +883,7 @@
                                         <param name="merchantConfigurationId" value="[##db.merchantConfigurationId.value##]" />
                                         <param name="localInvoiceId" value="[##db.paymentid.Column1##]" />
                                         <param name="amount" value="[##db.price.Value##]" />
-                                        <param name="callbackurl" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                        <param name="callbackurl" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                     </params>
                                 </member>
                             </basis>
@@ -895,7 +895,7 @@
                                     var obj_1 = obj["shahr_m1"]["url"]
                                     var obj_2 = obj["shahr_m1"]["token"]
                                     $.ajax({
-                                        url: "/Panel_Charging_Get_Token.bc",
+                                        url: "/EN-Panel_Charging_Get_Token.bc",
                                         type: "post",
                                         data: {
                                         token: obj_2,
@@ -934,11 +934,11 @@
                                     <param name="password" value="[##db.password.value##]" />
                                     <param name="amount" value="[##db.price.Value##]" />
                                     <param name="phonenumber" value="[##cms.form.phonenumber##]" />
-                                    <param name="title" value="شارژ آنلاین" />
+                                    <param name="title" value="wallet" />
                                     <param name="discountAmount" value="0" />
                                     <param name="taxAmount" value="0" />
                                     <param name="invoiceId" value="[##cms.form.factorid|(0)##]" />
-                                    <param name="returnURL" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]" />
+                                    <param name="returnURL" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]" />
                                 </params>
                             </member>
                             </basis>
@@ -951,7 +951,7 @@
                                     var obj_2 = obj["fadax_m1"]["token"];
                                     var obj_1_splited_1 = obj_1.split("paymentToken=");
                                     $.ajax({
-                                        url: "/Panel_Charging_Get_Token.bc",
+                                        url: "/EN-Panel_Charging_Get_Token.bc",
                                         type: "post",
                                         data: {
                                         token: obj_2,
@@ -993,12 +993,12 @@
                                         <param name="password" value="[##db.password.value##]" />
                                         <param name="amount" value="[##db.price.Value##]" />
                                         <param name="phonenumber" value="[##cms.form.phonenumber##]" />
-                                        <param name="title" value="شارژ آنلاین" />
+                                        <param name="title" value="wallet" />
                                         <param name="discountAmount" value="0" />
                                         <param name="taxAmount" value="0" />
                                         <param name="invoiceId" value="[##cms.form.factorid|(0)##]" />
                                         <param name="returnURL"
-                                            value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]" />
+                                            value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]" />
                                     </params>
                                 </member>
                             </basis>
@@ -1012,7 +1012,7 @@
                                     var obj_2 = obj["fadax_m1"]["token"];
                                     var obj_1_splited_1 = obj_1.split("paymentToken=");
                                     $.ajax({
-                                        url: "/Panel_Charging_Get_Token.bc",
+                                        url: "/EN-Panel_Charging_Get_Token.bc",
                                         type: "post",
                                         data: {
                                             token: obj_2,
@@ -1052,7 +1052,7 @@
                                     <param name="amount" value="[##db.price.Value##]" />
                                     <param name="username" value="[##db.username.Value##]" />
                                     <param name="password" value="[##db.password.Value##]" />
-                                    <param name="callback" value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc" />
+                                    <param name="callback" value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc" />
                                     <param name="terminalid" value="[##db.terminalid.Value##]" />
                                     <param name="mobile" value="[##cms.form.phonenumber##]" />
                                     <param name="dmnid" value="[##cms.cms.domainid##]" />
@@ -1075,7 +1075,7 @@
                                         var obj_1 = obj["pasargad_m1"]["data"]["url"]
                                         var obj_2 = obj["pasargad_m1"]["data"]["urlId"]
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 paymentid: "[##db.paymentid.Column1##]",
@@ -1120,7 +1120,7 @@
                                             <param name="password" value="[##db.password.Value##]" />
                                             <param name="amount" value="[##db.price.Value##]" />
                                             <param name="return_url"
-                                                value="[##site.address.domain##]/Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]" />
+                                                value="[##site.address.domain##]/EN-Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]" />
                                             <param name="national_code" value="[##cms.form.nationalCodeSiBank##]" />
                                             <param name="mobile" value="[##cms.form.mobileSiBank##]" />
                                             <param name="paymentid" value="[##db.paymentid.Column1##]" />
@@ -1140,7 +1140,7 @@
                                             document.getElementById("action").value = 1;
                                         }
                                         $.ajax({
-                                            url: "/Panel_Charging_Get_Token.bc",
+                                            url: "/EN-Panel_Charging_Get_Token.bc",
                                             type: "post",
                                             data: {
                                                 paymentid: "[##db.paymentid.Column1##]",
@@ -1172,7 +1172,7 @@
                                 "doc_type": "7",
                                 "factorid": [##cms.form.factorid|(0)##],
                                 "site_url": "[##site.address.domain##]",
-                                "callback_url": "Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]",
+                                "callback_url": "EN-Panel_wallet_Charging_CallBack.bc?iN=[##db.paymentid.Column1##]",
                                 "mobile": "[##cms.form.phonenumber##]",
                                 "email": "[##cms.form.email##]",
                                 "amount": "[##db.price.Value##]",
@@ -1195,7 +1195,7 @@
                                     try {
                                         const source = args.source?.rows;
                                         if (source[0].url_gateway) {
-                                            fetch("/Panel_Charging_Get_Token.bc?lid=1", {
+                                            fetch("/EN-Panel_Charging_Get_Token.bc", {
                                                 method: "POST",
                                                 headers: {
                                                     "Content-Type": "application/x-www-form-urlencoded",
@@ -1235,7 +1235,7 @@
                                         } else {
                                             const div = document.createElement('div');
                                             div.id = 'text-loading';
-                                            div.textContent = 'امکان اتصال به درگاه پرداخت الکترونیک وجود ندارد.';
+                                            div.textContent = 'It is not possible to connect to the electronic payment gateway.';
                                             document.querySelector(".sectionInfo").appendChild(div);
 
 
