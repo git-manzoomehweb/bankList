@@ -18,7 +18,7 @@
     <member core="view" name="txt" type="view" postsql="select Answer from [about.txt] where prpID = '8000'" />
 </basis>
 <basis core="group" name="FirstDelay">
-    <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]" procedurename="dbsource" name="db">
+    <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]" procedurename="dbsource" name="db">
         <member name="factor" method="train" query='{
                 "name": "db",
                 "mid": "20",
@@ -48,6 +48,8 @@
                         "targetunit": "10",
                         "factortype": "9",
                         "passengerinfo": [##cms.json.header##],
+                        "captchaId": "[##cms.form.captchaId##]",
+                        "captchaText": "[##cms.form.captchaText##]",
                         "products": [
                             {
                                 "type": "9",
@@ -87,7 +89,7 @@
                 postsql="select value from [db.NewtimeFactorpreform] where field = 'newtime'">
                 {"root":[##db.factor.result##]}</member>
         </basis>
-        <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]" name="db" procedurename="dbsource">
+        <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]" name="db" procedurename="dbsource">
             <member method="cms" name="webservice_detail" query='{
                     "name": "db",
                     "mid": "20",
@@ -111,7 +113,7 @@
                     {"root":[##db.webservice_detail.result##]} </member>
             </basis>
             <basis core="group" name="PriceDelay1">
-                <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]" name="db"
+                <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]" name="db"
                     procedurename="dbsource">
                     <member name="FinalPrice" method="invoice" query='{
                             "name": "db",
@@ -165,10 +167,9 @@
                         </basis>
                         <basis core="group" name="type" if="[##cms.form.accounttype##] in (3,2)">
                             <basis core="group" name="pay_type" if="'[##cms.form.paytype##]' = 'credit'">
-                                <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]"
+                                <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]"
                                     procedurename="dbsource" name="db">
-                                    <member name="save_inputs" method="cms"
-                                        query='{
+                                    <member name="save_inputs" method="cms" query='{
                                             "name": "db",
                                             "mid": "20",
                                             "member": [
@@ -185,8 +186,7 @@
                                                     "factortype": "9"
                                                 }
                                             ]
-                                        }'
-                                        preview="" />
+                                        }' preview="" />
                                 </basis>
                                 <form method="post" action="/Client_CallBack.bc" id="Credit_payment_form">
                                     <input type="hidden" value="1" name="Credit_payment" />
@@ -265,11 +265,10 @@
                                 </basis>
                                 <basis core="group" if="'[##db.paymentid.Column1##]' <> 'not ok'">
                                     <basis core="group" name="Delay_save_inputs"
-                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,203,204)">
-                                        <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]"
+                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,202,203,204,205,207,208,209,210,214)">
+                                        <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]"
                                             procedurename="dbsource" name="db">
-                                            <member name="save_inputs" method="cms"
-                                                query='{
+                                            <member name="save_inputs" method="cms" query='{
                                                     "name": "db",
                                                     "mid": "20",
                                                     "member": [
@@ -289,8 +288,7 @@
                                                             "factortype": "9"
                                                         }
                                                     ]
-                                                }'
-                                                preview="" />
+                                                }' preview="" />
                                         </basis>
                                         <basis core="group" name="Saman" if="[##cms.form.bank_id##] = 31">
                                             <basis core="inlinesource" name="db">
@@ -916,7 +914,7 @@
                                                         var obj = new Object([##irankish.m1.result##]);
                                                         var obj_2 = obj["irankish_m1"]["result"]["token"];
                                                         var obj_status = obj["irankish_m1"]["status"];
-                                                         $.ajax({
+                                                        $.ajax({
                                                             url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
@@ -1759,7 +1757,7 @@
                                         </basis>
                                     </basis>
                                     <basis core="group" name="api"
-                                        if="[##cms.form.bank_id##] in (203,204,202,207,208,209,210) ">
+                                        if="[##cms.form.bank_id##] in (202,203,204,205,207,208,209,210,214) ">
                                         <basis core="inlinesource" name="db">
                                             <member name="callback" format="json"
                                                 postsql="select value from [db.callback] where field = 'callback'">

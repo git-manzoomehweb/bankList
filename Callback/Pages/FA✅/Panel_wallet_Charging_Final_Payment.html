@@ -34,7 +34,7 @@
             }]} ' />
         </basis>
 
-       
+
 
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
 
@@ -129,8 +129,8 @@
             }]} ' />
         </basis>
 
-     
-     
+
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
 
         <basis core="group" name="es">
@@ -158,7 +158,7 @@
         </basis>
     </basis>
     <basis core="group" if="[##db.token.Value##]>0">
-        
+
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
@@ -185,7 +185,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-    
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -237,7 +237,7 @@
                 "doctypeid":"7"
                 }]} ' />
             </basis>
-          
+
 
 
         </basis>
@@ -270,7 +270,7 @@
                 }]} ' />
             </basis>
 
-        
+
 
             <basis core="group" name="es">
                 <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -330,8 +330,8 @@
             }]} ' />
         </basis>
 
-       
-    
+
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
 
         <basis core="group" name="es">
@@ -388,7 +388,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-     
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -421,7 +421,7 @@
             }]} ' />
         </basis>
 
-     
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
 
         <basis core="group" name="es">
@@ -477,7 +477,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-     
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -511,7 +511,7 @@
             }]} ' />
         </basis>
 
-     
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -569,7 +569,7 @@
             }]} ' />
         </basis>
 
-       
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -609,9 +609,9 @@
                 "doctypeid":"7"
                 }]} ' />
             </basis>
-            
-        
-          
+
+
+
             <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
             <basis core="group" name="es">
                 <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -670,7 +670,7 @@
             }]} ' />
         </basis>
 
-        
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -704,8 +704,8 @@
             }]} ' />
         </basis>
 
-      
-       
+
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
 
         <basis core="group" name="es">
@@ -736,7 +736,7 @@
     </basis>
     <basis core="group" if="'[##cms.form.token##]' <> 'true'">
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
- 
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -763,7 +763,7 @@
             }]} ' />
         </basis>
 
-   
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 
@@ -772,7 +772,7 @@
     <basis core="group" if="'[##cms.form.token##]' = 'true'">
 
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
- 
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -799,7 +799,7 @@
             }]} ' />
         </basis>
 
-     
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -830,7 +830,7 @@
     <basis core="group" if="'[##cms.form.token##]' <> 'true'">
 
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
- 
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -857,7 +857,7 @@
             }]} ' />
         </basis>
 
-       
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -866,7 +866,7 @@
         <basis core="group" if="'[##cms.form.RRN##]' <> 'false' ">
 
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
- 
+
                 <member method="cms" name="updatepayment" query='{ 
                 "name": "db",
                 "mid": "20",
@@ -893,7 +893,7 @@
                 }]} ' />
             </basis>
 
-           
+
 
             <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
             <basis core="group" name="es">
@@ -926,7 +926,7 @@
     <basis core="group" if="'[##cms.form.token##]' <> 'false'">
         <basis core="group" if="'[##cms.form.RRN##]' = 'false' ">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
- 
+
                 <member method="cms" name="updatepayment" query='{ 
                 "name": "db",
                 "mid": "20",
@@ -953,7 +953,7 @@
                 }]} ' />
             </basis>
 
-          
+
             <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
         </basis>
     </basis>
@@ -962,7 +962,7 @@
     <basis core="group" if="'[##cms.form.token##]' = '1'">
 
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
- 
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -989,7 +989,7 @@
             }]} ' />
         </basis>
 
-     
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1021,7 +1021,7 @@
     <basis core="group" if="'[##cms.form.token##]' <> '1'">
 
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
-            
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -1048,7 +1048,7 @@
             }]} ' />
         </basis>
 
-        
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 
@@ -1057,7 +1057,7 @@
     <basis core="group" if="'[##cms.form.token##]' = '0'">
 
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
-            
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -1084,7 +1084,7 @@
             }]} ' />
         </basis>
 
-       
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1115,7 +1115,7 @@
     </basis>
     <basis core="group" if="'[##cms.form.token##]' <> '0'">
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
-            
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -1150,7 +1150,7 @@
     <basis core="group" if="'[##cms.form.token##]' = 'true'">
 
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
-            
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -1206,7 +1206,7 @@
     </basis>
     <basis core="group" if="'[##cms.form.token##]' <> 'true'">
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
-            
+
             <member method="cms" name="updatepayment" query='{ 
             "name": "db",
             "mid": "20",
@@ -1233,7 +1233,7 @@
             }]} ' />
         </basis>
 
-       
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -1267,7 +1267,7 @@
             }]} ' />
         </basis>
 
-     
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1355,7 +1355,7 @@
             }]} ' />
         </basis>
 
-    
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1442,7 +1442,7 @@
             }]} ' />
         </basis>
 
-   
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1496,7 +1496,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-        
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -1561,7 +1561,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-       
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -1593,7 +1593,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-        
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1647,7 +1647,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-  
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -1679,7 +1679,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-        
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1733,7 +1733,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-      
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -1765,7 +1765,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-        
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1819,7 +1819,7 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-   
+
         <span class="updatepaymentF"> [##db.updatepayment.result##] </span>
     </basis>
 </basis>
@@ -1851,8 +1851,8 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-   
-   
+
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1912,7 +1912,7 @@
 </basis>
 
 
-<basis core="group" name="api" if="[##cms.form.bank_id##] in (202,203,204,207,208,209,210)">
+<basis core="group" name="api" if="[##cms.form.bank_id##] in (202,203,204,205,207,208,209,210,214)">
     <basis core="group" if="'[##cms.form.token##]' = '1'">
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
             <member method="cms" name="updatepayment" query='{ 
@@ -1940,8 +1940,8 @@
             "doctypeid":"7"
             }]} ' />
         </basis>
-   
-   
+
+
         <span class="updatepaymentT"> [##db.updatepayment.result##] </span>
         <basis core="group" name="es">
             <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
@@ -1968,7 +1968,7 @@
         </basis>
 
     </basis>
-    
+
     <basis core="group" if="'[##cms.form.token##]' <> '1'">
         <basis core="external.fly.ws" source="cmsDbService2" name="db" procedurename="dbsource">
             <member method="cms" name="updatepayment" query='{ 

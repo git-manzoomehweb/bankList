@@ -18,7 +18,7 @@
     <member core="view" name="txt" type="view" postsql="select Answer from [about.txt] where prpID = '8000'" />
 </basis>
 <basis core="group" name="FirstDelay">
-    <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]" procedurename="dbsource" name="db">
+    <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]" procedurename="dbsource" name="db">
         <member name="factor" method="train" query='{
                 "name": "db",
                 "mid": "20",
@@ -48,6 +48,8 @@
                         "targetunit": "10",
                         "factortype": "8",
                         "passengerinfo": [##cms.json.header##],
+                        "captchaId": "[##cms.form.captchaId##]",
+                        "captchaText": "[##cms.form.captchaText##]",
                         "products": [
                             {
                                 "type": "8",
@@ -86,7 +88,7 @@
                 postsql="select value from [db.NewtimeFactorpreform] where field = 'newtime'">
                 {"root":[##db.factor.result##]}</member>
         </basis>
-        <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]" name="db" procedurename="dbsource">
+        <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]" name="db" procedurename="dbsource">
             <member method="cms" name="webservice_detail" query='{
                     "name": "db",
                     "mid": "20",
@@ -110,7 +112,7 @@
                     {"root":[##db.webservice_detail.result##]} </member>
             </basis>
             <basis core="group" name="PriceDelay1">
-                <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]" name="db"
+                <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]" name="db"
                     procedurename="dbsource">
                     <member name="FinalPrice" method="invoice" query='{
                             "name": "db",
@@ -164,10 +166,9 @@
                         </basis>
                         <basis core="group" name="type" if="[##cms.form.accounttype##] in (3,2)">
                             <basis core="group" name="pay_type" if="'[##cms.form.paytype##]' = 'credit'">
-                                <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]"
+                                <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]"
                                     procedurename="dbsource" name="db">
-                                    <member name="save_inputs" method="cms"
-                                        query='{
+                                    <member name="save_inputs" method="cms" query='{
                                             "name": "db",
                                             "mid": "20",
                                             "member": [
@@ -184,8 +185,7 @@
                                                     "factortype": "8"
                                                 }
                                             ]
-                                        }'
-                                        preview="" />
+                                        }' preview="" />
                                 </basis>
                                 <form method="post" action="/Client_CallBack.bc" id="Credit_payment_form">
                                     <input type="hidden" value="1" name="Credit_payment" />
@@ -264,11 +264,10 @@
                                 </basis>
                                 <basis core="group" if="'[##db.paymentid.Column1##]' <> 'not ok'">
                                     <basis core="group" name="Delay_save_inputs"
-                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,203,204)">
-                                        <basis core="external.fly.ws" source="cmsDbService[##cms.query.sid|(2)##]"
+                                        if="[##cms.form.bank_id##] not in (35,51,55,57,66,69,95,97,98,199,202,203,204,205,207,208,209,210,214)">
+                                        <basis core="external.fly.ws" source="cmsDbService[##cms.form.sid|(2)##]"
                                             procedurename="dbsource" name="db">
-                                            <member name="save_inputs" method="cms"
-                                                query='{
+                                            <member name="save_inputs" method="cms" query='{
                                                     "name": "db",
                                                     "mid": "20",
                                                     "member": [
@@ -288,8 +287,7 @@
                                                             "factortype": "8"
                                                         }
                                                     ]
-                                                }'
-                                                preview="" />
+                                                }' preview="" />
                                         </basis>
                                         <basis core="group" name="Saman" if="[##cms.form.bank_id##] = 31">
                                             <basis core="inlinesource" name="db">
@@ -683,7 +681,7 @@
                                                     <script type="text/javascript">
 
                                                         var obj = new Object([##newsepah.m1.result##]);
-                                                         var obj_1 = obj["newsepah_m1"]["Token"];
+                                                        var obj_1 = obj["newsepah_m1"]["Token"];
                                                         var field_1 = 'https://pec.shaparak.ir/NewIPG/?Token=';
                                                         var url_redirect = field_1.concat(obj_1);
                                                         window.location = url_redirect;
@@ -730,7 +728,7 @@
 
 
                                                         var obj = new Object([##ArcaPayment.m1.result##]);
-                                                         var obj_1 = obj["ArcaPayment_m1"]["answer"];
+                                                        var obj_1 = obj["ArcaPayment_m1"]["answer"];
                                                         var obj_2 = JSON.parse(obj_1);
                                                         if (obj_2.errorCode == 0) {
                                                             var url_redirect = obj_2["formUrl"];
@@ -791,7 +789,7 @@
                                                                 action: $("#action").val(),
                                                                 bank_id: 65
                                                             },
-                                                            success: function(result) {
+                                                            success: function (result) {
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
@@ -857,7 +855,7 @@
                                                                 action: $("#action").val(),
                                                                 bank_id: 73
                                                             },
-                                                            success: function(result) {
+                                                            success: function (result) {
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
@@ -917,7 +915,7 @@
                                                         var obj = new Object([##irankish.m1.result##]);
                                                         var obj_2 = obj["irankish_m1"]["result"]["token"];
                                                         var obj_status = obj["irankish_m1"]["status"];
-                                                         $.ajax({
+                                                        $.ajax({
                                                             url: "/Client_Get_Token.bc",
                                                             type: "post",
                                                             data: {
@@ -926,7 +924,7 @@
                                                                 action: $("#action").val(),
                                                                 bank_id: 77
                                                             },
-                                                            success: function(result) {
+                                                            success: function (result) {
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
@@ -990,7 +988,7 @@
                                                                 action: $("#action").val(),
                                                                 bank_id: 85
                                                             },
-                                                            success: function(result) {
+                                                            success: function (result) {
                                                                 $(".sectionInfo").empty().html(result)
                                                             }
                                                         });
@@ -1028,8 +1026,8 @@
 
 
                                                         var obj = new Object([##pod.m1.result##]);
-                                                         var url_redirect = obj["pod_m1"]["url"];
-                                                          window.location = url_redirect;
+                                                        var url_redirect = obj["pod_m1"]["url"];
+                                                        window.location = url_redirect;
 
 
                                                     </script>
@@ -1075,8 +1073,8 @@
 
 
                                                         var obj = new Object([##sadad.m1.result##]);
-                                                         var url_redirect = obj["sadad_m1"]["url"];
-                                                          window.location = url_redirect;
+                                                        var url_redirect = obj["sadad_m1"]["url"];
+                                                        window.location = url_redirect;
 
 
                                                     </script>
@@ -1115,7 +1113,7 @@
 
                                                 var str = document.getElementById("json").value;
                                                 var split_str = str.split('/');
-                                                 str = str.replace(/'"/g, ' ');
+                                                str = str.replace(/'"/g, ' ');
                                                 if (str == 'Time Out') {
                                                     document.getElementById("action").value = 0;
                                                 } else {
@@ -1138,7 +1136,7 @@
                                                         factorid: "[##db.Factorid.Value|(0)##]",
                                                         factortype: 8
                                                     },
-                                                    success: function(result) {
+                                                    success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
@@ -1173,9 +1171,9 @@
                                             <script type="text/javascript">
 
                                                 var obj = new Object([##kipaa.m1.result##]);
-                                                 var obj_1 = obj["kipaa_m1"]["answer"]
+                                                var obj_1 = obj["kipaa_m1"]["answer"]
                                                 var obj_2 = JSON.parse(obj_1);
-                                                 if (obj_2["Status"] == '200') {
+                                                if (obj_2["Status"] == '200') {
                                                     document.getElementById("action").value = 1;
                                                 } else {
                                                     document.getElementById("action").value = 0;
@@ -1196,7 +1194,7 @@
                                                         factorid: "[##db.Factorid.Value|(0)##]",
                                                         factortype: 8
                                                     },
-                                                    success: function(result) {
+                                                    success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
@@ -1231,9 +1229,9 @@
                                             <script type="text/javascript">
 
                                                 var obj = new Object([##aghayePardakht.m1.result##]);
-                                                 var obj_1 = obj["aghayePardakht_m1"]["url"]
+                                                var obj_1 = obj["aghayePardakht_m1"]["url"]
                                                 var split_obj_1 = obj_1.split('/');
-                                                 $.ajax({
+                                                $.ajax({
                                                     url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
@@ -1250,7 +1248,7 @@
                                                         factorid: "[##db.Factorid.Value|(0)##]",
                                                         factortype: 8
                                                     },
-                                                    success: function(result) {
+                                                    success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
@@ -1309,7 +1307,7 @@
                                                         factorid: "[##db.Factorid.Value|(0)##]",
                                                         factortype: 8
                                                     },
-                                                    success: function(result) {
+                                                    success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
@@ -1355,7 +1353,7 @@
                                                 var obj = new Object([##shahr.m1.result##]);
                                                 var obj_1 = obj["shahr_m1"]["url"]
                                                 var obj_2 = obj["shahr_m1"]["token"];
-                                                 $.ajax({
+                                                $.ajax({
                                                     url: "/Client_Get_Token.bc",
                                                     type: "post",
                                                     data: {
@@ -1372,7 +1370,7 @@
                                                         factorid: "[##db.Factorid.Value|(0)##]",
                                                         factortype: 8
                                                     },
-                                                    success: function(result) {
+                                                    success: function (result) {
                                                         $(".sectionInfo").empty().html(result)
                                                     }
                                                 });
@@ -1442,7 +1440,7 @@
                                                             factorid: "[##db.Factorid.Value|(0)##]",
                                                             factortype: 8
                                                         },
-                                                        success: function(result) {
+                                                        success: function (result) {
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
@@ -1514,7 +1512,7 @@
                                                             factorid: "[##db.Factorid.Value|(0)##]",
                                                             factortype: 8
                                                         },
-                                                        success: function(result) {
+                                                        success: function (result) {
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
@@ -1575,7 +1573,7 @@
                                                     var obj = new Object([##pasargad.m1.result##]);
                                                     var obj_1 = obj["pasargad_m1"]["data"]["url"]
                                                     var obj_2 = obj["pasargad_m1"]["data"]["urlId"];
-                                                     $.ajax({
+                                                    $.ajax({
                                                         url: "/Client_Get_Token.bc",
                                                         type: "post",
                                                         data: {
@@ -1593,7 +1591,7 @@
                                                             factortype: 8,
                                                             bank_id: 95
                                                         },
-                                                        success: function(result) {
+                                                        success: function (result) {
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
@@ -1665,7 +1663,7 @@
                                                             factortype: 8,
                                                             bank_id: 97
                                                         },
-                                                        success: function(result) {
+                                                        success: function (result) {
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
@@ -1731,7 +1729,7 @@
                                                     var paymentToken = obj["snap_m1"]["response"]["paymentToken"]
                                                     var authentication = obj["snap_m1"]["authentication"]
                                                     var paymentPageUrl = obj["snap_m1"]["response"]["paymentPageUrl"];
-                                                     $.ajax({
+                                                    $.ajax({
                                                         url: "/Client_Get_Token.bc",
                                                         type: "post",
                                                         data: {
@@ -1750,7 +1748,7 @@
                                                             factortype: 8,
                                                             bank_id: 98
                                                         },
-                                                        success: function(result) {
+                                                        success: function (result) {
                                                             $(".sectionInfo").empty().html(result)
                                                         }
                                                     });
@@ -1760,7 +1758,7 @@
                                         </basis>
                                     </basis>
                                     <basis core="group" name="api"
-                                        if="[##cms.form.bank_id##] in (203,204,202,207,208,209,210) ">
+                                        if="[##cms.form.bank_id##] in (202,203,204,205,207,208,209,210,214) ">
                                         <basis core="inlinesource" name="db">
                                             <member name="callback" format="json"
                                                 postsql="select value from [db.callback] where field = 'callback'">
@@ -1877,11 +1875,11 @@
                                     cancelButton: 'انتقال به صفحه اصلی',
                                     animation: 'top',
                                     closeAnimation: 'scale',
-                                    onOpen: function() {},
-                                    confirm: function() {
+                                    onOpen: function () { },
+                                    confirm: function () {
                                         $(".FormRedirect").submit()
                                     },
-                                    cancel: function() {
+                                    cancel: function () {
                                         window.location = '[##cms.Host.FA_redirect|(/)##]'
                                     }
                                 })
@@ -1899,8 +1897,8 @@
                                     cancelButton: 'انتقال به صفحه اصلی',
                                     animation: 'top',
                                     closeAnimation: 'scale',
-                                    onOpen: function() {},
-                                    cancel: function() {
+                                    onOpen: function () { },
+                                    cancel: function () {
                                         window.location = '[##cms.Host.FA_redirect|(/)##]'
                                     }
                                 })
@@ -1948,15 +1946,15 @@
                                 cancelButton: 'خیر',
                                 animation: 'top',
                                 closeAnimation: 'scale',
-                                onOpen: function() {},
-                                confirm: function() {
+                                onOpen: function () { },
+                                confirm: function () {
                                     $(".FactorForm").submit()
                                 },
-                                cancel: function() {
+                                cancel: function () {
                                     window.location = '[##cms.Host.FA_redirect|(/)##]'
                                 }
                             });
-                             $(".NewpriceFactorpreform").text(function(index, value) {
+                            $(".NewpriceFactorpreform").text(function (index, value) {
                                 return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             });
 
@@ -2002,11 +2000,11 @@
                                 cancelButton: 'خیر',
                                 animation: 'top',
                                 closeAnimation: 'scale',
-                                onOpen: function() {},
-                                confirm: function() {
+                                onOpen: function () { },
+                                confirm: function () {
                                     $(".FactorForm").submit()
                                 },
-                                cancel: function() {
+                                cancel: function () {
                                     window.location = '[##cms.Host.FA_redirect|(/)##]'
                                 }
                             })
